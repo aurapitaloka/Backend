@@ -1,0 +1,397 @@
+<style>
+    body:not(.siswa-layout) {
+        scroll-behavior: smooth;
+    }
+    body:not(.siswa-layout) .admin-menu-toggle-inline {
+        width: 28px;
+        height: 28px;
+        border-radius: 0;
+        border: none;
+        background: transparent;
+        color: #FFFFFF;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    body:not(.siswa-layout) .admin-header-left {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    body:not(.siswa-layout) .sidebar.closed {
+        transform: translateX(-100%);
+    }
+
+    body:not(.siswa-layout) .main-content.full {
+        margin-left: 0;
+    }
+
+    body:not(.siswa-layout) .admin-sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 1100;
+        display: none;
+    }
+
+    body:not(.siswa-layout) .admin-sidebar-overlay.active {
+        display: block;
+    }
+
+    @media (max-width: 1024px) {
+        body:not(.siswa-layout) .admin-menu-toggle {
+            display: inline-flex;
+        }
+    }
+
+    .sidebar-nav {
+        scrollbar-width: none;
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+
+@media (max-width: 900px) {
+    body:not(.siswa-layout) .dashboard-container {
+        flex-direction: column;
+    }
+
+    body:not(.siswa-layout) .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    body:not(.siswa-layout) .main-content {
+        margin-left: 0;
+    }
+
+    body:not(.siswa-layout) .header-bar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        padding: 1rem 1.25rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    body:not(.siswa-layout) .content-area {
+        padding: 1.25rem;
+    }
+
+    body:not(.siswa-layout) .sidebar-nav {
+        padding: 0.75rem 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.5rem;
+    }
+
+    body:not(.siswa-layout) .nav-item {
+        margin: 0 0.5rem;
+    }
+}
+</style>
+
+<div class="admin-sidebar-overlay" id="adminSidebarOverlay"></div>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar-nav">
+    <div class="nav-item" data-route="dashboard">
+        <a href="/dashboard">
+            <span class="nav-icon">
+                <i data-lucide="layout-dashboard"></i>
+            </span>
+            <span>Dashboard</span>
+        </a>
+    </div>
+    
+    <div class="nav-item" data-route="materi">
+        <a href="{{ route('materi.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="book-open"></i>
+            </span>
+            <span>Materi</span>
+        </a>
+    </div>
+    
+    <div class="nav-item" data-route="fiksi">
+        <a href="{{ route('fiksi.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="bookmark"></i>
+            </span>
+            <span>Fiksi</span>
+        </a>
+    </div>
+
+    <div class="nav-item" data-route="aac">
+        <a href="{{ route('aac.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="message-circle"></i>
+            </span>
+            <span>AAC</span>
+        </a>
+    </div>
+    
+    <div class="nav-item" data-route="pengguna">
+        <a href="{{ route('pengguna.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="users"></i>
+            </span>
+            <span>Pengguna</span>
+        </a>
+    </div>
+    
+    <div class="nav-item" data-route="level">
+        <a href="{{ route('level.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="layers"></i>
+            </span>
+            <span>Level</span>
+        </a>
+    </div>
+    
+    <div class="nav-item" data-route="mata-pelajaran">
+        <a href="{{ route('mata-pelajaran.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="graduation-cap"></i>
+            </span>
+            <span>Mata Pelajaran</span>
+        </a>
+    </div>
+
+    <div class="nav-item" data-route="landing">
+        <a href="{{ route('landing.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="layout-template"></i>
+            </span>
+            <span>Landing</span>
+        </a>
+    </div>
+
+    <div class="nav-item" data-route="panduan">
+    <a href="{{ route('panduan.index', [], false) }}">
+        <span class="nav-icon">
+            <i data-lucide="book-text"></i>
+        </span>
+        <span>Panduan</span>
+    </a>
+    </div>
+
+    <div class="nav-item" data-route="ulasan">
+        <a href="{{ route('ulasan.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="message-square"></i>
+            </span>
+            <span>Ulasan</span>
+        </a>
+    </div>
+
+    <div class="nav-item" data-route="kuis">
+        <a href="{{ route('kuis.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="check-square"></i>
+            </span>
+            <span>Kuis</span>
+        </a>
+    </div>
+
+    <div class="nav-item" data-route="kuis-hasil">
+        <a href="{{ route('kuis.hasil.index', [], false) }}">
+            <span class="nav-icon">
+                <i data-lucide="clipboard-check"></i>
+            </span>
+            <span>Hasil Kuis</span>
+        </a>
+    </div>
+    
+    <div class="nav-item" data-route="profile">
+        <a href="/dashboard/profile">
+            <span class="nav-icon">
+                <i data-lucide="user"></i>
+            </span>
+            <span>Profile</span>
+        </a>
+    </div>
+</nav>
+
+
+<script>
+// Set active nav item based on current URL
+(function() {
+    function setActiveNavItem() {
+        const currentPath = window.location.pathname;
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        // Remove all active classes first
+        navItems.forEach(item => item.classList.remove('active'));
+        
+        // Determine which menu should be active based on URL path
+        let activeRoute = null;
+        
+        // Check in order of specificity (most specific first)
+        // Must check specific routes BEFORE checking /dashboard to avoid conflicts
+        
+        if (currentPath.includes('/dashboard/mata-pelajaran') || currentPath.includes('/mata-pelajaran')) {
+            activeRoute = 'mata-pelajaran';
+        }
+        else if (currentPath.includes('/dashboard/landing') || currentPath.includes('/landing')) {
+            activeRoute = 'landing';
+        }
+        else if (currentPath.includes('/dashboard/panduan') || currentPath.includes('/panduan')) {
+            activeRoute = 'panduan';
+        }
+        else if (currentPath.includes('/dashboard/ulasan') || currentPath.includes('/ulasan')) {
+            activeRoute = 'ulasan';
+        }
+        else if (currentPath.includes('/dashboard/kuis-hasil') || currentPath.includes('/kuis-hasil')) {
+            activeRoute = 'kuis-hasil';
+        }
+        else if (currentPath.includes('/dashboard/kuis') || currentPath.includes('/kuis')) {
+            activeRoute = 'kuis';
+        }
+        else if (currentPath.includes('/dashboard/level') || currentPath.includes('/level')) {
+            activeRoute = 'level';
+        }
+        else if (currentPath.includes('/dashboard/aac') || currentPath.includes('/aac')) {
+            activeRoute = 'aac';
+        }
+        else if (currentPath.includes('/dashboard/pengguna') || currentPath.includes('/pengguna')) {
+            activeRoute = 'pengguna';
+        } 
+        else if (currentPath.includes('/dashboard/fiksi') || currentPath.includes('/fiksi')) {
+            activeRoute = 'fiksi';
+        } 
+        else if (currentPath.includes('/dashboard/materi') || currentPath.includes('/materi')) {
+            activeRoute = 'materi';
+        } 
+        else if (currentPath.includes('/dashboard/profile') || currentPath.includes('/profile')) {
+            activeRoute = 'profile';
+        }
+        // Dashboard must be checked LAST and only for exact match
+        else if (currentPath === '/dashboard' || currentPath === '/dashboard/') {
+            activeRoute = 'dashboard';
+        }
+        
+        // Set active class
+        if (activeRoute) {
+            const activeItem = document.querySelector(`.nav-item[data-route="${activeRoute}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+                console.log('Active route set to:', activeRoute, 'for path:', currentPath);
+            } else {
+                console.warn('Active item not found for route:', activeRoute);
+            }
+        } else {
+            console.warn('No active route determined for path:', currentPath);
+        }
+    }
+    
+    // Run immediately and also on DOMContentLoaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setActiveNavItem);
+    } else {
+        setActiveNavItem();
+    }
+})();
+</script>
+
+<script>
+// Admin sidebar toggle
+(function() {
+    if (document.body.classList.contains('siswa-layout')) {
+        return;
+    }
+
+    function initAdminToggle() {
+        const sidebar = document.querySelector('.sidebar');
+        const main = document.querySelector('.main-content');
+        const overlay = document.getElementById('adminSidebarOverlay');
+        const header = document.querySelector('.header-bar');
+
+        if (!sidebar) {
+            return;
+        }
+
+        let toggle = document.querySelector('.admin-menu-toggle-inline');
+        if (!toggle && header) {
+            toggle = document.createElement('button');
+            toggle.className = 'admin-menu-toggle-inline';
+            toggle.setAttribute('aria-label', 'Toggle sidebar');
+            toggle.innerHTML = '<i data-lucide="menu"></i>';
+        }
+
+        if (header && toggle) {
+            const existingLeft = header.querySelector('.admin-header-left');
+            if (!existingLeft) {
+                const left = document.createElement('div');
+                left.className = 'admin-header-left';
+                const titleEl = header.querySelector('h1, .header-title');
+                if (titleEl) {
+                    header.insertBefore(left, header.firstElementChild);
+                    left.appendChild(toggle);
+                    left.appendChild(titleEl);
+                } else {
+                    header.insertBefore(toggle, header.firstElementChild);
+                }
+            }
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        if (!toggle) {
+            return;
+        }
+
+        function setClosed(closed) {
+            sidebar.classList.toggle('closed', closed);
+            if (main) {
+                main.classList.toggle('full', closed);
+            }
+            if (overlay) {
+                overlay.classList.toggle('active', closed && window.innerWidth <= 1024);
+            }
+        }
+
+        toggle.addEventListener('click', function() {
+            const isClosed = sidebar.classList.contains('closed');
+            setClosed(!isClosed);
+        });
+
+        if (overlay) {
+            overlay.addEventListener('click', function() {
+                setClosed(false);
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAdminToggle);
+    } else {
+        initAdminToggle();
+    }
+})();
+
+// Log sidebar link clicks for debugging.
+document.querySelectorAll('.sidebar-nav a').forEach(function(link) {
+    link.addEventListener('click', function() {
+        const currentUrl = window.location.href;
+        const targetUrl = link.getAttribute('href') || '';
+        const text = (link.textContent || '').trim();
+        const params = new URLSearchParams({
+            current_url: currentUrl,
+            target_url: targetUrl,
+            text: text,
+            ts: new Date().toISOString()
+        });
+        const beacon = new Image();
+        beacon.src = `/debug/nav-log?${params.toString()}`;
+    });
+});
+</script>
