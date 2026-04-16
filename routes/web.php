@@ -74,8 +74,6 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard.siswa.kelas.update');
     Route::get('/dashboard-siswa/panduan', [App\Http\Controllers\SiswaDashboardController::class, 'panduan'])
         ->name('dashboard.siswa.panduan');
-    Route::get('/dashboard/panduan/create', [PanduanController::class, 'create'])->name('panduan.create');
-    Route::post('/dashboard/panduan', [PanduanController::class, 'store'])->name('panduan.store');
     Route::get('/dashboard-siswa/rak-buku', [App\Http\Controllers\SiswaDashboardController::class, 'rakBuku'])
         ->name('dashboard.siswa.rak-buku');
     Route::post('/dashboard-siswa/rak-buku', [App\Http\Controllers\SiswaDashboardController::class, 'addRakBuku'])
@@ -87,6 +85,7 @@ Route::middleware('auth')->group(function () {
     'index' => 'panduan.index',
     'create' => 'panduan.create',
     'store' => 'panduan.store',
+    'show' => 'panduan.show',
     'edit' => 'panduan.edit',
     'update' => 'panduan.update',
     'destroy' => 'panduan.destroy',

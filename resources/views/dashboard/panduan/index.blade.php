@@ -624,9 +624,9 @@
                             <td>{{ $item->created_at->format('d M Y') }}</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="action-btn view">
+                                    <a href="{{ route('panduan.show', $item->id) }}" class="action-btn view" style="text-decoration: none;">
                                         <i data-lucide="eye"></i>
-                                    </button>
+                                    </a>
                                     <a href="{{ route('panduan.edit', $item->id) }}" class="action-btn edit">
                                         <i data-lucide="edit-3"></i>
                                     </a>

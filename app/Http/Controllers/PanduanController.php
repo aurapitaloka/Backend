@@ -54,6 +54,12 @@ class PanduanController extends Controller
     return view('dashboard.panduan.edit', compact('data'));
 }
 
+    public function show($id)
+{
+    $data = Panduan::findOrFail($id);
+    return view('dashboard.panduan.show', compact('data'));
+}
+
     public function update(Request $request, $id)
 {
     $request->validate([

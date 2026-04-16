@@ -465,7 +465,7 @@
                             placeholder="Contoh: Cara Menggunakan Fitur Suara">                        
                             @error('judul')
                             <span class="error-message">{{ $message }}</span>
-                        @enderr
+                        @enderror
                     </div>
 
                     <div class="form-group">
