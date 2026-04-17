@@ -50,8 +50,11 @@ class FiksiController extends Controller
         ], [
             'judul_buku.required' => 'Judul buku wajib diisi',
             'penulis.required' => 'Penulis wajib diisi',
-            'file_path.mimes' => 'File harus berupa PDF, DOC, atau DOCX',
-            'file_path.max' => 'Ukuran file maksimal 10MB',
+            'file_path.file' => 'File buku tidak valid. Pilih file PDF, DOC, atau DOCX.',
+            'file_path.mimes' => 'Format file buku harus PDF, DOC, atau DOCX.',
+            'file_path.max' => 'Ukuran file buku terlalu besar. Maksimal 10 MB. Silakan kompres atau pilih file yang lebih kecil.',
+            'jumlah_halaman.integer' => 'Jumlah halaman harus berupa angka.',
+            'jumlah_halaman.min' => 'Jumlah halaman minimal 1.',
         ]);
 
         // Handle file upload
@@ -117,8 +120,11 @@ class FiksiController extends Controller
         ], [
             'judul_buku.required' => 'Judul buku wajib diisi',
             'penulis.required' => 'Penulis wajib diisi',
-            'file_path.mimes' => 'File harus berupa PDF, DOC, atau DOCX',
-            'file_path.max' => 'Ukuran file maksimal 10MB',
+            'file_path.file' => 'File buku tidak valid. Pilih file PDF, DOC, atau DOCX.',
+            'file_path.mimes' => 'Format file buku harus PDF, DOC, atau DOCX.',
+            'file_path.max' => 'Ukuran file buku terlalu besar. Maksimal 10 MB. Silakan kompres atau pilih file yang lebih kecil.',
+            'jumlah_halaman.integer' => 'Jumlah halaman harus berupa angka.',
+            'jumlah_halaman.min' => 'Jumlah halaman minimal 1.',
         ]);
 
         // Handle file upload if new file is provided

@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\PostTooLargeException;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,5 +17,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToGroup('web', \App\Http\Middleware\LogWebAuth::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (PostTooLargeException $e, Request $request) {
+            $maxUploadSize = ini_get('post_max_size') ?: 'batas server';
+            $message = "Ukuran upload terlalu besar. Total file yang dikirim melebihi batas server ({$maxUploadSize}). Silakan kompres file atau pilih file yang lebih kecil.";
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $message], 413);
+            }
+
+            return back()->withErrors(['upload' => $message])->withInput();
+        });
     })->create();

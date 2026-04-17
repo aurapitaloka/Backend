@@ -8,6 +8,7 @@ use App\Models\Materi;
 use App\Models\Pengguna;
 use App\Models\Level;
 use App\Models\MataPelajaran;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller
@@ -17,14 +18,46 @@ class MateriController extends Controller
      */
     public function index()
     {
+        $search = trim((string) request('search', ''));
+        $user = Auth::user();
+
         $materi = Materi::with(['pengguna', 'level', 'mataPelajaran'])
+            ->when($this->isSiswaApiRequest(), function ($query) use ($user) {
+                $user->loadMissing('siswa');
+
+                $query->where('status_aktif', true)
+                    ->when($user->siswa?->level_id, function ($levelQuery) use ($user) {
+                        $levelQuery->where('level_id', $user->siswa->level_id);
+                    });
+            })
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('judul', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%")
+                        ->orWhere('tipe_konten', 'like', "%{$search}%")
+                        ->when(ctype_digit($search), function ($idQuery) use ($search) {
+                            $idQuery->orWhere('id', (int) $search);
+                        })
+                        ->orWhereHas('mataPelajaran', function ($relation) use ($search) {
+                            $relation->where('nama', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('level', function ($relation) use ($search) {
+                            $relation->where('nama', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('pengguna', function ($relation) use ($search) {
+                            $relation->where('nama', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
         if (request()->wantsJson() || request()->is('api/*')) {
             return response()->json($materi);
         }
 
-        return view('dashboard.materi.materi', compact('materi'));
+        return view('dashboard.materi.materi', compact('materi', 'search'));
     }
 
     /**
@@ -58,9 +91,16 @@ class MateriController extends Controller
             'tipe_konten.required' => 'Tipe konten wajib dipilih',
             'konten_teks.required_if' => 'Konten teks wajib diisi jika tipe konten adalah teks',
             'file_path.required_if' => 'File wajib diupload jika tipe konten adalah file',
+            'file_path.file' => 'File materi tidak valid. Pilih file PDF, DOC, atau DOCX.',
+            'file_path.mimes' => 'Format file materi harus PDF, DOC, atau DOCX.',
+            'file_path.max' => 'Ukuran file materi terlalu besar. Maksimal 10 MB. Silakan kompres atau pilih file yang lebih kecil.',
             'mata_pelajaran_id.exists' => 'Mata pelajaran yang dipilih tidak valid',
             'level_id.exists' => 'Level yang dipilih tidak valid',
-            'cover_path.image' => 'Cover harus berupa gambar',
+            'cover_path.image' => 'Cover buku harus berupa gambar.',
+            'cover_path.mimes' => 'Format cover buku harus JPG, JPEG, PNG, atau WEBP.',
+            'cover_path.max' => 'Ukuran cover buku terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
+            'jumlah_halaman.integer' => 'Jumlah halaman harus berupa angka.',
+            'jumlah_halaman.min' => 'Jumlah halaman minimal 1.',
         ]);
 
         // Handle file upload
@@ -96,6 +136,20 @@ class MateriController extends Controller
     public function show(string $id)
     {
         $materi = Materi::with(['pengguna', 'level', 'mataPelajaran'])->findOrFail($id);
+
+        if ($this->isSiswaApiRequest()) {
+            $user = Auth::user();
+            $user->loadMissing('siswa');
+
+            if (!$materi->status_aktif) {
+                return response()->json(['message' => 'Materi tidak tersedia'], 404);
+            }
+
+            if ($user->siswa?->level_id && (int) $materi->level_id !== (int) $user->siswa->level_id) {
+                return response()->json(['message' => 'Materi ini bukan untuk kelas kamu.'], 403);
+            }
+        }
+
         if (request()->wantsJson() || request()->is('api/*')) {
             return response()->json($materi);
         }
@@ -136,9 +190,16 @@ class MateriController extends Controller
             'judul.required' => 'Judul wajib diisi',
             'tipe_konten.required' => 'Tipe konten wajib dipilih',
             'konten_teks.required_if' => 'Konten teks wajib diisi jika tipe konten adalah teks',
+            'file_path.file' => 'File materi tidak valid. Pilih file PDF, DOC, atau DOCX.',
+            'file_path.mimes' => 'Format file materi harus PDF, DOC, atau DOCX.',
+            'file_path.max' => 'Ukuran file materi terlalu besar. Maksimal 10 MB. Silakan kompres atau pilih file yang lebih kecil.',
             'mata_pelajaran_id.exists' => 'Mata pelajaran yang dipilih tidak valid',
             'level_id.exists' => 'Level yang dipilih tidak valid',
-            'cover_path.image' => 'Cover harus berupa gambar',
+            'cover_path.image' => 'Cover buku harus berupa gambar.',
+            'cover_path.mimes' => 'Format cover buku harus JPG, JPEG, PNG, atau WEBP.',
+            'cover_path.max' => 'Ukuran cover buku terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
+            'jumlah_halaman.integer' => 'Jumlah halaman harus berupa angka.',
+            'jumlah_halaman.min' => 'Jumlah halaman minimal 1.',
         ]);
 
         // Handle file upload if new file is provided
@@ -188,21 +249,46 @@ class MateriController extends Controller
     public function destroy(string $id)
     {
         $materi = Materi::findOrFail($id);
+        $filePath = $materi->file_path;
+        $coverPath = $materi->cover_path;
 
-        // Delete file if exists
-        if ($materi->file_path && Storage::disk('public')->exists($materi->file_path)) {
-            Storage::disk('public')->delete($materi->file_path);
+        DB::transaction(function () use ($materi) {
+            $sesiBacaIds = DB::table('sesi_baca')
+                ->where('materi_id', $materi->id)
+                ->pluck('id');
+
+            DB::table('log_akses_materi')->where('materi_id', $materi->id)->delete();
+            DB::table('log_perintah_suara')->whereIn('sesi_id', $sesiBacaIds)->delete();
+            DB::table('sesi_baca')->where('materi_id', $materi->id)->delete();
+            DB::table('rak_buku')->where('materi_id', $materi->id)->delete();
+            DB::table('catatan_siswa')->where('materi_id', $materi->id)->update(['materi_id' => null]);
+            DB::table('kuis')->where('materi_id', $materi->id)->update(['materi_id' => null]);
+
+            $materi->delete();
+        });
+
+        // Delete files only after the database delete succeeds.
+        if ($filePath && Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
         }
-        if ($materi->cover_path && Storage::disk('public')->exists($materi->cover_path)) {
-            Storage::disk('public')->delete($materi->cover_path);
+        if ($coverPath && Storage::disk('public')->exists($coverPath)) {
+            Storage::disk('public')->delete($coverPath);
         }
 
-        $materi->delete();
         if (request()->wantsJson() || request()->is('api/*')) {
             return response()->json(['message' => 'Materi berhasil dihapus!']);
         }
 
         return redirect()->route('materi.index')
             ->with('success', 'Materi berhasil dihapus!');
+    }
+
+    private function isSiswaApiRequest(): bool
+    {
+        $user = Auth::user();
+
+        return (request()->wantsJson() || request()->is('api/*'))
+            && $user
+            && $user->peran === 'siswa';
     }
 }

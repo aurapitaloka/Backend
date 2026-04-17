@@ -175,6 +175,9 @@ class KuisController extends Controller
             'pertanyaan.required' => 'Minimal harus ada 1 pertanyaan.',
             'pertanyaan.*.teks.required' => 'Pertanyaan wajib diisi.',
             'pertanyaan.*.tipe.required' => 'Tipe soal wajib dipilih.',
+            'pertanyaan_audio.*.file' => 'Audio soal tidak valid. Pilih file MP3, WAV, atau OGG.',
+            'pertanyaan_audio.*.mimes' => 'Format audio soal harus MP3, WAV, atau OGG.',
+            'pertanyaan_audio.*.max' => 'Ukuran audio soal terlalu besar. Maksimal 10 MB per file. Silakan kompres atau pilih audio yang lebih kecil.',
         ]);
 
         $validator->after(function ($validator) use ($request) {

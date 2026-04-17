@@ -134,8 +134,15 @@ class SiswaDashboardController extends Controller
         }
 
         $pageTitle = 'Rak Buku';
-        $rak = RakBuku::with('materi')
+        $levelId = $user->siswa?->level_id;
+        $rak = RakBuku::with(['materi.mataPelajaran', 'materi.level'])
             ->where('pengguna_id', $user->id)
+            ->whereHas('materi', function ($query) use ($levelId) {
+                $query->where('status_aktif', true)
+                    ->when($levelId, function ($levelQuery) use ($levelId) {
+                        $levelQuery->where('level_id', $levelId);
+                    });
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -152,6 +159,17 @@ class SiswaDashboardController extends Controller
         $validated = $request->validate([
             'materi_id' => 'required|exists:materi,id',
         ]);
+
+        $materi = Materi::findOrFail($validated['materi_id']);
+        if (!$materi->status_aktif) {
+            return redirect()
+                ->back()
+                ->with('error', 'Materi ini sudah tidak tersedia.');
+        }
+
+        if ($block = $this->ensureMateriLevelAccess($user, $materi)) {
+            return $block;
+        }
 
         RakBuku::firstOrCreate([
             'pengguna_id' => $user->id,
@@ -494,7 +512,15 @@ class SiswaDashboardController extends Controller
                 $query->where(function ($inner) use ($levelId) {
                     $inner->whereNull('materi_id')
                         ->orWhereHas('materi', function ($materiQuery) use ($levelId) {
-                            $materiQuery->where('level_id', $levelId);
+                            $materiQuery->where('level_id', $levelId)
+                                ->where('status_aktif', true);
+                        });
+                });
+            }, function ($query) {
+                $query->where(function ($inner) {
+                    $inner->whereNull('materi_id')
+                        ->orWhereHas('materi', function ($materiQuery) {
+                            $materiQuery->where('status_aktif', true);
                         });
                 });
             })

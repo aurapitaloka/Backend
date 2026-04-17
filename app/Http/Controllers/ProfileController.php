@@ -46,9 +46,9 @@ class ProfileController extends Controller
             'email.required' => 'Email wajib diisi',
             'email.email' => 'Format email tidak valid',
             'email.unique' => 'Email sudah digunakan oleh pengguna lain',
-            'foto_profil.image' => 'File harus berupa gambar',
-            'foto_profil.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif',
-            'foto_profil.max' => 'Ukuran gambar maksimal 2MB',
+            'foto_profil.image' => 'Foto profil harus berupa file gambar.',
+            'foto_profil.mimes' => 'Format foto profil harus JPEG, PNG, JPG, atau GIF.',
+            'foto_profil.max' => 'Ukuran foto profil terlalu besar. Maksimal 2 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
         ]);
 
         $updateData = [
@@ -98,9 +98,9 @@ class ProfileController extends Controller
             'foto_profil' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'foto_profil.required' => 'Foto profil wajib diupload',
-            'foto_profil.image' => 'File harus berupa gambar',
-            'foto_profil.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif',
-            'foto_profil.max' => 'Ukuran gambar maksimal 2MB',
+            'foto_profil.image' => 'Foto profil harus berupa file gambar.',
+            'foto_profil.mimes' => 'Format foto profil harus JPEG, PNG, JPG, atau GIF.',
+            'foto_profil.max' => 'Ukuran foto profil terlalu besar. Maksimal 2 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
         ]);
 
         // Create uploads/profiles directory if it doesn't exist

@@ -49,9 +49,9 @@ class AacController extends Controller
             'status_aktif' => 'boolean',
         ], [
             'judul.required' => 'Judul/ungkapan wajib diisi',
-            'gambar_path.image' => 'Gambar harus berupa file gambar',
-            'gambar_path.mimes' => 'Gambar harus berformat JPG, PNG, WEBP, atau SVG',
-            'gambar_path.max' => 'Ukuran gambar maksimal 5MB',
+            'gambar_path.image' => 'Gambar AAC harus berupa file gambar.',
+            'gambar_path.mimes' => 'Format gambar AAC harus JPG, JPEG, PNG, WEBP, atau SVG.',
+            'gambar_path.max' => 'Ukuran gambar AAC terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
         ]);
 
         if ($request->hasFile('gambar_path')) {
@@ -113,9 +113,9 @@ class AacController extends Controller
             'status_aktif' => 'boolean',
         ], [
             'judul.required' => 'Judul/ungkapan wajib diisi',
-            'gambar_path.image' => 'Gambar harus berupa file gambar',
-            'gambar_path.mimes' => 'Gambar harus berformat JPG, PNG, WEBP, atau SVG',
-            'gambar_path.max' => 'Ukuran gambar maksimal 5MB',
+            'gambar_path.image' => 'Gambar AAC harus berupa file gambar.',
+            'gambar_path.mimes' => 'Format gambar AAC harus JPG, JPEG, PNG, WEBP, atau SVG.',
+            'gambar_path.max' => 'Ukuran gambar AAC terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
         ]);
 
         if ($request->hasFile('gambar_path')) {

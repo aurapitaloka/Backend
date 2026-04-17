@@ -32,7 +32,15 @@ class ApiKuisController extends Controller
                 $query->where(function ($inner) use ($levelId) {
                     $inner->whereNull('materi_id')
                         ->orWhereHas('materi', function ($materiQuery) use ($levelId) {
-                            $materiQuery->where('level_id', $levelId);
+                            $materiQuery->where('level_id', $levelId)
+                                ->where('status_aktif', true);
+                        });
+                });
+            }, function ($query) {
+                $query->where(function ($inner) {
+                    $inner->whereNull('materi_id')
+                        ->orWhereHas('materi', function ($materiQuery) {
+                            $materiQuery->where('status_aktif', true);
                         });
                 });
             })

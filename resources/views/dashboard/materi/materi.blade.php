@@ -286,6 +286,89 @@
             width: 18px;
             height: 18px;
         }
+
+        .search-form {
+            display: flex;
+            align-items: stretch;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            width: min(100%, 680px);
+        }
+
+        .search-input-wrap {
+            position: relative;
+            flex: 1 1 280px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--color-text-light);
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid var(--color-gray);
+            border-radius: 8px;
+            padding: 0 0.9rem 0 2.65rem;
+            font: inherit;
+            color: var(--color-text);
+            background: var(--color-white);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(248, 184, 3, 0.18);
+        }
+
+        .search-button,
+        .reset-search {
+            height: 44px;
+            border-radius: 8px;
+            padding: 0 1rem;
+            border: 1px solid transparent;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-button {
+            background: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .search-button:hover {
+            background: var(--color-primary-dark);
+        }
+
+        .reset-search {
+            background: var(--color-white);
+            border-color: var(--color-gray);
+            color: var(--color-text);
+        }
+
+        .reset-search:hover {
+            background: var(--color-primary-light);
+        }
+
+        .search-note {
+            width: 100%;
+            color: var(--color-text-light);
+            font-size: 0.85rem;
+        }
         
         /* Table Container */
         .table-container {
@@ -602,6 +685,13 @@
             .materi-table td:nth-child(7) a {
                 max-width: 80px;
             }
+
+            .search-form,
+            .search-input-wrap,
+            .search-button,
+            .reset-search {
+                width: 100%;
+            }
         }
         
         /* Empty State */
@@ -659,18 +749,49 @@
                 <div class="page-toolbar">
                     <div class="summary-card">
                         <i data-lucide="layers"></i>
-                        <span>Total materi: {{ $materi->total() }} item</span>
+                        <span>{{ $search ? 'Hasil pencarian' : 'Total materi' }}: {{ $materi->total() }} item</span>
                     </div>
                     <a href="{{ route('materi.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
                         <span><i data-lucide="plus"></i></span>
                         <span>Tambah Materi</span>
                     </a>
                 </div>
+
+                <form action="{{ route('materi.index') }}" method="GET" class="search-form" role="search">
+                    <div class="search-input-wrap">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input
+                            type="search"
+                            name="search"
+                            value="{{ $search }}"
+                            class="search-input"
+                            placeholder="Cari ID, judul, deskripsi, mata pelajaran, level, atau pembuat..."
+                            aria-label="Cari materi"
+                        >
+                    </div>
+                    <button type="submit" class="search-button">
+                        <i data-lucide="search"></i>
+                        <span>Cari</span>
+                    </button>
+                    @if($search)
+                        <a href="{{ route('materi.index') }}" class="reset-search">
+                            <i data-lucide="x"></i>
+                            <span>Reset</span>
+                        </a>
+                    @endif
+                    <div class="search-note">Pencarian bisa pakai ID materi, judul, deskripsi, mata pelajaran, level, nama pembuat, atau email pembuat.</div>
+                </form>
                 
                 <!-- Table Container -->
                 <div class="table-container">
                     <div class="table-header">
-                        <div class="table-title">Daftar Materi</div>
+                        <div class="table-title">
+                            @if($search)
+                                Hasil untuk "{{ $search }}"
+                            @else
+                                Daftar Materi
+                            @endif
+                        </div>
                     </div>
                     @if($materi->count() > 0)
                         <table class="materi-table">
@@ -737,8 +858,13 @@
                         <div class="empty-state-icon">
                             <i data-lucide="book-open"></i>
                         </div>
-                            <h3 style="margin-bottom: 0.5rem;">Belum ada materi</h3>
-                            <p>Mulai dengan menambahkan materi baru.</p>
+                            @if($search)
+                                <h3 style="margin-bottom: 0.5rem;">Materi tidak ditemukan</h3>
+                                <p>Tidak ada materi yang cocok dengan kata kunci "{{ $search }}".</p>
+                            @else
+                                <h3 style="margin-bottom: 0.5rem;">Belum ada materi</h3>
+                                <p>Mulai dengan menambahkan materi baru.</p>
+                            @endif
                         </div>
                     @endif
                 </div>

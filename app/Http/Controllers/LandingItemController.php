@@ -44,6 +44,9 @@ class LandingItemController extends Controller
         ], [
             'section.required' => 'Bagian landing wajib dipilih',
             'title.required' => 'Judul wajib diisi',
+            'image.image' => 'Gambar landing harus berupa file gambar.',
+            'image.mimes' => 'Format gambar landing harus JPG, JPEG, PNG, atau WEBP.',
+            'image.max' => 'Ukuran gambar landing terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
         ]);
 
         if ($request->hasFile('image')) {
@@ -96,6 +99,9 @@ class LandingItemController extends Controller
         ], [
             'section.required' => 'Bagian landing wajib dipilih',
             'title.required' => 'Judul wajib diisi',
+            'image.image' => 'Gambar landing harus berupa file gambar.',
+            'image.mimes' => 'Format gambar landing harus JPG, JPEG, PNG, atau WEBP.',
+            'image.max' => 'Ukuran gambar landing terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
         ]);
 
         if ($request->hasFile('image')) {
