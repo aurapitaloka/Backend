@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hasil Kuis - AKSES</title>
+    <title>Hasil Kuis - Ruma</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -65,8 +65,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             @include('components.sidebar')
@@ -81,6 +81,14 @@
                 <h1 class="header-title">Hasil Kuis</h1>
             </header>
             <div class="content-area">
+                @include('components.list-search', [
+                    'action' => route('kuis.hasil.index'),
+                    'resetRoute' => route('kuis.hasil.index'),
+                    'value' => $search ?? '',
+                    'placeholder' => 'Cari hasil kuis berdasarkan ID, judul kuis, materi, atau skor...',
+                    'note' => 'Gunakan kata kunci seperti ID hasil, judul kuis, judul materi, skor, total benar, atau total pertanyaan.'
+                ])
+
                 <div class="card">
                     <div class="table-head">
                         <div class="table-title">

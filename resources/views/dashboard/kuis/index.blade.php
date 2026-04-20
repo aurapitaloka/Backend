@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Kuis - AKSES</title>
+    <title>Manajemen Kuis - Ruma</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -182,133 +182,212 @@
             padding: 2rem;
         }
 
-
-        .page {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 1rem;
+        .page-subtitle {
+            color: var(--color-text-light);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
         }
 
-        .card {
+        .page-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .summary-card {
+            background: #FFF9E6;
+            border: 1px solid rgba(248, 184, 3, 0.35);
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #7A4A00;
+            font-weight: 600;
+        }
+
+        .summary-card i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .add-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--color-accent);
+            color: #1F2937;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(248, 184, 3, 0.3);
+            text-decoration: none;
+        }
+
+        .add-button:hover {
+            background: #E6A500;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(248, 184, 3, 0.4);
+        }
+
+        .table-container {
             background: var(--color-white);
             border-radius: 16px;
             padding: 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(0,0,0,0.04);
-            margin-bottom: 1rem;
+            overflow-x: auto;
         }
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .stat-card {
-            background: #FFF7E6;
-            border: 1px solid #F2E3C2;
-            border-radius: 14px;
-            padding: 0.85rem 1rem;
+
+        .table-header {
             display: flex;
             align-items: center;
-            gap: 0.7rem;
-        }
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: rgba(248, 184, 3, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #A16207;
-        }
-        .stat-label { font-size: 0.8rem; color: var(--color-text-light); }
-        .stat-value { font-size: 1.1rem; font-weight: 700; }
-
-        .title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .desc {
-            color: var(--color-text-light);
-            margin-top: 0.35rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.7rem 1.1rem;
-            border-radius: 12px;
+        .table-title {
             font-weight: 600;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            gap: 0.4rem;
+            font-size: 1.1rem;
         }
 
-        .btn-primary {
-            background: var(--color-accent);
-            color: #1F2937;
-        }
-
-        .btn-secondary {
-            background: var(--color-gray);
-            color: var(--color-text);
-        }
-        .btn-outline {
-            background: #FFFDF5;
-            color: #92400E;
-            border: 2px solid #F8B803;
-        }
-        .btn-outline:hover {
-            background: #FFF5DB;
-        }
-        .btn-sm {
-            padding: 0.4rem 0.7rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-        }
-
-        table {
+        .kuis-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: auto;
         }
 
-        th, td {
+        .kuis-table thead {
+            background: var(--color-primary-light);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .kuis-table th {
+            padding: 1rem 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text);
+            white-space: nowrap;
             text-align: left;
-            padding: 0.75rem;
+            border-bottom: 2px solid var(--color-gray);
+        }
+
+        .kuis-table th:nth-child(1),
+        .kuis-table td:nth-child(1) {
+            width: 50px;
+            text-align: center;
+        }
+
+        .kuis-table td {
+            padding: 1rem 0.75rem;
             border-bottom: 1px solid var(--color-gray);
-            font-size: 0.95rem;
+            color: var(--color-text);
+            font-size: 0.9rem;
+            vertical-align: middle;
         }
 
-        .tag {
+        .kuis-table td:nth-child(1) {
+            text-align: center;
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+
+        .kuis-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .kuis-table tbody tr:hover {
+            background: #F9FAFB;
+        }
+
+        .kuis-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
             display: inline-block;
-            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
             font-weight: 600;
-            padding: 0.3rem 0.6rem;
-            border-radius: 999px;
-            background: rgba(248, 184, 3, 0.15);
-            color: #B35E00;
         }
 
-        .actions {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
+        .status-badge.aktif {
+            background: #E8F5E9;
+            color: #388E3C;
         }
-        .badge {
+
+        .status-badge.nonaktif {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+
+        .action-buttons {
             display: inline-flex;
+            gap: 0.5rem;
             align-items: center;
-            gap: 0.35rem;
-            padding: 0.25rem 0.6rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
         }
-        .badge-active { background: #DCFCE7; color: #166534; }
-        .badge-inactive { background: #FEE2E2; color: #991B1B; }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+            background: #F9FAFB;
+            text-decoration: none;
+        }
+
+        .action-btn.view {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .action-btn.edit {
+            background: #FFF9E6;
+            color: var(--color-accent);
+        }
+
+        .action-btn.delete {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--color-text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .pagination-wrap {
+            margin-top: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -316,8 +395,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             @include('components.sidebar')
@@ -332,109 +411,91 @@
                 <h1 class="header-title">Manajemen Kuis</h1>
             </header>
             <div class="content-area">
-                <div class="page">
-                <div class="card">
-                    <div class="actions" style="justify-content: space-between; align-items: center;">
-                        <div>
-                            <div class="title">Manajemen Kuis</div>
-                            <div class="desc">Buat dan kelola kuis untuk materi pembelajaran.</div>
-                        </div>
-                        <div class="actions">
-                            <a href="{{ route('kuis.create') }}" class="btn btn-primary">
-                                <i data-lucide="plus-circle"></i>
-                                Tambah Kuis
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon"><i data-lucide="clipboard-list"></i></div>
-                        <div>
-                            <div class="stat-label">Total Kuis</div>
-                            <div class="stat-value">{{ $kuis->total() }}</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i data-lucide="check-circle"></i></div>
-                        <div>
-                            <div class="stat-label">Kuis Aktif</div>
-                            <div class="stat-value">{{ $kuis->where('status_aktif', true)->count() }}</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i data-lucide="pause-circle"></i></div>
-                        <div>
-                            <div class="stat-label">Nonaktif</div>
-                            <div class="stat-value">{{ $kuis->where('status_aktif', false)->count() }}</div>
-                        </div>
-                    </div>
-                </div>
-
                 @if(session('success'))
-                    <div class="card" style="border-left:4px solid #16A34A;">
-                        <span class="tag">Sukses</span>
-                        <div class="desc" style="margin-top:0.35rem;">{{ session('success') }}</div>
+                    <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        {{ session('success') }}
                     </div>
                 @endif
 
-                <div class="card">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Judul</th>
-                                <th>Materi</th>
-                                <th>Pertanyaan</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($kuis as $item)
+                <div class="page-subtitle">Buat dan kelola kuis untuk materi pembelajaran.</div>
+                <div class="list-search-panel">
+                    <div class="page-toolbar">
+                        <div class="summary-card">
+                            <i data-lucide="clipboard-list"></i>
+                            <span>{{ ($search ?? '') !== '' ? 'Hasil pencarian' : 'Total kuis' }}: {{ $kuis->total() }} item</span>
+                        </div>
+                        <a href="{{ route('kuis.create') }}" class="add-button">
+                            <i data-lucide="plus"></i>
+                            <span>Tambah Kuis</span>
+                        </a>
+                    </div>
+
+                    @include('components.list-search', [
+                        'action' => route('kuis.index'),
+                        'resetRoute' => route('kuis.index'),
+                        'value' => $search ?? '',
+                        'placeholder' => 'Cari kuis berdasarkan ID, judul, deskripsi, atau materi...',
+                        'note' => 'Gunakan kata kunci seperti ID kuis, judul kuis, deskripsi, atau judul materi yang terhubung.',
+                        'panel' => false
+                    ])
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="table-title">Daftar Kuis</div>
+                    </div>
+                    @if($kuis->count() > 0)
+                        <table class="kuis-table">
+                            <thead>
                                 <tr>
-                                    <td>{{ $item->judul }}</td>
-                                    <td>{{ $item->materi->judul ?? '-' }}</td>
-                                    <td>{{ $item->pertanyaan_count }}</td>
-                                    <td>
-                                        @if($item->status_aktif)
-                                            <span class="badge badge-active"><i data-lucide="check"></i> Aktif</span>
-                                        @else
-                                            <span class="badge badge-inactive"><i data-lucide="x"></i> Nonaktif</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="actions">
-                                            <a href="{{ route('kuis.show', $item->id) }}" class="btn btn-outline btn-sm">
+                                    <th>No.</th>
+                                    <th>Judul</th>
+                                    <th>Materi</th>
+                                    <th>Pertanyaan</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($kuis as $index => $item)
+                                    <tr>
+                                        <td>{{ $kuis->firstItem() + $index }}</td>
+                                        <td><strong>{{ $item->judul }}</strong></td>
+                                        <td>{{ $item->materi->judul ?? '-' }}</td>
+                                        <td>{{ $item->pertanyaan_count }}</td>
+                                        <td>
+                                            <span class="status-badge {{ $item->status_aktif ? 'aktif' : 'nonaktif' }}">
+                                                {{ $item->status_aktif ? 'Aktif' : 'Nonaktif' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="{{ route('kuis.show', $item->id) }}" class="action-btn view" title="Lihat">
                                                 <i data-lucide="eye"></i>
-                                                Detail
-                                            </a>
-                                            <a href="{{ route('kuis.edit', $item->id) }}" class="btn btn-outline btn-sm">
-                                                <i data-lucide="pencil"></i>
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('kuis.destroy', $item->id) }}" method="post" onsubmit="return confirm('Hapus kuis ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-secondary btn-sm" type="submit">
+                                                </a>
+                                                <a href="{{ route('kuis.edit', $item->id) }}" class="action-btn edit" title="Edit">
+                                                    <i data-lucide="edit-3"></i>
+                                                </a>
+                                                <button type="button" class="action-btn delete" title="Hapus"
+                                                    onclick="handleDeleteKuis({{ $item->id }}, '{{ addslashes($item->judul) }}')">
                                                     <i data-lucide="trash-2"></i>
-                                                    Hapus
                                                 </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="desc">Belum ada kuis.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    <div style="margin-top:1rem;">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i data-lucide="clipboard-list"></i></div>
+                            <h3 style="margin-bottom: 0.5rem;">Belum ada kuis</h3>
+                            <p>Mulai dengan menambahkan kuis baru.</p>
+                        </div>
+                    @endif
+                    <div class="pagination-wrap">
                         {{ $kuis->links() }}
                     </div>
-                </div>
                 </div>
             </div>
         </main>
@@ -459,6 +520,43 @@
                 }
             });
         }
+
+        function handleDeleteKuis(id, judul) {
+            showModal({
+                type: 'delete',
+                title: 'Hapus Kuis',
+                message: `Apakah Anda yakin ingin menghapus kuis "${judul}"? Tindakan ini tidak dapat dibatalkan.`,
+                icon: 'trash-2',
+                confirmText: 'Ya, Hapus',
+                isDanger: true,
+                onConfirm: function() {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `{{ url('dashboard/kuis') }}/${id}`;
+
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = '{{ csrf_token() }}';
+                    form.appendChild(csrfToken);
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+                    form.appendChild(methodInput);
+
+                    document.body.appendChild(form);
+
+                    if (typeof showInfoToast !== 'undefined') {
+                        showInfoToast('Menghapus...', 'Sedang menghapus kuis...');
+                    }
+
+                    form.submit();
+                }
+            });
+        }
+
         lucide.createIcons();
     </script>
 </body>

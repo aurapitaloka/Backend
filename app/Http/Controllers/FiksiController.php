@@ -12,17 +12,34 @@ class FiksiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->get('search', ''));
+
         $fiksi = Fiksi::with('pengguna')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('judul_buku', 'like', "%{$search}%")
+                        ->orWhere('penulis', 'like', "%{$search}%")
+                        ->orWhere('kategori', 'like', "%{$search}%")
+                        ->orWhere('tahun_terbit', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%")
+                        ->orWhereHas('pengguna', function ($penggunaQuery) use ($search) {
+                            $penggunaQuery->where('nama', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         if (request()->expectsJson()) {
             return response()->json($fiksi);
         }
 
-        return view('dashboard.fiksi.fiksi', compact('fiksi'));
+        return view('dashboard.fiksi.fiksi', compact('fiksi', 'search'));
     }
 
     /**

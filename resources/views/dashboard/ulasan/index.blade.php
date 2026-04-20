@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ulasan - AKSES Dashboard</title>
+    <title>Ulasan - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -242,8 +242,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             @include('components.sidebar')
@@ -266,16 +266,31 @@
                     </div>
                 @endif
 
-                <div style="display:flex; justify-content:flex-start; margin-bottom:1rem;">
-                    <a href="{{ route('ulasan.export', [], false) }}" class="btn btn-export">
-                        <i data-lucide="download"></i>
-                        Export CSV
-                    </a>
+                <div class="list-search-panel">
+                    <div style="display:flex; justify-content:flex-start; margin-bottom:0.85rem;">
+                        <a href="{{ route('ulasan.export', [], false) }}" class="btn btn-export">
+                            <i data-lucide="download"></i>
+                            Export CSV
+                        </a>
+                    </div>
+
+                    @include('components.list-search', [
+                        'action' => route('ulasan.index'),
+                        'resetRoute' => route('ulasan.index'),
+                        'value' => $search ?? '',
+                        'placeholder' => 'Cari ulasan berdasarkan ID, nama, email, rating, atau isi ulasan...',
+                        'note' => 'Gunakan kata kunci seperti ID ulasan, nama pengirim, email, rating, atau isi ulasan.',
+                        'panel' => false
+                    ])
                 </div>
 
                 <div class="section-card">
                     @if($ulasan->count() === 0)
-                        <p style="color:var(--color-text-light);">Belum ada ulasan masuk.</p>
+                        @if(($search ?? '') !== '')
+                            <p style="color:var(--color-text-light);">Tidak ada ulasan yang cocok dengan kata kunci "{{ $search }}".</p>
+                        @else
+                            <p style="color:var(--color-text-light);">Belum ada ulasan masuk.</p>
+                        @endif
                     @else
                         <table class="table">
                             <thead>

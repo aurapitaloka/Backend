@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panduan - AKSES Dashboard</title>
+    <title>Panduan - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -557,8 +557,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             
@@ -587,23 +587,34 @@
                     </div>
                 @endif
 
-                <div class="page-intro">
-                    <div>
-                        <div class="page-subtitle">Kelola daftar panduan agar materi lebih terstruktur dan mudah ditemukan.</div>
-                        <div class="summary-card">
-                            <span class="summary-icon"><i data-lucide="layers"></i></span>
-                            <div class="summary-text">Total Panduan: {{ count($data) }} item</div>
+                <div class="list-search-panel">
+                    <div class="page-intro">
+                        <div>
+                            <div class="page-subtitle">Kelola daftar panduan agar materi lebih terstruktur dan mudah ditemukan.</div>
+                            <div class="summary-card">
+                                <span class="summary-icon"><i data-lucide="layers"></i></span>
+                                <div class="summary-text">{{ ($search ?? '') !== '' ? 'Hasil pencarian' : 'Total Panduan' }}: {{ $data->total() }} item</div>
+                            </div>
                         </div>
+                        <a href="{{ route('panduan.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
+                            <i data-lucide="plus"></i>
+                            <span>Tambah Panduan</span>
+                        </a>
                     </div>
-                    <a href="{{ route('panduan.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
-                        <i data-lucide="plus"></i>
-                        <span>Tambah Panduan</span>
-                    </a>
+
+                    @include('components.list-search', [
+                        'action' => route('panduan.index'),
+                        'resetRoute' => route('panduan.index'),
+                        'value' => $search ?? '',
+                        'placeholder' => 'Cari panduan berdasarkan ID, judul, tag, urutan, atau deskripsi...',
+                        'note' => 'Gunakan kata kunci seperti ID panduan, judul panduan, tag, urutan, atau deskripsi panduan.',
+                        'panel' => false
+                    ])
                 </div>
 
                 <!-- Table Container -->
                 <div class="table-container">
-                    @if(count($data) > 0)
+                    @if($data->count() > 0)
                         <table class="pengguna-table">
                             <thead>
                         <tr>
@@ -618,7 +629,7 @@
                         <tbody>
                         @foreach($data as $index => $item)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $data->firstItem() + $index }}</td>
                             <td><strong>{{ $item->judul }}</strong></td>
                             <td>{{ $item->deskripsi ?? '-' }}</td>
                             <td>{{ $item->created_at->format('d M Y') }}</td>
@@ -644,10 +655,16 @@
                     @else
                         <div class="empty-state">
                             <div class="empty-state-icon"><i data-lucide="book-open"></i></div>
-                            <h3 style="margin-bottom: 0.5rem;">Belum ada panduan</h3>
-                            <p>Mulai dengan menambahkan panduan baru.</p>
+                            @if(($search ?? '') !== '')
+                                <h3 style="margin-bottom: 0.5rem;">Panduan tidak ditemukan</h3>
+                                <p>Tidak ada panduan yang cocok dengan kata kunci "{{ $search }}".</p>
+                            @else
+                                <h3 style="margin-bottom: 0.5rem;">Belum ada panduan</h3>
+                                <p>Mulai dengan menambahkan panduan baru.</p>
+                            @endif
                         </div>
                     @endif
+                    <div style="margin-top:1rem;">{{ $data->links() }}</div>
                 </div>
 
         </main>

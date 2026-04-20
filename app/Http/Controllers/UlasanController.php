@@ -3,14 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ulasan;
+use Illuminate\Http\Request;
 
 class UlasanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $ulasan = Ulasan::orderByDesc('created_at')->paginate(15);
+        $search = trim((string) $request->get('search', ''));
 
-        return view('dashboard.ulasan.index', compact('ulasan'));
+        $ulasan = Ulasan::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('nama', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('rating', 'like', "%{$search}%")
+                        ->orWhere('isi', 'like', "%{$search}%");
+                });
+            })
+            ->orderByDesc('created_at')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('dashboard.ulasan.index', compact('ulasan', 'search'));
     }
 
     public function exportCsv()

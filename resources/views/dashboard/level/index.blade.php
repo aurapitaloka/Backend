@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Level - AKSES Dashboard</title>
+    <title>Level - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -537,7 +537,7 @@
                     <div class="logo-circle">
                         <span class="logo-icon">👋</span>
                     </div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             
@@ -567,15 +567,26 @@
                 @endif
 
                 <div class="page-subtitle">Kelola level (kelas) agar struktur pembelajaran lebih rapi.</div>
-                <div class="page-toolbar">
-                    <div class="summary-card">
-                        <i data-lucide="layers"></i>
-                        <span>Total level: {{ $levels->total() }} item</span>
+                <div class="list-search-panel">
+                    <div class="page-toolbar">
+                        <div class="summary-card">
+                            <i data-lucide="layers"></i>
+                            <span>{{ ($search ?? '') !== '' ? 'Hasil pencarian' : 'Total level' }}: {{ $levels->total() }} item</span>
+                        </div>
+                        <a href="{{ route('level.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
+                            <i data-lucide="plus"></i>
+                            <span>Tambah Level</span>
+                        </a>
                     </div>
-                    <a href="{{ route('level.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
-                        <i data-lucide="plus"></i>
-                        <span>Tambah Level</span>
-                    </a>
+
+                    @include('components.list-search', [
+                        'action' => route('level.index'),
+                        'resetRoute' => route('level.index'),
+                        'value' => $search ?? '',
+                        'placeholder' => 'Cari level berdasarkan ID, nama, atau deskripsi...',
+                        'note' => 'Gunakan kata kunci seperti ID level, nama level, atau deskripsi level.',
+                        'panel' => false
+                    ])
                 </div>
 
                 <!-- Table Container -->

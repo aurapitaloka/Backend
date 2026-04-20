@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing - AKSES Dashboard</title>
+    <title>Landing - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -391,8 +391,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
 
@@ -416,18 +416,29 @@
                     </div>
                 @endif
 
-                <div class="page-intro">
-                    <div>
-                        <div class="page-subtitle">Kelola konten landing agar informasi di halaman utama selalu relevan.</div>
-                        <div class="summary-card">
-                            <span class="summary-icon"><i data-lucide="layers"></i></span>
-                            <div class="summary-text">Total konten: {{ $landingItems->total() }} item</div>
+                <div class="list-search-panel">
+                    <div class="page-intro">
+                        <div>
+                            <div class="page-subtitle">Kelola konten landing agar informasi di halaman utama selalu relevan.</div>
+                            <div class="summary-card">
+                                <span class="summary-icon"><i data-lucide="layers"></i></span>
+                                <div class="summary-text">{{ ($search ?? '') !== '' ? 'Hasil pencarian' : 'Total konten' }}: {{ $landingItems->total() }} item</div>
+                            </div>
                         </div>
+                        <a href="{{ route('landing.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
+                            <i data-lucide="plus"></i>
+                            <span>Tambah Konten</span>
+                        </a>
                     </div>
-                    <a href="{{ route('landing.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
-                        <i data-lucide="plus"></i>
-                        <span>Tambah Konten</span>
-                    </a>
+
+                    @include('components.list-search', [
+                        'action' => route('landing.index'),
+                        'resetRoute' => route('landing.index'),
+                        'value' => $search ?? '',
+                        'placeholder' => 'Cari konten landing berdasarkan ID, bagian, judul, badge, atau tombol...',
+                        'note' => 'Gunakan kata kunci seperti ID konten, bagian landing, judul, subtitle, deskripsi, badge, label tombol, atau metadata.',
+                        'panel' => false
+                    ])
                 </div>
 
                 <div class="table-container">

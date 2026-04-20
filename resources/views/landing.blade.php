@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AKSES - Solusi edukasi modern dengan teknologi voice dan gesture control untuk pengalaman belajar yang accessible dan interaktif">
+    <meta name="description" content="Ruma - Solusi edukasi modern dengan teknologi voice dan gesture control untuk pengalaman belajar yang accessible dan interaktif">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>AKSES - Belajar Lebih Mudah, Tanpa Sentuhan</title>
+    <title>Ruma - Belajar Lebih Mudah, Tanpa Sentuhan</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -284,10 +284,10 @@
         <!-- Logo -->
         <a href="#beranda" class="flex items-center gap-3">
             <img src="{{ asset('images/image.png') }}" 
-                 alt="AKSES Logo"
+                 alt="Ruma Logo"
                  class="h-10 w-auto">
             <span class="font-extrabold text-xl tracking-wide text-gray-900">
-                AKSES
+                Ruma
             </span>
         </a>
 
@@ -362,7 +362,7 @@
             <div class="hidden md:flex justify-center">
                 <img
                     src="{{ optional($hero)->image_path ? Storage::url($hero->image_path) : asset('images/welcome.webp') }}"
-                    alt="Ilustrasi Pembelajaran AKSES"
+                    alt="Ilustrasi Pembelajaran Ruma"
                     class="max-h-[420px] w-auto drop-shadow-xl"
                 />
             </div>
@@ -383,7 +383,7 @@
                 {{ optional($featureHeader)->title ?? 'Fitur Unggulan' }}
             </h2>
             <p class="text-lg md:text-xl text-gray-600 leading-relaxed">
-                {{ optional($featureHeader)->description ?? 'AKSES menghadirkan teknologi pembelajaran inklusif yang dirancang untuk memudahkan semua siswa belajar secara mandiri, interaktif, dan tanpa hambatan.' }}
+                {{ optional($featureHeader)->description ?? 'Ruma menghadirkan teknologi pembelajaran inklusif yang dirancang untuk memudahkan semua siswa belajar secara mandiri, interaktif, dan tanpa hambatan.' }}
             </p>
         </div>
 
@@ -424,7 +424,7 @@
                 {{ optional($flowHeader)->title ?? 'Alur Penggunaan' }}
             </h2>
             <p class="text-lg text-gray-600 leading-relaxed">
-                {{ optional($flowHeader)->description ?? 'Ikuti langkah-langkah sederhana untuk mulai belajar dengan AKSES secara mudah, inklusif, dan tanpa hambatan.' }}
+                {{ optional($flowHeader)->description ?? 'Ikuti langkah-langkah sederhana untuk mulai belajar dengan Ruma secara mudah, inklusif, dan tanpa hambatan.' }}
             </p>
         </div>
 
@@ -550,11 +550,11 @@
             <!-- Text Content -->
             <div>
                 <h2 class="text-4xl md:text-5xl font-extrabold text-green-600 mb-6">
-                    {{ optional($app)->title ?? 'Dapatkan Aplikasi AKSES' }}
+                    {{ optional($app)->title ?? 'Dapatkan Aplikasi Ruma' }}
                 </h2>
 
                 <p class="text-lg text-gray-700 mb-8 max-w-xl">
-                    {{ optional($app)->description ?? 'Belajar menjadi lebih mudah dan inklusif dengan teknologi tanpa sentuhan. AKSES dapat digunakan melalui smartphone maupun web.' }}
+                    {{ optional($app)->description ?? 'Belajar menjadi lebih mudah dan inklusif dengan teknologi tanpa sentuhan. Ruma dapat digunakan melalui smartphone maupun web.' }}
                 </p>
 
               <div class="flex flex-col sm:flex-row gap-4">
@@ -574,7 +574,7 @@
                 <div class="relative">
 
                     <img src="{{ optional($app)->image_path ? Storage::url($app->image_path) : asset('images/mockup.png') }}"
-                         alt="Mockup Aplikasi AKSES"
+                         alt="Mockup Aplikasi Ruma"
                          class="w-full max-w-xl drop-shadow-2xl
                                 hover:scale-105 transition-transform duration-500"
                          onerror="this.style.display='none';">
@@ -599,7 +599,7 @@
 
             <!-- Brand & Description -->
             <div>
-                <h3 class="text-3xl font-extrabold mb-4">{{ optional($footer)->title ?? 'AKSES' }}</h3>
+                <h3 class="text-3xl font-extrabold mb-4">{{ optional($footer)->title ?? 'Ruma' }}</h3>
                 <p class="text-gray-200 leading-relaxed mb-6">
                     {{ optional($footer)->description ?? 'Platform pembelajaran inklusif yang membantu siswa belajar lebih mudah tanpa sentuhan, kapan pun dan di mana pun.' }}
                 </p>
@@ -699,7 +699,7 @@
         <div class="border-t border-white/20 py-6">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-300">
                 <p>
-                    © {{ date('Y') }} {{ optional($footer)->title ?? 'AKSES' }}. All rights reserved.
+                    © {{ date('Y') }} {{ optional($footer)->title ?? 'Ruma' }}. All rights reserved.
                 </p>
                 <p>
                     {{ optional($footer)->subtitle ?? 'Developed by Aura Pitaloka | 22090026' }}

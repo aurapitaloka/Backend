@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AAC - AKSES Dashboard</title>
+    <title>AAC - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -557,8 +557,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             
@@ -587,18 +587,29 @@
                     </div>
                 @endif
 
-                <div class="page-top">
-                    <div class="page-subtitle">Kelola daftar simbol dan ungkapan AAC agar mudah digunakan.</div>
-                    <div class="page-toolbar">
-                    <div class="summary-card">
-                        <i data-lucide="message-circle"></i>
-                        <span>Total AAC: {{ $aac->total() }} item</span>
+                <div class="list-search-panel">
+                    <div class="page-top">
+                        <div class="page-subtitle">Kelola daftar simbol dan ungkapan AAC agar mudah digunakan.</div>
+                        <div class="page-toolbar">
+                        <div class="summary-card">
+                            <i data-lucide="message-circle"></i>
+                            <span>{{ ($search ?? '') !== '' ? 'Hasil pencarian' : 'Total AAC' }}: {{ $aac->total() }} item</span>
+                        </div>
+                        <a href="{{ route('aac.create') }}" class="add-button">
+                            <i data-lucide="plus"></i>
+                            Tambah AAC
+                        </a>
+                        </div>
                     </div>
-                    <a href="{{ route('aac.create') }}" class="add-button">
-                        <i data-lucide="plus"></i>
-                        Tambah AAC
-                    </a>
-                    </div>
+
+                    @include('components.list-search', [
+                        'action' => route('aac.index'),
+                        'resetRoute' => route('aac.index'),
+                        'value' => $search ?? '',
+                        'placeholder' => 'Cari AAC berdasarkan ID, judul, kategori, urutan, atau pembuat...',
+                        'note' => 'Gunakan kata kunci seperti ID AAC, judul/ungkapan, kategori, deskripsi, urutan, nama pembuat, atau email pembuat.',
+                        'panel' => false
+                    ])
                 </div>
       
                 <!-- Table Container -->

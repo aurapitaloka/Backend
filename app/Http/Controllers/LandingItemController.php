@@ -10,12 +10,29 @@ class LandingItemController extends Controller
 {
     public function index()
     {
-        $landingItems = LandingItem::orderBy('section')
+        $search = trim((string) request('search', ''));
+
+        $landingItems = LandingItem::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('section', 'like', "%{$search}%")
+                        ->orWhere('title', 'like', "%{$search}%")
+                        ->orWhere('subtitle', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('badge', 'like', "%{$search}%")
+                        ->orWhere('button_label', 'like', "%{$search}%")
+                        ->orWhere('meta_one', 'like', "%{$search}%")
+                        ->orWhere('meta_two', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('section')
             ->orderBy('sort_order')
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('dashboard.landing.index', compact('landingItems'));
+        return view('dashboard.landing.index', compact('landingItems', 'search'));
     }
 
     public function create()

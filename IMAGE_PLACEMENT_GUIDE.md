@@ -1,4 +1,4 @@
-# Panduan Penempatan Gambar untuk Landing Page AKSES
+# Panduan Penempatan Gambar untuk Landing Page Ruma
 
 File-file gambar berikut perlu ditempatkan di folder `public/images/` dengan nama yang sesuai:
 
@@ -7,7 +7,7 @@ File-file gambar berikut perlu ditempatkan di folder `public/images/` dengan nam
 ```
 public/
 ├── images/
-│   ├── logo-akses.png              # Logo utama AKSES (disarankan: 200x60px, format PNG dengan transparansi)
+│   ├── logo-ruma.png              # Logo utama Ruma (disarankan: 200x60px, format PNG dengan transparansi)
 │   ├── hero-illustration.png        # Ilustrasi hero section (disarankan: 800x600px, format PNG/JPG)
 │   ├── mobile-app-mockup.png        # Mockup aplikasi mobile (disarankan: 400x800px, format PNG)
 │   ├── desktop-app-mockup.png       # Mockup aplikasi web/desktop (disarankan: 1200x800px, format PNG)
@@ -22,10 +22,10 @@ public/
 
 ## Detail Spesifikasi Gambar
 
-### 1. Logo AKSES (`logo-akses.png`)
+### 1. Logo Ruma (`logo-ruma.png`)
 - **Ukuran**: 200x60px (atau proporsi yang sesuai)
 - **Format**: PNG dengan background transparan
-- **Konten**: Logo teks "AKSES" atau logo brand AKSES
+- **Konten**: Logo teks "Ruma" atau logo brand Ruma
 - **Penggunaan**: Header navigation
 
 ### 2. Hero Illustration (`hero-illustration.png`)
@@ -37,14 +37,14 @@ public/
 ### 3. Mobile App Mockup (`mobile-app-mockup.png`)
 - **Ukuran**: 400x800px (rasio 1:2 untuk smartphone)
 - **Format**: PNG dengan transparansi atau JPG
-- **Konten**: Screenshot atau mockup aplikasi AKSES di smartphone
+- **Konten**: Screenshot atau mockup aplikasi Ruma di smartphone
 - **Tampilan**: Layar login/register aplikasi
 
 ### 4. Desktop App Mockup (`desktop-app-mockup.png`)
 - **Ukuran**: 1200x800px (rasio 3:2)
 - **Format**: PNG atau JPG
-- **Konten**: Screenshot atau mockup aplikasi AKSES di desktop/web browser
-- **Tampilan**: Halaman web AKSES
+- **Konten**: Screenshot atau mockup aplikasi Ruma di desktop/web browser
+- **Tampilan**: Halaman web Ruma
 
 ### 5. Book Shelf Images (`book-shelf-1.png`, `book-shelf-2.png`, `book-shelf-3.png`)
 - **Ukuran**: 600x400px (rasio 3:2)

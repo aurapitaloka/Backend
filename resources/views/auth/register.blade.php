@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Daftar akun AKSES - Platform Edukasi Modern">
-    <title>Daftar - AKSES</title>
+    <meta name="description" content="Daftar akun Ruma - Platform Edukasi Modern">
+    <title>Daftar - Ruma</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
@@ -325,7 +325,7 @@
             <div class="flex justify-center mb-4">
                 <img src="{{ asset('images/image.png') }}" class="h-24 w-auto drop-shadow-xl">
             </div>
-            <h1 class="login-title">Daftar Akun AKSES</h1>
+            <h1 class="login-title">Daftar Akun Ruma</h1>
             <p class="login-subtitle">Buat akun siswa untuk mulai belajar</p>
         </div>
 

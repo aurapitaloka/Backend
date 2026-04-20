@@ -12,8 +12,21 @@ class MataPelajaranController extends Controller
      */
     public function index()
     {
-        $mataPelajarans = MataPelajaran::orderBy('nama')->paginate(10);
-        return view('dashboard.mata-pelajaran.index', compact('mataPelajarans'));
+        $search = trim((string) request('search', ''));
+
+        $mataPelajarans = MataPelajaran::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('nama', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('nama')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('dashboard.mata-pelajaran.index', compact('mataPelajarans', 'search'));
     }
 
     /**

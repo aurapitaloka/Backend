@@ -12,19 +12,35 @@ class AacController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->get('search', ''));
+
         $aac = Aac::with('pengguna')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('judul', 'like', "%{$search}%")
+                        ->orWhere('kategori', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%")
+                        ->orWhere('urutan', 'like', "%{$search}%")
+                        ->orWhereHas('pengguna', function ($penggunaQuery) use ($search) {
+                            $penggunaQuery->where('nama', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->orderByRaw('CASE WHEN urutan IS NULL THEN 1 ELSE 0 END')
             ->orderBy('urutan')
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         if (request()->expectsJson()) {
             return response()->json($aac);
         }
 
-        return view('dashboard.aac.aac', compact('aac'));
+        return view('dashboard.aac.aac', compact('aac', 'search'));
     }
 
     /**

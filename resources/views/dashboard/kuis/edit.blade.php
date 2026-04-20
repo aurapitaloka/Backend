@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Kuis - AKSES</title>
+    <title>Edit Kuis - Ruma</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -64,8 +64,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             @include('components.sidebar')
@@ -120,7 +120,8 @@
                         </div>
                         <div class="form-group">
                             <label>
-                                <input type="checkbox" name="status_aktif" {{ old('status_aktif', $kuis->status_aktif) ? 'checked' : '' }}>
+                                <input type="hidden" name="status_aktif" value="0">
+                                <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', $kuis->status_aktif) ? 'checked' : '' }}>
                                 Aktifkan Kuis
                             </label>
                         </div>
@@ -146,6 +147,7 @@
                                         <button type="button" class="btn btn-secondary remove-question">Hapus</button>
                                     </div>
                             <div class="form-group">
+                                <input type="hidden" name="pertanyaan[{{ $index }}][id]" value="{{ $pertanyaan->id }}">
                                 <label>Pertanyaan</label>
                                 <input type="text" name="pertanyaan[{{ $index }}][teks]" value="{{ $pertanyaan->pertanyaan }}" required>
                             </div>

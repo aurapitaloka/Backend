@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiksi - AKSES Dashboard</title>
+    <title>Fiksi - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -248,11 +248,14 @@
         
         /* Main Content */
         .main-content {
-            flex: 1;
+            flex: none;
             margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            max-width: calc(100% - var(--sidebar-width));
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            min-width: 0;
         }
         
         /* Header Bar */
@@ -278,12 +281,14 @@
         /* Content Area */
         .content-area {
             flex: 1;
-            padding: 2rem;
+            padding: 1.5rem 2rem 2rem;
         }
 
         .page-container {
-            max-width: 1200px;
+            width: 100%;
+            max-width: none;
             margin: 0 auto;
+            min-width: 0;
         }
 
         .page-subtitle {
@@ -298,11 +303,20 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 0.75rem;
-            margin-bottom: 1.25rem;
+            margin-bottom: 0.85rem;
         }
 
         .page-top {
             padding: 0;
+        }
+
+        .fiksi-controls {
+            background: var(--color-white);
+            border: 1px solid rgba(17, 24, 39, 0.06);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
         .summary-card {
@@ -340,14 +354,15 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.6rem 1.25rem;
+            padding: 0.75rem 1.5rem;
             background: var(--color-accent);
             color: #1F2937;
             font-weight: 600;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 0; 
+            margin: 0;
+            box-shadow: 0 4px 12px rgba(248, 184, 3, 0.3);
         }
         
         .add-button:hover {
@@ -358,6 +373,97 @@
         
         .add-button:active {
             transform: translateY(0);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: minmax(260px, 1fr) auto auto;
+            align-items: center;
+            gap: 0.65rem;
+            width: 100%;
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 14px;
+            padding: 0.75rem;
+        }
+
+        .search-input-wrap {
+            position: relative;
+            min-width: 0;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--color-text-light);
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 46px;
+            border: 1px solid #D1D5DB;
+            border-radius: 10px;
+            padding: 0 0.9rem 0 2.65rem;
+            font: inherit;
+            color: var(--color-text);
+            background: var(--color-white);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(248, 184, 3, 0.18);
+        }
+
+        .search-button,
+        .reset-search {
+            height: 46px;
+            border-radius: 10px;
+            padding: 0 1.15rem;
+            border: 1px solid transparent;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-button {
+            background: var(--color-primary);
+            color: var(--color-white);
+            box-shadow: 0 4px 10px rgba(17, 24, 39, 0.12);
+        }
+
+        .search-button:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .reset-search {
+            background: var(--color-white);
+            border-color: var(--color-gray);
+            color: var(--color-text);
+        }
+
+        .reset-search:hover {
+            background: var(--color-primary-light);
+        }
+
+        .search-note {
+            grid-column: 1 / -1;
+            color: var(--color-text-light);
+            font-size: 0.82rem;
+            line-height: 1.45;
+            padding-top: 0.2rem;
         }
         
         /* Table Container */
@@ -382,7 +488,7 @@
         }
         
         .fiksi-table th {
-            padding: 1rem;
+            padding: 0.9rem 0.75rem;
             text-align: left;
             font-weight: 600;
             color: var(--color-text);
@@ -391,10 +497,46 @@
         }
         
         .fiksi-table td {
-            padding: 1rem;
+            padding: 0.9rem 0.75rem;
             border-bottom: 1px solid var(--color-gray);
             color: var(--color-text);
             font-size: 0.9rem;
+        }
+
+        .fiksi-table th:nth-child(1),
+        .fiksi-table td:nth-child(1) { width: 48px; text-align: center; }
+
+        .fiksi-table th:nth-child(2),
+        .fiksi-table td:nth-child(2) { width: 90px; }
+
+        .fiksi-table th:nth-child(3),
+        .fiksi-table td:nth-child(3) { width: 20%; }
+
+        .fiksi-table th:nth-child(4),
+        .fiksi-table td:nth-child(4) { width: 12%; }
+
+        .fiksi-table th:nth-child(5),
+        .fiksi-table td:nth-child(5) { width: 13%; }
+
+        .fiksi-table th:nth-child(6),
+        .fiksi-table td:nth-child(6) { width: 96px; }
+
+        .fiksi-table th:nth-child(7),
+        .fiksi-table td:nth-child(7) { width: 18%; }
+
+        .fiksi-table th:nth-child(8),
+        .fiksi-table td:nth-child(8) { width: 98px; text-align: center; }
+
+        .fiksi-table th:nth-child(9),
+        .fiksi-table td:nth-child(9) { width: 128px; }
+
+        .fiksi-table td:nth-child(3),
+        .fiksi-table td:nth-child(4),
+        .fiksi-table td:nth-child(5),
+        .fiksi-table td:nth-child(7) {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .fiksi-table tbody tr {
@@ -561,6 +703,8 @@
             
             .main-content {
                 margin-left: 0;
+                width: 100%;
+                max-width: 100%;
             }
             
             .content-area {
@@ -570,6 +714,16 @@
             .table-container {
                 padding: 1rem;
                 margin-top: 0;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .search-input-wrap,
+            .search-button,
+            .reset-search {
+                width: 100%;
             }
             
             .fiksi-table {
@@ -589,8 +743,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             
@@ -621,24 +775,56 @@
                     </div>
                 @endif
 
-                <div class="page-top">
-                    <div class="page-subtitle">Kelola koleksi fiksi agar rapi dan mudah ditemukan.</div>
+                <div class="page-subtitle">Kelola koleksi fiksi agar rapi dan mudah ditemukan.</div>
+
+                <div class="fiksi-controls">
                     <div class="page-toolbar">
-                    <div class="summary-card">
-                        <i data-lucide="book"></i>
-                        <span>Total fiksi: {{ $fiksi->total() }} item</span>
+                        <div class="summary-card">
+                            <i data-lucide="book"></i>
+                            <span>{{ $search ? 'Hasil pencarian' : 'Total fiksi' }}: {{ $fiksi->total() }} item</span>
+                        </div>
+                        <a href="{{ route('fiksi.create') }}" class="add-button" style="text-decoration:none;">
+                            <i data-lucide="plus"></i>
+                            Tambah Fiksi
+                        </a>
                     </div>
-                    <a href="{{ route('fiksi.create') }}" class="add-button" style="text-decoration:none;">
-                        <i data-lucide="plus"></i>
-                        Tambah Fiksi
-                    </a>
-                    </div>
+
+                    <form action="{{ route('fiksi.index') }}" method="GET" class="search-form" role="search">
+                        <div class="search-input-wrap">
+                            <i data-lucide="search" class="search-icon"></i>
+                            <input
+                                type="search"
+                                name="search"
+                                value="{{ $search }}"
+                                class="search-input"
+                                placeholder="Cari fiksi berdasarkan ID, judul, penulis, kategori, tahun, atau pembuat..."
+                                aria-label="Cari fiksi"
+                            >
+                        </div>
+                        <button type="submit" class="search-button">
+                            <i data-lucide="search"></i>
+                            <span>Cari</span>
+                        </button>
+                        @if($search)
+                            <a href="{{ route('fiksi.index') }}" class="reset-search">
+                                <i data-lucide="x"></i>
+                                <span>Reset</span>
+                            </a>
+                        @endif
+                        <div class="search-note">Gunakan kata kunci seperti ID fiksi, judul buku, penulis, kategori, tahun terbit, nama pembuat, atau email pembuat.</div>
+                    </form>
                 </div>
-      
+
                 <!-- Table Container -->
                 <div class="table-container">
                     <div class="table-header">
-                        <div class="table-title">Daftar Fiksi</div>
+                        <div class="table-title">
+                            @if($search)
+                                Hasil untuk "{{ $search }}"
+                            @else
+                                Daftar Fiksi
+                            @endif
+                        </div>
                     </div>
                     @if($fiksi->count() > 0)
                         <table class="fiksi-table materi-style">
@@ -700,8 +886,13 @@
                     @else
                         <div class="empty-state">
                             <div class="empty-state-icon"><i data-lucide="book-open"></i></div>
-                            <h3 style="margin-bottom: 0.5rem;">Belum ada fiksi</h3>
-                            <p>Mulai dengan menambahkan fiksi baru.</p>
+                            @if($search)
+                                <h3 style="margin-bottom: 0.5rem;">Fiksi tidak ditemukan</h3>
+                                <p>Tidak ada fiksi yang cocok dengan kata kunci "{{ $search }}".</p>
+                            @else
+                                <h3 style="margin-bottom: 0.5rem;">Belum ada fiksi</h3>
+                                <p>Mulai dengan menambahkan fiksi baru.</p>
+                            @endif
                         </div>
                     @endif
                 </div>

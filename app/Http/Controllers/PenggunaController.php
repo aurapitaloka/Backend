@@ -14,10 +14,24 @@ class PenggunaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pengguna = Pengguna::orderBy('created_at', 'desc')->paginate(10);
-        return view('dashboard.pengguna.pengguna', compact('pengguna'));
+        $search = trim((string) $request->get('search', ''));
+
+        $pengguna = Pengguna::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('nama', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('peran', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('dashboard.pengguna.pengguna', compact('pengguna', 'search'));
     }
 
     /**

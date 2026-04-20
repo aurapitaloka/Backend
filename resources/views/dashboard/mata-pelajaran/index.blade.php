@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mata Pelajaran - AKSES Dashboard</title>
+    <title>Mata Pelajaran - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -557,8 +557,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             
@@ -587,18 +587,29 @@
                     </div>
                 @endif
 
-                <div class="page-intro">
-                    <div>
-                        <div class="page-subtitle">Kelola daftar mata pelajaran agar materi lebih terstruktur dan mudah ditemukan.</div>
-                        <div class="summary-card">
-                            <span class="summary-icon"><i data-lucide="layers"></i></span>
-                            <div class="summary-text">Total mata pelajaran: {{ $mataPelajarans->total() }} item</div>
+                <div class="list-search-panel">
+                    <div class="page-intro">
+                        <div>
+                            <div class="page-subtitle">Kelola daftar mata pelajaran agar materi lebih terstruktur dan mudah ditemukan.</div>
+                            <div class="summary-card">
+                                <span class="summary-icon"><i data-lucide="layers"></i></span>
+                                <div class="summary-text">{{ ($search ?? '') !== '' ? 'Hasil pencarian' : 'Total mata pelajaran' }}: {{ $mataPelajarans->total() }} item</div>
+                            </div>
                         </div>
+                        <a href="{{ route('mata-pelajaran.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
+                            <i data-lucide="plus"></i>
+                            <span>Tambah Mata Pelajaran</span>
+                        </a>
                     </div>
-                    <a href="{{ route('mata-pelajaran.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
-                        <i data-lucide="plus"></i>
-                        <span>Tambah Mata Pelajaran</span>
-                    </a>
+
+                    @include('components.list-search', [
+                        'action' => route('mata-pelajaran.index'),
+                        'resetRoute' => route('mata-pelajaran.index'),
+                        'value' => $search ?? '',
+                        'placeholder' => 'Cari mata pelajaran berdasarkan ID, nama, atau deskripsi...',
+                        'note' => 'Gunakan kata kunci seperti ID mata pelajaran, nama mata pelajaran, atau deskripsi.',
+                        'panel' => false
+                    ])
                 </div>
 
                 <!-- Table Container -->

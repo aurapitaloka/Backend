@@ -12,23 +12,40 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class KuisController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->get('search', ''));
+
         $kuis = Kuis::with('materi')
             ->withCount('pertanyaan')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('judul', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%")
+                        ->orWhereHas('materi', function ($materiQuery) use ($search) {
+                            $materiQuery->where('judul', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('dashboard.kuis.index', compact('kuis'));
+        return view('dashboard.kuis.index', compact('kuis', 'search'));
     }
 
     public function create()
     {
-        $materiList = Materi::orderBy('judul')->get();
+        $materiList = Materi::where('status_aktif', true)
+            ->orderBy('judul')
+            ->get();
+
         return view('dashboard.kuis.create', compact('materiList'));
     }
 
@@ -41,7 +58,7 @@ class KuisController extends Controller
                 'materi_id' => $validated['materi_id'] ?? null,
                 'judul' => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'] ?? null,
-                'status_aktif' => $request->has('status_aktif'),
+                'status_aktif' => $request->boolean('status_aktif'),
                 'dibuat_oleh' => Auth::id(),
             ]);
 
@@ -61,24 +78,31 @@ class KuisController extends Controller
     public function edit(Kuis $kui)
     {
         $kui->load('pertanyaan.opsi');
-        $materiList = Materi::orderBy('judul')->get();
+        $materiList = Materi::where('status_aktif', true)
+            ->orderBy('judul')
+            ->get();
+
         return view('dashboard.kuis.edit', ['kuis' => $kui, 'materiList' => $materiList]);
     }
 
     public function update(Request $request, Kuis $kui)
     {
-        $validated = $this->validatePayload($request);
+        $validated = $this->validatePayload($request, $kui);
 
         DB::transaction(function () use ($kui, $validated, $request) {
+            $existingAudioPaths = $kui->pertanyaan()
+                ->pluck('audio_path', 'id')
+                ->all();
+
             $kui->update([
                 'materi_id' => $validated['materi_id'] ?? null,
                 'judul' => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'] ?? null,
-                'status_aktif' => $request->has('status_aktif'),
+                'status_aktif' => $request->boolean('status_aktif'),
             ]);
 
             KuisPertanyaan::where('kuis_id', $kui->id)->delete();
-            $this->storePertanyaan($kui->id, $validated['pertanyaan'], $request);
+            $this->storePertanyaan($kui->id, $validated['pertanyaan'], $request, $existingAudioPaths);
         });
 
         return redirect()->route('kuis.index')
@@ -93,14 +117,31 @@ class KuisController extends Controller
             ->with('success', 'Kuis berhasil dihapus.');
     }
 
-    public function hasilIndex()
+    public function hasilIndex(Request $request)
     {
+        $search = trim((string) $request->get('search', ''));
+
         $hasil = KuisHasil::query()
             ->with(['kuis.materi', 'jawaban.pertanyaan'])
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('skor', 'like', "%{$search}%")
+                        ->orWhere('total_benar', 'like', "%{$search}%")
+                        ->orWhere('total_pertanyaan', 'like', "%{$search}%")
+                        ->orWhereHas('kuis', function ($kuisQuery) use ($search) {
+                            $kuisQuery->where('judul', 'like', "%{$search}%")
+                                ->orWhereHas('materi', function ($materiQuery) use ($search) {
+                                    $materiQuery->where('judul', 'like', "%{$search}%");
+                                });
+                        });
+                });
+            })
             ->orderByDesc('selesai_at')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('dashboard.kuis.hasil', compact('hasil'));
+        return view('dashboard.kuis.hasil', compact('hasil', 'search'));
     }
 
     public function hasilShow(KuisHasil $hasil)
@@ -149,13 +190,17 @@ class KuisController extends Controller
             ->with('success', 'Koreksi disimpan.');
     }
 
-    private function validatePayload(Request $request): array
+    private function validatePayload(Request $request, ?Kuis $kuis = null): array
     {
         $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:200',
-            'materi_id' => 'nullable|exists:materi,id',
+            'materi_id' => [
+                'nullable',
+                Rule::exists('materi', 'id')->where('status_aktif', true),
+            ],
             'deskripsi' => 'nullable|string',
             'pertanyaan' => 'required|array|min:1',
+            'pertanyaan.*.id' => 'nullable|integer',
             'pertanyaan.*.teks' => 'required|string',
             'pertanyaan.*.tipe' => 'required|in:pilihan,essay,listening,speaking',
             'pertanyaan.*.benar' => 'nullable|in:A,B,C,D',
@@ -180,18 +225,27 @@ class KuisController extends Controller
             'pertanyaan_audio.*.max' => 'Ukuran audio soal terlalu besar. Maksimal 10 MB per file. Silakan kompres atau pilih audio yang lebih kecil.',
         ]);
 
-        $validator->after(function ($validator) use ($request) {
+        $validator->after(function ($validator) use ($request, $kuis) {
             $pertanyaanList = $request->input('pertanyaan', []);
             $audioFiles = $request->file('pertanyaan_audio', []);
+            $existingAudioPaths = $kuis
+                ? $kuis->pertanyaan()->pluck('audio_path', 'id')->all()
+                : [];
+
             foreach ($pertanyaanList as $idx => $item) {
                 $tipe = $item['tipe'] ?? 'pilihan';
+                $existingAudioPath = null;
+                if (!empty($item['id']) && array_key_exists((int) $item['id'], $existingAudioPaths)) {
+                    $existingAudioPath = $existingAudioPaths[(int) $item['id']];
+                }
+
                 if (in_array($tipe, ['pilihan', 'listening'], true)) {
                     if (empty($item['benar']) || empty($item['opsi']['A']) || empty($item['opsi']['B']) || empty($item['opsi']['C']) || empty($item['opsi']['D'])) {
                         $validator->errors()->add("pertanyaan.$idx", 'Soal pilihan ganda/listening harus punya opsi A-D dan jawaban benar.');
                     }
                     if ($tipe === 'listening') {
                         $audioText = $item['audio_text'] ?? '';
-                        if (!$audioText && empty($audioFiles[$idx])) {
+                        if (!$audioText && empty($audioFiles[$idx]) && empty($existingAudioPath)) {
                             $validator->errors()->add("pertanyaan.$idx", 'Soal listening harus punya audio (file) atau teks TTS.');
                         }
                     }
@@ -206,7 +260,7 @@ class KuisController extends Controller
                     if (empty($item['jawaban_teks'])) {
                         $validator->errors()->add("pertanyaan.$idx", 'Soal speaking harus punya jawaban target.');
                     }
-                    if (!$audioText && empty($audioFiles[$idx])) {
+                    if (!$audioText && empty($audioFiles[$idx]) && empty($existingAudioPath)) {
                         $validator->errors()->add("pertanyaan.$idx", 'Soal speaking harus punya audio contoh (file) atau teks TTS.');
                     }
                 }
@@ -220,13 +274,17 @@ class KuisController extends Controller
         return $validator->validated();
     }
 
-    private function storePertanyaan(int $kuisId, array $pertanyaanList, Request $request): void
+    private function storePertanyaan(int $kuisId, array $pertanyaanList, Request $request, array $existingAudioPaths = []): void
     {
         $order = 1;
         foreach ($pertanyaanList as $idx => $item) {
             $tipe = $item['tipe'] ?? 'pilihan';
             $audioPath = null;
             if (in_array($tipe, ['listening', 'speaking'], true)) {
+                if (!empty($item['id']) && array_key_exists((int) $item['id'], $existingAudioPaths)) {
+                    $audioPath = $existingAudioPaths[(int) $item['id']];
+                }
+
                 $audioFiles = $request->file('pertanyaan_audio', []);
                 if (isset($audioFiles[$idx]) && $audioFiles[$idx]) {
                     $file = $audioFiles[$idx];

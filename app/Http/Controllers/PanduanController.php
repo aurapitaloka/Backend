@@ -9,8 +9,24 @@ class PanduanController extends Controller
 {
     public function index()
     {
-        $data = Panduan::all();
-        return view('dashboard.panduan.index', compact('data'));
+        $search = trim((string) request('search', ''));
+
+        $data = Panduan::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('judul', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%")
+                        ->orWhere('tag', 'like', "%{$search}%")
+                        ->orWhere('urutan', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('urutan')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('dashboard.panduan.index', compact('data', 'search'));
     }
 
     public function create()

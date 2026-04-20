@@ -1,4 +1,4 @@
-# API Dokumentasi Lengkap - AKSES Backend
+# API Dokumentasi Lengkap - Ruma Backend
 
 Dokumentasi ini merangkum seluruh endpoint di `routes/api.php` beserta contoh request dan contoh respons sesuai implementasi controller saat ini.
 
@@ -33,7 +33,7 @@ Content-Type: application/json
 Body:
 ```json
 {
-  "email": "superadmin@akses.com",
+  "email": "superadmin@ruma.com",
   "kata_sandi": "password"
 }
 ```
@@ -45,7 +45,7 @@ Response 200:
   "user": {
     "id": 1,
     "nama": "Super Admin",
-    "email": "superadmin@akses.com",
+    "email": "superadmin@ruma.com",
     "peran": "guru"
   }
 }
@@ -148,7 +148,7 @@ Response 200 (paginasi):
       "pengguna": {
         "id": 1,
         "nama": "Super Admin",
-        "email": "superadmin@akses.com"
+        "email": "superadmin@ruma.com"
       },
       "level": {
         "id": 2,
@@ -187,7 +187,7 @@ Response 200:
   "dibuat_oleh": 1,
   "created_at": "2026-01-01T10:00:00.000000Z",
   "updated_at": "2026-01-01T10:00:00.000000Z",
-  "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@akses.com" },
+  "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@ruma.com" },
   "level": { "id": 2, "nama": "Kelas 7", "deskripsi": null, "status_aktif": true },
   "mata_pelajaran": { "id": 3, "nama": "Matematika", "deskripsi": null, "status_aktif": true }
 }
@@ -282,7 +282,7 @@ Response 200 (paginasi):
       "dibuat_oleh": 1,
       "created_at": "2025-12-06T10:00:00.000000Z",
       "updated_at": "2025-12-06T10:00:00.000000Z",
-      "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@akses.com" }
+      "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@ruma.com" }
     }
   ],
   "per_page": 10,
@@ -306,7 +306,7 @@ Response 200:
   "dibuat_oleh": 1,
   "created_at": "2025-12-06T10:00:00.000000Z",
   "updated_at": "2025-12-06T10:00:00.000000Z",
-  "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@akses.com" }
+  "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@ruma.com" }
 }
 ```
 
@@ -339,7 +339,7 @@ Response 201:
   "dibuat_oleh": 1,
   "created_at": "2025-12-06T10:00:00.000000Z",
   "updated_at": "2025-12-06T10:00:00.000000Z",
-  "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@akses.com" }
+  "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@ruma.com" }
 }
 ```
 
@@ -359,7 +359,7 @@ Response 200:
   "dibuat_oleh": 1,
   "created_at": "2025-12-06T10:00:00.000000Z",
   "updated_at": "2025-12-06T11:00:00.000000Z",
-  "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@akses.com" }
+  "pengguna": { "id": 1, "nama": "Super Admin", "email": "superadmin@ruma.com" }
 }
 ```
 

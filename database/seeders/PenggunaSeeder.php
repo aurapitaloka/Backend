@@ -17,13 +17,13 @@ class PenggunaSeeder extends Seeder
     public function run(): void
     {
         // Cek apakah superadmin sudah ada
-        $existingSuperadmin = Pengguna::where('email', 'superadmin@akses.com')->first();
+        $existingSuperadmin = Pengguna::where('email', 'superadmin@ruma.com')->first();
         
         if (!$existingSuperadmin) {
             // Buat pengguna superadmin
             $superadmin = Pengguna::create([
                 'nama' => 'Super Admin',
-                'email' => 'superadmin@akses.com',
+                'email' => 'superadmin@ruma.com',
                 'kata_sandi' => Hash::make('password'),
                 'peran' => 'guru',
                 'status_aktif' => true,
@@ -32,11 +32,11 @@ class PenggunaSeeder extends Seeder
             // Buat data guru untuk superadmin
             Guru::create([
                 'pengguna_id' => $superadmin->id,
-                'nama_sekolah' => 'Sekolah AKSES',
+                'nama_sekolah' => 'Sekolah Ruma',
             ]);
 
             $this->command->info('Superadmin berhasil dibuat!');
-            $this->command->info('Email: superadmin@akses.com');
+            $this->command->info('Email: superadmin@ruma.com');
             $this->command->info('Password: password');
         } else {
             $this->command->info('Superadmin sudah ada di database.');

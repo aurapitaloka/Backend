@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buat Kuis - AKSES</title>
+    <title>Buat Kuis - Ruma</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -77,6 +77,19 @@
         .btn-ghost { background: transparent; border: 1px solid var(--color-gray); color: var(--color-text); }
         .btn-ghost:hover { background: #F9FAFB; }
         .inline-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+        .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+        .type-picker { margin-bottom: 1rem; }
+        .type-picker-title { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; font-weight: 700; color: var(--color-text); }
+        .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+        .type-card { position: relative; display: flex; align-items: flex-start; gap: 0.75rem; min-height: 92px; padding: 0.9rem; border: 1px solid #E5E7EB; border-radius: 12px; background: #FFFFFF; color: var(--color-text); text-align: left; cursor: pointer; transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease; }
+        .type-card:hover { transform: translateY(-1px); border-color: rgba(248, 184, 3, 0.65); box-shadow: 0 8px 20px rgba(17, 24, 39, 0.08); }
+        .type-card.active { background: #FFF9E6; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(248, 184, 3, 0.16); }
+        .type-card-icon { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: #F3F4F6; color: #374151; }
+        .type-card.active .type-card-icon { background: var(--color-accent); color: #1F2937; }
+        .type-card-title { display: block; font-weight: 700; margin-bottom: 0.2rem; }
+        .type-card-desc { display: block; color: var(--color-text-light); font-size: 0.8rem; line-height: 1.35; }
+        .type-card-check { position: absolute; right: 0.65rem; top: 0.65rem; width: 18px; height: 18px; border-radius: 50%; border: 1px solid #D1D5DB; background: #FFFFFF; }
+        .type-card.active .type-card-check { border-color: var(--color-accent); background: var(--color-accent); box-shadow: inset 0 0 0 4px #FFFFFF; }
     </style>
 </head>
 <body>
@@ -84,8 +97,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
-                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="AKSES Logo"></div>
-                    <div class="logo-text">AKSES</div>
+                    <div class="logo-circle"><img src="{{ asset('images/image.png') }}" alt="Ruma Logo"></div>
+                    <div class="logo-text">Ruma</div>
                 </div>
             </div>
             @include('components.sidebar')
@@ -157,7 +170,8 @@
                             <label>Status Kuis</label>
                             <div class="inline-row">
                                 <label style="display:flex; align-items:center; gap:0.5rem; font-weight:600;">
-                                    <input type="checkbox" name="status_aktif" {{ old('status_aktif', true) ? 'checked' : '' }}>
+                                    <input type="hidden" name="status_aktif" value="0">
+                                    <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', true) ? 'checked' : '' }}>
                                     Aktifkan Kuis
                                 </label>
                                 <div class="field-hint">Jika nonaktif, kuis tidak tampil ke siswa.</div>
@@ -241,16 +255,53 @@
                         <label>Pertanyaan</label>
                         <input type="text" name="pertanyaan[${index}][teks]" required>
                     </div>
-                    <div class="inline-row">
-                        <div class="form-group">
-                            <label>Tipe Soal</label>
-                            <select name="pertanyaan[${index}][tipe]" class="q-type" required>
-                                <option value="pilihan">Pilihan Ganda</option>
-                                <option value="essay">Essay</option>
-                                <option value="listening">Listening</option>
-                                <option value="speaking">Speaking</option>
-                            </select>
+                    <div class="type-picker">
+                        <div class="type-picker-title">
+                            <i data-lucide="layout-list"></i>
+                            <span>Pilih Jenis Soal</span>
                         </div>
+                        <select name="pertanyaan[${index}][tipe]" class="q-type visually-hidden" required aria-label="Tipe Soal">
+                            <option value="pilihan">Pilihan Ganda</option>
+                            <option value="essay">Essay</option>
+                            <option value="listening">Listening</option>
+                            <option value="speaking">Speaking</option>
+                        </select>
+                        <div class="type-grid" role="group" aria-label="Pilih jenis soal">
+                            <button type="button" class="type-card active" data-type="pilihan">
+                                <span class="type-card-icon"><i data-lucide="list-checks"></i></span>
+                                <span>
+                                    <span class="type-card-title">Pilihan Ganda</span>
+                                    <span class="type-card-desc">Opsi A-D dengan satu jawaban benar.</span>
+                                </span>
+                                <span class="type-card-check"></span>
+                            </button>
+                            <button type="button" class="type-card" data-type="essay">
+                                <span class="type-card-icon"><i data-lucide="file-pen-line"></i></span>
+                                <span>
+                                    <span class="type-card-title">Essay</span>
+                                    <span class="type-card-desc">Jawaban teks dengan keyword koreksi.</span>
+                                </span>
+                                <span class="type-card-check"></span>
+                            </button>
+                            <button type="button" class="type-card" data-type="listening">
+                                <span class="type-card-icon"><i data-lucide="headphones"></i></span>
+                                <span>
+                                    <span class="type-card-title">Listening</span>
+                                    <span class="type-card-desc">Siswa menjawab setelah audio diputar.</span>
+                                </span>
+                                <span class="type-card-check"></span>
+                            </button>
+                            <button type="button" class="type-card" data-type="speaking">
+                                <span class="type-card-icon"><i data-lucide="mic"></i></span>
+                                <span>
+                                    <span class="type-card-title">Speaking</span>
+                                    <span class="type-card-desc">Latihan pengucapan dengan target audio.</span>
+                                </span>
+                                <span class="type-card-check"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="inline-row">
                         <div class="form-group q-answer">
                             <label>Jawaban Benar</label>
                             <select name="pertanyaan[${index}][benar]" required>
@@ -341,6 +392,7 @@
                     renumber();
                 });
                 const typeSelect = wrapper.querySelector('.q-type');
+                const typeCards = Array.from(wrapper.querySelectorAll('.type-card'));
                 const choices = wrapper.querySelector('.q-choices');
                 const answerWrap = wrapper.querySelector('.q-answer');
                 const answerSelect = answerWrap.querySelector('select');
@@ -373,6 +425,12 @@
 
                 function toggleByType() {
                     const val = typeSelect.value;
+                    typeCards.forEach(card => {
+                        const active = card.dataset.type === val;
+                        card.classList.toggle('active', active);
+                        card.setAttribute('aria-pressed', active ? 'true' : 'false');
+                    });
+
                     if (val === 'essay') {
                         choices.style.display = 'none';
                         answerWrap.style.display = 'none';
@@ -431,6 +489,14 @@
                         setDisabled(speakingFields, true);
                     }
                 }
+
+                typeCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        typeSelect.value = card.dataset.type;
+                        typeSelect.dispatchEvent(new Event('change'));
+                    });
+                });
+
                 typeSelect.addEventListener('change', toggleByType);
                 toggleByType();
                 return wrapper;
@@ -450,10 +516,12 @@
             addBtn.addEventListener('click', () => {
                 const index = container.querySelectorAll('.question').length;
                 container.appendChild(buildQuestion(index));
+                lucide.createIcons();
             });
 
             // default 1 question
             container.appendChild(buildQuestion(0));
+            lucide.createIcons();
         })();
     </script>
 </body>

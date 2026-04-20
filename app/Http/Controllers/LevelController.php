@@ -10,14 +10,27 @@ class LevelController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $levels = Level::orderBy('nama')->paginate(10);
+        $search = trim((string) $request->get('search', ''));
+
+        $levels = Level::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('id', 'like', "%{$search}%")
+                        ->orWhere('nama', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('nama')
+            ->paginate(10)
+            ->withQueryString();
+
         if (request()->expectsJson()) {
             return response()->json($levels);
         }
 
-        return view('dashboard.level.index', compact('levels'));
+        return view('dashboard.level.index', compact('levels', 'search'));
     }
 
     /**

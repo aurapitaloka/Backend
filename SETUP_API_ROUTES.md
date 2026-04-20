@@ -188,7 +188,7 @@ POST /api/login
 Content-Type: application/json
 
 {
-  "email": "superadmin@akses.com",
+  "email": "superadmin@ruma.com",
   "kata_sandi": "password"
 }
 ```
@@ -201,7 +201,7 @@ Content-Type: application/json
   "user": {
     "id": 1,
     "nama": "Super Admin",
-    "email": "superadmin@akses.com",
+    "email": "superadmin@ruma.com",
     "peran": "guru"
   }
 }
@@ -323,7 +323,7 @@ export default new ApiClient();
 curl -X POST http://127.0.0.1:8000/api/login \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -d '{"email":"superadmin@akses.com","kata_sandi":"password"}'
+  -d '{"email":"superadmin@ruma.com","kata_sandi":"password"}'
 
 # Get Materi (use token from login)
 curl -X GET http://127.0.0.1:8000/api/materi \

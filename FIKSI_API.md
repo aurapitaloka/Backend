@@ -51,7 +51,7 @@ Response (JSON, paginasi standar Laravel):
       "pengguna": {
         "id": 1,
         "nama": "Super Admin",
-        "email": "superadmin@akses.com"
+        "email": "superadmin@ruma.com"
       }
     }
   ],
@@ -85,7 +85,7 @@ Response (JSON):
   "pengguna": {
     "id": 1,
     "nama": "Super Admin",
-    "email": "superadmin@akses.com"
+    "email": "superadmin@ruma.com"
   }
 }
 ```

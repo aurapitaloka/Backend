@@ -42,7 +42,7 @@ async function login(email, password, rememberMe = false) {
 }
 
 // Usage
-login('superadmin@akses.com', 'password', true);
+login('superadmin@ruma.com', 'password', true);
 ```
 
 ### 2. Get All Materi

@@ -31,7 +31,7 @@ class LandingPageController extends Controller
 
         $featureHeader = $featureHeader ?? (object) [
             'title' => 'Fitur Unggulan',
-            'description' => 'AKSES menghadirkan teknologi pembelajaran inklusif yang dirancang untuk memudahkan semua siswa belajar secara mandiri, interaktif, dan tanpa hambatan.',
+            'description' => 'Ruma menghadirkan teknologi pembelajaran inklusif yang dirancang untuk memudahkan semua siswa belajar secara mandiri, interaktif, dan tanpa hambatan.',
         ];
 
         if ($features->isEmpty()) {
@@ -56,14 +56,14 @@ class LandingPageController extends Controller
 
         $flowHeader = $flowHeader ?? (object) [
             'title' => 'Alur Penggunaan',
-            'description' => 'Ikuti langkah-langkah sederhana untuk mulai belajar dengan AKSES secara mudah, inklusif, dan tanpa hambatan.',
+            'description' => 'Ikuti langkah-langkah sederhana untuk mulai belajar dengan Ruma secara mudah, inklusif, dan tanpa hambatan.',
         ];
 
         if ($steps->isEmpty()) {
             $steps = collect([
                 (object) [
                     'title' => 'Buat Akun & Login',
-                    'description' => 'Daftarkan akun siswa, lalu masuk ke dashboard AKSES.',
+                    'description' => 'Daftarkan akun siswa, lalu masuk ke dashboard Ruma.',
                     'sort_order' => 1,
                 ],
                 (object) [
@@ -121,15 +121,15 @@ class LandingPageController extends Controller
         }
 
         $app = $app ?? (object) [
-            'title' => 'Dapatkan Aplikasi AKSES',
-            'description' => 'Belajar menjadi lebih mudah dan inklusif dengan teknologi tanpa sentuhan. AKSES dapat digunakan melalui smartphone maupun web.',
+            'title' => 'Dapatkan Aplikasi Ruma',
+            'description' => 'Belajar menjadi lebih mudah dan inklusif dengan teknologi tanpa sentuhan. Ruma dapat digunakan melalui smartphone maupun web.',
             'button_label' => 'Download Sekarang',
             'button_url' => '#',
             'image_path' => null,
         ];
 
         $footer = $footer ?? (object) [
-            'title' => 'AKSES',
+            'title' => 'Ruma',
             'description' => 'Platform pembelajaran inklusif yang membantu siswa belajar lebih mudah tanpa sentuhan, kapan pun dan di mana pun.',
             'subtitle' => 'Developed by Aura Pitaloka | 22090026',
             'meta_one' => 'Tegal',

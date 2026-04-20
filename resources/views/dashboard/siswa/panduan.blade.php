@@ -2,7 +2,7 @@
 
 @section('content')
     <h2 class="section-title">Panduan Siswa</h2>
-    <p class="section-desc">Ikuti alur penggunaan dan daftar perintah suara AKSES.</p>
+    <p class="section-desc">Ikuti alur penggunaan dan daftar perintah suara Ruma.</p>
 
     <div class="section-grid">
         <section class="section-card">

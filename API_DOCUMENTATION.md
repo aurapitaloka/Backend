@@ -1,4 +1,4 @@
-# API Documentation - AKSES Backend
+# API Documentation - Ruma Backend
 
 ## Base URL
 ```
@@ -204,7 +204,7 @@ Authorization: Required (Session)
   "user": {
     "id": 1,
     "nama": "Super Admin",
-    "email": "superadmin@akses.com",
+    "email": "superadmin@ruma.com",
     "peran": "guru",
     "status_aktif": true
   },
@@ -251,7 +251,7 @@ Authorization: Required
       "pengguna": {
         "id": 1,
         "nama": "Super Admin",
-        "email": "superadmin@akses.com"
+        "email": "superadmin@ruma.com"
       },
       "level": {
         "id": 1,
@@ -639,7 +639,7 @@ Authorization: Required
     {
       "id": 1,
       "nama": "Super Admin",
-      "email": "superadmin@akses.com",
+      "email": "superadmin@ruma.com",
       "peran": "guru",
       "status_aktif": true,
       "created_at": "2025-12-06T10:00:00.000000Z",
@@ -648,7 +648,7 @@ Authorization: Required
       "guru": {
         "id": 1,
         "pengguna_id": 1,
-        "nama_sekolah": "Sekolah AKSES",
+        "nama_sekolah": "Sekolah Ruma",
         "created_at": "2025-12-06T10:00:00.000000Z",
         "updated_at": "2025-12-06T10:00:00.000000Z"
       }
@@ -905,7 +905,7 @@ Authorization: Required
   "user": {
     "id": 1,
     "nama": "Super Admin",
-    "email": "superadmin@akses.com",
+    "email": "superadmin@ruma.com",
     "peran": "guru",
     "status_aktif": true,
     "created_at": "2025-12-06T10:00:00.000000Z",
@@ -914,7 +914,7 @@ Authorization: Required
     "guru": {
       "id": 1,
       "pengguna_id": 1,
-      "nama_sekolah": "Sekolah AKSES",
+      "nama_sekolah": "Sekolah Ruma",
       "created_at": "2025-12-06T10:00:00.000000Z",
       "updated_at": "2025-12-06T10:00:00.000000Z"
     }
@@ -1171,7 +1171,7 @@ const response = await fetch('http://127.0.0.1:8000/api/login', {
     'Accept': 'application/json'
   },
   body: JSON.stringify({
-    email: 'superadmin@akses.com',
+    email: 'superadmin@ruma.com',
     kata_sandi: 'password'
   })
 });
@@ -1197,7 +1197,7 @@ fetch('http://127.0.0.1:8000/api/materi', {
 ```bash
 curl -X POST http://127.0.0.1:8000/login \
   -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "email=superadmin@akses.com&kata_sandi=password" \
+  -d "email=superadmin@ruma.com&kata_sandi=password" \
   -c cookies.txt
 ```
 
