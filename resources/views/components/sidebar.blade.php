@@ -22,6 +22,48 @@
         gap: 0.6rem;
     }
 
+    body:not(.siswa-layout) .sidebar-header {
+        min-height: 72px;
+        padding: 0 1.25rem;
+        display: flex;
+        align-items: center;
+    }
+
+    body:not(.siswa-layout) .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    body:not(.siswa-layout) .logo-circle {
+        width: 36px;
+        height: 36px;
+        flex: 0 0 36px;
+        overflow: hidden;
+    }
+
+    body:not(.siswa-layout) .logo-circle img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+    }
+
+    body:not(.siswa-layout) .logo-text {
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0;
+    }
+
+    body:not(.siswa-layout) .header-bar {
+        min-height: 72px;
+    }
+
+    body:not(.siswa-layout) .header-title {
+        font-size: 1.15rem;
+        letter-spacing: 0;
+    }
+
     body:not(.siswa-layout) .sidebar.closed {
         transform: translateX(-100%);
     }
@@ -49,7 +91,37 @@
     }
 
     .sidebar-nav {
+        padding: 1rem 0;
         scrollbar-width: none;
+    }
+
+    body:not(.siswa-layout) .nav-item {
+        margin: 0.25rem 0.85rem;
+        border-radius: 8px;
+    }
+
+    body:not(.siswa-layout) .nav-item a {
+        gap: 0.75rem;
+        padding: 0.6rem 0.85rem;
+        font-size: 0.84rem;
+        line-height: 1.25;
+        border-radius: 8px;
+    }
+
+    body:not(.siswa-layout) .nav-item.active a {
+        border-left-width: 3px;
+    }
+
+    body:not(.siswa-layout) .nav-icon {
+        width: 19px;
+        height: 19px;
+        flex: 0 0 19px;
+        font-size: 1rem;
+    }
+
+    body:not(.siswa-layout) .nav-icon i {
+        width: 18px;
+        height: 18px;
     }
 
     .sidebar-nav::-webkit-scrollbar {
@@ -103,7 +175,7 @@
 <!-- Sidebar Navigation -->
 <nav class="sidebar-nav">
     <div class="nav-item" data-route="dashboard">
-        <a href="/dashboard">
+        <a href="/dashboard" data-testid="nav-dashboard" aria-label="Dashboard">
             <span class="nav-icon">
                 <i data-lucide="layout-dashboard"></i>
             </span>
@@ -112,7 +184,7 @@
     </div>
     
     <div class="nav-item" data-route="materi">
-        <a href="{{ route('materi.index', [], false) }}">
+        <a href="{{ route('materi.index', [], false) }}" data-testid="nav-materi" aria-label="Materi">
             <span class="nav-icon">
                 <i data-lucide="book-open"></i>
             </span>
@@ -121,7 +193,7 @@
     </div>
     
     <div class="nav-item" data-route="fiksi">
-        <a href="{{ route('fiksi.index', [], false) }}">
+        <a href="{{ route('fiksi.index', [], false) }}" data-testid="nav-fiksi" aria-label="Fiksi">
             <span class="nav-icon">
                 <i data-lucide="bookmark"></i>
             </span>
@@ -130,7 +202,7 @@
     </div>
 
     <div class="nav-item" data-route="aac">
-        <a href="{{ route('aac.index', [], false) }}">
+        <a href="{{ route('aac.index', [], false) }}" data-testid="nav-aac" aria-label="AAC">
             <span class="nav-icon">
                 <i data-lucide="message-circle"></i>
             </span>
@@ -139,7 +211,7 @@
     </div>
     
     <div class="nav-item" data-route="pengguna">
-        <a href="{{ route('pengguna.index', [], false) }}">
+        <a href="{{ route('pengguna.index', [], false) }}" data-testid="nav-pengguna" aria-label="Pengguna">
             <span class="nav-icon">
                 <i data-lucide="users"></i>
             </span>
@@ -148,7 +220,7 @@
     </div>
     
     <div class="nav-item" data-route="level">
-        <a href="{{ route('level.index', [], false) }}">
+        <a href="{{ route('level.index', [], false) }}" data-testid="nav-level" aria-label="Level">
             <span class="nav-icon">
                 <i data-lucide="layers"></i>
             </span>
@@ -157,7 +229,7 @@
     </div>
     
     <div class="nav-item" data-route="mata-pelajaran">
-        <a href="{{ route('mata-pelajaran.index', [], false) }}">
+        <a href="{{ route('mata-pelajaran.index', [], false) }}" data-testid="nav-mata-pelajaran" aria-label="Mata Pelajaran">
             <span class="nav-icon">
                 <i data-lucide="graduation-cap"></i>
             </span>
@@ -166,7 +238,7 @@
     </div>
 
     <div class="nav-item" data-route="landing">
-        <a href="{{ route('landing.index', [], false) }}">
+        <a href="{{ route('landing.index', [], false) }}" data-testid="nav-landing" aria-label="Landing">
             <span class="nav-icon">
                 <i data-lucide="layout-template"></i>
             </span>
@@ -175,7 +247,7 @@
     </div>
 
     <div class="nav-item" data-route="panduan">
-    <a href="{{ route('panduan.index', [], false) }}">
+    <a href="{{ route('panduan.index', [], false) }}" data-testid="nav-panduan" aria-label="Panduan">
         <span class="nav-icon">
             <i data-lucide="book-text"></i>
         </span>
@@ -184,7 +256,7 @@
     </div>
 
     <div class="nav-item" data-route="ulasan">
-        <a href="{{ route('ulasan.index', [], false) }}">
+        <a href="{{ route('ulasan.index', [], false) }}" data-testid="nav-ulasan" aria-label="Ulasan">
             <span class="nav-icon">
                 <i data-lucide="message-square"></i>
             </span>
@@ -193,7 +265,7 @@
     </div>
 
     <div class="nav-item" data-route="kuis">
-        <a href="{{ route('kuis.index', [], false) }}">
+        <a href="{{ route('kuis.index', [], false) }}" data-testid="nav-kuis" aria-label="Kuis">
             <span class="nav-icon">
                 <i data-lucide="check-square"></i>
             </span>
@@ -202,7 +274,7 @@
     </div>
 
     <div class="nav-item" data-route="kuis-hasil">
-        <a href="{{ route('kuis.hasil.index', [], false) }}">
+        <a href="{{ route('kuis.hasil.index', [], false) }}" data-testid="nav-kuis-hasil" aria-label="Hasil Kuis">
             <span class="nav-icon">
                 <i data-lucide="clipboard-check"></i>
             </span>
@@ -211,7 +283,7 @@
     </div>
     
     <div class="nav-item" data-route="profile">
-        <a href="/dashboard/profile">
+        <a href="/dashboard/profile" data-testid="nav-profile" aria-label="Profile">
             <span class="nav-icon">
                 <i data-lucide="user"></i>
             </span>

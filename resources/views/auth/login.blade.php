@@ -403,7 +403,7 @@
                 </div>
             @endif
 
-            <form id="loginForm" method="POST" action="{{ route('login', [], false) }}">
+            <form id="loginForm" data-testid="login-form" method="POST" action="{{ route('login', [], false) }}">
                 @csrf
                 
                 <!-- Email Field -->
@@ -413,6 +413,8 @@
                         type="email" 
                         id="email" 
                         name="email" 
+                        data-testid="login-email"
+                        aria-label="Email"
                         class="form-input @error('email') error-input @enderror" 
                         placeholder="Masukan email" 
                         value="{{ old('email') }}"
@@ -432,6 +434,8 @@
                         type="password" 
                         id="kata_sandi" 
                         name="kata_sandi" 
+                        data-testid="login-password"
+                        aria-label="Kata Sandi"
                         class="form-input @error('kata_sandi') error-input @enderror" 
                         placeholder="Masukan Kata Sandi" 
                         required
@@ -444,19 +448,19 @@
                 
                 <!-- Remember Password Checkbox -->
                 <div class="checkbox-group">
-                    <input type="checkbox" id="ingat_sandi" name="ingat_sandi" checked>
-                    <label for="ingat_sandi" class="checkbox-custom"></label>
+                    <input type="checkbox" id="ingat_sandi" name="ingat_sandi" data-testid="login-remember" checked>
+                    <label for="ingat_sandi" class="checkbox-custom" data-testid="login-remember-control"></label>
                     <label for="ingat_sandi" class="checkbox-label">Ingat kata sandi</label>
                 </div>
                 
                 <!-- Login Button -->
-                <button type="submit" class="login-button">
+                <button type="submit" id="login-button" class="login-button" data-testid="login-submit">
                     <span>Login</span>
                 </button>
                 
                 <!-- Register Link -->
                 <div class="register-link">
-                    Belum punya akun? <a href="{{ route('register', [], false) ?? '#' }}">Daftar Sekarang</a>
+                    Belum punya akun? <a href="{{ route('register', [], false) ?? '#' }}" data-testid="register-link">Daftar Sekarang</a>
                 </div>
             </form>
         </div>
