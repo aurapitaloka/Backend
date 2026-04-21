@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LandingItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class LandingItemController extends Controller
@@ -48,14 +49,6 @@ class LandingItemController extends Controller
         $validated = $request->validate([
             'section' => 'required|in:' . implode(',', $sections),
             'title' => 'required|string|max:200',
-            'subtitle' => 'nullable|string|max:200',
-            'description' => 'nullable|string',
-            'badge' => 'nullable|string|max:100',
-            'button_label' => 'nullable|string|max:100',
-            'button_url' => 'nullable|string|max:255',
-            'meta_one' => 'nullable|string|max:255',
-            'meta_two' => 'nullable|string|max:255',
-            'sort_order' => 'nullable|integer|min:0',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'is_active' => 'boolean',
         ], [
@@ -76,6 +69,7 @@ class LandingItemController extends Controller
         $validated['is_active'] = $request->has('is_active');
 
         LandingItem::create($validated);
+        $this->syncBrandingAsset();
 
         return redirect()->route('landing.index')
             ->with('success', 'Konten landing berhasil ditambahkan!');
@@ -103,14 +97,6 @@ class LandingItemController extends Controller
         $validated = $request->validate([
             'section' => 'required|in:' . implode(',', $sections),
             'title' => 'required|string|max:200',
-            'subtitle' => 'nullable|string|max:200',
-            'description' => 'nullable|string',
-            'badge' => 'nullable|string|max:100',
-            'button_label' => 'nullable|string|max:100',
-            'button_url' => 'nullable|string|max:255',
-            'meta_one' => 'nullable|string|max:255',
-            'meta_two' => 'nullable|string|max:255',
-            'sort_order' => 'nullable|integer|min:0',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'is_active' => 'boolean',
         ], [
@@ -137,6 +123,7 @@ class LandingItemController extends Controller
         $validated['is_active'] = $request->has('is_active');
 
         $landingItem->update($validated);
+        $this->syncBrandingAsset();
 
         return redirect()->route('landing.index')
             ->with('success', 'Konten landing berhasil diperbarui!');
@@ -151,8 +138,31 @@ class LandingItemController extends Controller
         }
 
         $landingItem->delete();
+        $this->syncBrandingAsset();
 
         return redirect()->route('landing.index')
             ->with('success', 'Konten landing berhasil dihapus!');
+    }
+
+    private function syncBrandingAsset(): void
+    {
+        $branding = LandingItem::section('branding')
+            ->active()
+            ->orderBy('sort_order')
+            ->first();
+
+        if (!$branding?->image_path || !Storage::disk('public')->exists($branding->image_path)) {
+            return;
+        }
+
+        $sourcePath = Storage::disk('public')->path($branding->image_path);
+        $targetDirectory = public_path('images');
+        $targetPath = $targetDirectory . DIRECTORY_SEPARATOR . 'image.png';
+
+        if (!File::exists($targetDirectory)) {
+            File::makeDirectory($targetDirectory, 0755, true);
+        }
+
+        File::copy($sourcePath, $targetPath);
     }
 }

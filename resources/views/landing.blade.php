@@ -283,11 +283,11 @@
 
         <!-- Logo -->
         <a href="#beranda" class="flex items-center gap-3">
-            <img src="{{ asset('images/image.png') }}" 
-                 alt="Ruma Logo"
+            <img src="{{ $appBranding->image_url }}" 
+                 alt="{{ $appBranding->title }} Logo"
                  class="h-10 w-auto">
             <span class="font-extrabold text-xl tracking-wide text-gray-900">
-                Ruma
+                {{ $appBranding->title }}
             </span>
         </a>
 
@@ -789,5 +789,4 @@
     </div>
 </body>
 </html>
-
 

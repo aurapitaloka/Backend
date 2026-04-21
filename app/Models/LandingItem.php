@@ -9,6 +9,7 @@ class LandingItem extends Model
     protected $table = 'landing_items';
 
     public const SECTIONS = [
+        'branding' => 'Branding Aplikasi',
         'hero' => 'Hero',
         'feature-header' => 'Header Fitur',
         'feature' => 'Fitur',

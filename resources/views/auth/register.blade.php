@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Daftar akun Ruma - Platform Edukasi Modern">
-    <title>Daftar - Ruma</title>
+    <meta name="description" content="Daftar akun {{ $appBranding->title }} - Platform Edukasi Modern">
+    <title>Daftar - {{ $appBranding->title }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
@@ -320,13 +320,9 @@
     <div class="decoration-circle decoration-circle-1"></div>
     <div class="decoration-circle decoration-circle-2"></div>
 
-    <div class="login-container">
+        <div class="login-container">
         <div class="logo-section">
-            <div class="flex justify-center mb-4">
-                <img src="{{ asset('images/image.png') }}" class="h-24 w-auto drop-shadow-xl">
-            </div>
-            <h1 class="login-title">Daftar Akun Ruma</h1>
-            <p class="login-subtitle">Buat akun siswa untuk mulai belajar</p>
+            <x-auth-brand :heading="'Daftar Akun ' . $appBranding->title" subtitle="Buat akun siswa untuk mulai belajar" />
         </div>
 
         <div class="login-card">

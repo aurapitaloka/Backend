@@ -347,7 +347,7 @@
                     @csrf
 
                     <div class="section-title"><i data-lucide="layout-dashboard"></i> Informasi Konten</div>
-                    <div class="section-subtitle">Atur judul, deskripsi, tombol, dan urutan tampil di landing page.</div>
+                    <div class="section-subtitle">Atur identitas konten landing dengan form yang lebih ringkas.</div>
 
                     <div class="form-group">
                         <label class="form-label">Bagian Landing <span class="required">*</span></label>
@@ -357,6 +357,9 @@
                                 <option value="{{ $value }}" {{ old('section') === $value ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
+                        <div style="margin-top: 0.5rem; color: var(--color-text-light); font-size: 0.9rem;">
+                            Pilih <strong>Branding Aplikasi</strong> jika ingin mengatur logo utama yang dipakai di landing page, login, dan sidebar dashboard.
+                        </div>
                         @error('section')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
@@ -366,71 +369,6 @@
                         <label class="form-label">Judul <span class="required">*</span></label>
                         <input type="text" name="title" value="{{ old('title') }}" class="form-input" required placeholder="Judul konten">
                         @error('title')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Subjudul</label>
-                        <input type="text" name="subtitle" value="{{ old('subtitle') }}" class="form-input" placeholder="Subjudul (opsional)">
-                        @error('subtitle')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Deskripsi</label>
-                        <textarea name="description" rows="4" class="form-textarea" placeholder="Deskripsi konten">{{ old('description') }}</textarea>
-                        @error('description')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Badge / Icon</label>
-                        <input type="text" name="badge" value="{{ old('badge') }}" class="form-input" placeholder="Contoh: IPA, MTK, eye, mic">
-                        <div class="form-help">Isi dengan label pendek atau nama icon (lucide) untuk fitur.</div>
-                        @error('badge')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Label Tombol</label>
-                        <input type="text" name="button_label" value="{{ old('button_label') }}" class="form-input" placeholder="Contoh: Lihat Detail">
-                        @error('button_label')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">URL Tombol</label>
-                        <input type="text" name="button_url" value="{{ old('button_url') }}" class="form-input" placeholder="Contoh: #fitur atau https://...">
-                        @error('button_url')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Meta 1</label>
-                        <input type="text" name="meta_one" value="{{ old('meta_one') }}" class="form-input" placeholder="Contoh: Tegal">
-                        @error('meta_one')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Meta 2</label>
-                        <input type="text" name="meta_two" value="{{ old('meta_two') }}" class="form-input" placeholder="Contoh: +62 111-0000-2222">
-                        @error('meta_two')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Urutan</label>
-                        <input type="number" name="sort_order" value="{{ old('sort_order') }}" class="form-input" min="0" placeholder="0">
-                        @error('sort_order')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>

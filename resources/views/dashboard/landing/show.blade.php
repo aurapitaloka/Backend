@@ -352,55 +352,6 @@
                             </div>
                         </div>
                         <div class="info-card">
-                            <div class="info-icon"><i data-lucide="text"></i></div>
-                            <div>
-                                <div class="info-label">Subjudul</div>
-                                <div class="info-value">{{ $landingItem->subtitle ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="badge-check"></i></div>
-                            <div>
-                                <div class="info-label">Badge / Icon</div>
-                                <div class="info-value">{{ $landingItem->badge ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="mouse-pointer-click"></i></div>
-                            <div>
-                                <div class="info-label">Label Tombol</div>
-                                <div class="info-value">{{ $landingItem->button_label ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="link"></i></div>
-                            <div>
-                                <div class="info-label">URL Tombol</div>
-                                <div class="info-value">{{ $landingItem->button_url ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="map-pin"></i></div>
-                            <div>
-                                <div class="info-label">Meta 1</div>
-                                <div class="info-value">{{ $landingItem->meta_one ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="phone"></i></div>
-                            <div>
-                                <div class="info-label">Meta 2</div>
-                                <div class="info-value">{{ $landingItem->meta_two ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="list-ordered"></i></div>
-                            <div>
-                                <div class="info-label">Urutan</div>
-                                <div class="info-value">{{ $landingItem->sort_order ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
                             <div class="info-icon"><i data-lucide="calendar-plus"></i></div>
                             <div>
                                 <div class="info-label">Tanggal Dibuat</div>
@@ -414,15 +365,6 @@
                                 <div class="info-value">{{ $landingItem->updated_at->format('d M Y H:i') }}</div>
                             </div>
                         </div>
-                        @if($landingItem->description)
-                            <div class="info-card" style="grid-column: 1 / -1;">
-                                <div class="info-icon"><i data-lucide="align-left"></i></div>
-                                <div>
-                                    <div class="info-label">Deskripsi</div>
-                                    <div class="info-value">{{ $landingItem->description }}</div>
-                                </div>
-                            </div>
-                        @endif
                         @if($landingItem->image_path)
                             <div class="info-card" style="grid-column: 1 / -1;">
                                 <div class="info-icon"><i data-lucide="image"></i></div>

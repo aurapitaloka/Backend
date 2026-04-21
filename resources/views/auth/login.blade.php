@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Login ke Ruma - Platform Edukasi Modern">
-    <title>Login - Ruma</title>
+    <meta name="description" content="Login ke {{ $appBranding->title }} - Platform Edukasi Modern">
+    <title>Login - {{ $appBranding->title }}</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -372,14 +372,7 @@
     <div class="login-container">
        <!-- Logo Section -->
 <div class="logo-section">
-    <div class="flex justify-center mb-4">
-        <img src="{{ asset('images/image.png') }}"
-     class="h-24 w-auto drop-shadow-xl">
-    </div>
-        <h1 class="login-title">Masuk ke Ruma</h1>
-        <p class="login-subtitle">
-    Platform edukasi modern untuk belajar lebih mudah dan terarah
-</p>
+    <x-auth-brand />
 
 </div>
 
