@@ -840,7 +840,7 @@
 
         function renderPdfPageCard(pageNumber, viewport, canvas) {
             const card = document.createElement('label');
-            card.className = 'pdf-page-card selected';
+            card.className = 'pdf-page-card';
             card.dataset.pageNumber = String(pageNumber);
 
             const preview = document.createElement('div');
@@ -849,7 +849,7 @@
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.className = 'pdf-page-check';
-            checkbox.checked = true;
+            checkbox.checked = false;
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
                     selectedPdfPages.add(pageNumber);

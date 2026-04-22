@@ -638,7 +638,7 @@
                         </label>
                         <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx" class="form-input" {{ old('tipe_konten', $materi->tipe_konten) == 'file' && !$materi->file_path ? 'required' : '' }}>
                         <small style="color: var(--color-text-light); margin-top: 0.5rem; display: block;">PDF di atas 10 MB akan dicoba dikompres otomatis sampai 10 MB. DOC/DOCX tetap maksimal 10 MB. Kosongkan jika tidak ingin mengubah file.</small>
-                        <input type="hidden" name="pdf_page_selection" id="pdf_page_selection" value="">
+                        <input type="hidden" name="pdf_page_selection" id="pdf_page_selection" value="{{ old('pdf_page_selection', $materi->pdf_page_selection) }}">
                         <div id="pdf_selection_panel" class="pdf-selection-panel" style="display: none;">
                             <div id="pdf_selection_loading" class="pdf-selection-loading" style="display: none;">Sedang menyiapkan preview halaman PDF...</div>
                             <div class="pdf-selection-range">
@@ -734,6 +734,13 @@
         const pdfPageEndInput = document.getElementById('pdf_page_end');
         const pdfSelectAllButton = document.getElementById('pdf_select_all');
         const pdfClearAllButton = document.getElementById('pdf_clear_all');
+        const existingPdfUrl = @json(($materi->tipe_konten === 'file' && $materi->file_path && str_ends_with(strtolower($materi->file_path), '.pdf')) ? Storage::url($materi->file_path) : null);
+        const initialSelectedPdfPages = new Set(
+            (pdfPageSelectionInput?.value || '')
+                .split(',')
+                .map((value) => Number.parseInt(value.trim(), 10))
+                .filter((value) => Number.isInteger(value) && value > 0)
+        );
         let selectedPdfPages = new Set();
         let totalPdfPages = 0;
         let isSyncingPdfInputs = false;
@@ -832,7 +839,8 @@
 
         function renderPdfPageCard(pageNumber, viewport, canvas) {
             const card = document.createElement('label');
-            card.className = 'pdf-page-card selected';
+            const isInitiallySelected = initialSelectedPdfPages.has(pageNumber);
+            card.className = `pdf-page-card${isInitiallySelected ? ' selected' : ''}`;
             card.dataset.pageNumber = String(pageNumber);
 
             const preview = document.createElement('div');
@@ -841,7 +849,7 @@
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.className = 'pdf-page-check';
-            checkbox.checked = true;
+            checkbox.checked = isInitiallySelected;
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
                     selectedPdfPages.add(pageNumber);
@@ -866,12 +874,15 @@
             return card;
         }
 
-        async function loadPdfPreview(file) {
-            if (!file || !pdfSelectionPanel) {
+        async function loadPdfPreview(source) {
+            if (!source || !pdfSelectionPanel) {
                 return;
             }
 
-            const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+            const isFileObject = typeof File !== 'undefined' && source instanceof File;
+            const isPdf = isFileObject
+                ? (source.type === 'application/pdf' || source.name.toLowerCase().endsWith('.pdf'))
+                : String(source).toLowerCase().includes('.pdf');
             pdfSelectionPanel.style.display = isPdf ? 'block' : 'none';
 
             if (!isPdf) {
@@ -892,10 +903,14 @@
             updatePdfSelectionSummary();
 
             try {
-                const buffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+                const documentSource = isFileObject
+                    ? { data: await source.arrayBuffer() }
+                    : source;
+                const pdf = await pdfjsLib.getDocument(documentSource).promise;
                 totalPdfPages = pdf.numPages;
-                selectedPdfPages = new Set();
+                selectedPdfPages = new Set(
+                    Array.from(initialSelectedPdfPages).filter((pageNumber) => pageNumber <= totalPdfPages)
+                );
 
                 for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
                     const page = await pdf.getPage(pageNumber);
@@ -972,6 +987,7 @@
             fileInput.addEventListener('change', () => {
                 const currentFile = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
                 if (currentFile) {
+                    initialSelectedPdfPages.clear();
                     loadPdfPreview(currentFile);
                 } else {
                     pdfSelectionPanel.style.display = 'none';
@@ -986,6 +1002,10 @@
 
         if (tipeKontenSelect.value) {
             tipeKontenSelect.dispatchEvent(new Event('change'));
+        }
+
+        if (!fileInput?.files?.length && existingPdfUrl && tipeKontenSelect.value === 'file') {
+            loadPdfPreview(existingPdfUrl);
         }
 
         if (pdfPageStartInput) {

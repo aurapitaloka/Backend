@@ -18,6 +18,7 @@ class Materi extends Model
         'file_path',
         'cover_path',
         'jumlah_halaman',
+        'pdf_page_selection',
         'status_aktif',
         'dibuat_oleh',
     ];

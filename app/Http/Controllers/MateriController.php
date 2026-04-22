@@ -116,9 +116,12 @@ class MateriController extends Controller
                 $request->input('pdf_page_selection')
             );
             $validated['file_path'] = $storedFile['path'];
+            $validated['pdf_page_selection'] = $request->input('pdf_page_selection');
             if ($storedFile['page_count'] !== null) {
                 $validated['jumlah_halaman'] = $storedFile['page_count'];
             }
+        } else {
+            $validated['pdf_page_selection'] = null;
         }
 
         if ($request->hasFile('cover_path')) {
@@ -227,12 +230,14 @@ class MateriController extends Controller
             }
 
             $validated['file_path'] = $newFilePath;
+            $validated['pdf_page_selection'] = $request->input('pdf_page_selection');
             if ($storedFile['page_count'] !== null) {
                 $validated['jumlah_halaman'] = $storedFile['page_count'];
             }
         } else {
             // Keep existing file if not uploading new one
             $validated['file_path'] = $materi->file_path;
+            $validated['pdf_page_selection'] = $materi->pdf_page_selection;
         }
 
         if ($request->hasFile('cover_path')) {
