@@ -552,7 +552,7 @@
 
     @include('components.modal')
 
-    @if(($user->siswa->level_id ?? null) === null)
+    @if(($user->peran ?? null) === 'siswa' && (($user->siswa->level_id ?? null) === null))
         <div id="levelSetupOverlay" style="position:fixed; inset:0; background:rgba(17,24,39,0.65); z-index:2000; display:flex; align-items:center; justify-content:center; padding:1rem;">
             <div style="width:100%; max-width:520px; background:#fff; border-radius:16px; padding:1.5rem; box-shadow:0 20px 40px rgba(0,0,0,0.25);">
                 <span class="tag">Profil Siswa</span>
