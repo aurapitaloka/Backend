@@ -6,6 +6,7 @@ use App\Models\LandingItem;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         View::composer('*', function ($view) {
             $branding = null;
 
@@ -38,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
                 'subtitle' => $branding?->subtitle ?: 'Platform edukasi modern untuk belajar lebih mudah dan terarah',
                 'description' => $branding?->description,
                 'image_url' => $branding?->image_path
-                    ? Storage::url($branding->image_path)
+                    ? URL::route('media.public.show', ['path' => $branding->image_path], true)
                     : asset('images/image.png'),
             ]);
         });
