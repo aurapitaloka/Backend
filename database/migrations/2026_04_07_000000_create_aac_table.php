@@ -20,11 +20,7 @@ return new class extends Migration
             $table->string('gambar_path', 255)->nullable();
             $table->integer('urutan')->nullable();
             $table->boolean('status_aktif')->default(true);
-            $table->bigInteger('dibuat_oleh');
-            $table->foreign('dibuat_oleh')
-                ->references('id')
-                ->on('pengguna')
-                ->onDelete('cascade');
+            $table->foreignId('dibuat_oleh')->constrained('pengguna')->onDelete('cascade');
             $table->timestamps();
         });
     }
