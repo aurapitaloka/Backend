@@ -10,16 +10,11 @@ return new class extends Migration
     {
         Schema::create('rak_buku', function (Blueprint $table) {
             $table->id();
-            // `pengguna.id` and `materi.id` in this project are signed BIGINT (not unsigned),
-            // so use signed bigInteger to match types and avoid FK mismatch.
-            $table->bigInteger('pengguna_id');
-            $table->bigInteger('materi_id');
+            $table->foreignId('pengguna_id')->constrained('pengguna')->onDelete('cascade');
+            $table->foreignId('materi_id')->constrained('materi')->onDelete('cascade');
             $table->timestamps();
 
             $table->unique(['pengguna_id','materi_id']);
-
-            $table->foreign('pengguna_id')->references('id')->on('pengguna')->onDelete('cascade');
-            $table->foreign('materi_id')->references('id')->on('materi')->onDelete('cascade');
         });
     }
 
