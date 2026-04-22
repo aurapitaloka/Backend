@@ -154,8 +154,8 @@
     @else
         <div class="read-panel">
             <h3 class="section-title">Materi (PDF)</h3>
-            @if($materi->file_path)
-                <iframe id="pdfFrame" src="{{ asset('storage/' . $materi->file_path) }}" style="width:100%; height:70vh; border:1px solid var(--color-gray); border-radius:14px;"></iframe>
+            @if($materi->file_url)
+                <iframe id="pdfFrame" src="{{ $materi->file_url }}" style="width:100%; height:70vh; border:1px solid var(--color-gray); border-radius:14px;"></iframe>
                 <p class="section-desc" style="margin-top:0.5rem;">
                     Catatan: Auto-scroll dan TTS untuk PDF tergantung dukungan browser.
                 </p>

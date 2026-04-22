@@ -75,8 +75,8 @@
     </style>
 
     <div class="detail-hero">
-        <div class="detail-cover" style="{{ $materi->cover_path ? "background-image:url('" . asset('storage/' . $materi->cover_path) . "'); background-size:cover; background-position:center;" : 'background:#fff; color:#111827; border:1px solid rgba(0,0,0,0.08);' }}">
-            @if(!$materi->cover_path)
+        <div class="detail-cover" style="{{ $materi->cover_url ? "background-image:url('" . $materi->cover_url . "'); background-size:cover; background-position:center;" : 'background:#fff; color:#111827; border:1px solid rgba(0,0,0,0.08);' }}">
+            @if(!$materi->cover_url)
                 <div style="font-size:0.95rem; line-height:1.4; font-weight:700;">{{ $materi->judul }}</div>
             @else
                 {{ $materi->level->nama ?? 'Materi' }}
@@ -144,8 +144,8 @@
     @else
         <div class="content-section">
             <h3 class="section-title">File Materi</h3>
-            @if($materi->file_path)
-                <a href="{{ asset('storage/' . $materi->file_path) }}" class="btn btn-primary" target="_blank" rel="noopener">Unduh / Buka File</a>
+            @if($materi->file_url)
+                <a href="{{ $materi->file_url }}" class="btn btn-primary" target="_blank" rel="noopener">Unduh / Buka File</a>
             @else
                 <p class="section-desc">File tidak tersedia.</p>
             @endif

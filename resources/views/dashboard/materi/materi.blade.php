@@ -844,8 +844,8 @@
                                             </span>
                                         </td>
                                         <td>
-                                            @if($item->file_path)
-                                                <a href="{{ Storage::url($item->file_path) }}" class="file-link" target="_blank">
+                                            @if($item->file_url)
+                                                <a href="{{ $item->file_url }}" class="file-link" target="_blank">
                                                     {{ basename($item->file_path) }}
                                                 </a>
                                             @else

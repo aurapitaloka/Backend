@@ -519,24 +519,24 @@
                     <div class="content-section">
                         <h3 class="section-title">Konten Materi</h3>
                         
-                        @if($materi->tipe_konten == 'file' && $materi->file_path)
+                        @if($materi->tipe_konten == 'file' && $materi->file_url)
                             <div>
                                 <p style="margin-bottom: 1rem; color: var(--color-muted);">
                                     File: <strong>{{ basename($materi->file_path) }}</strong>
                                 </p>
                                 <iframe 
-                                    src="{{ Storage::url($materi->file_path) }}" 
+                                    src="{{ $materi->file_url }}" 
                                     class="pdf-viewer"
                                     type="application/pdf">
                                     <p style="padding: 2rem; text-align: center; color: var(--color-muted);">
                                         Browser Anda tidak mendukung preview PDF. 
-                                        <a href="{{ Storage::url($materi->file_path) }}" target="_blank" style="color: var(--color-accent-dark); text-decoration: underline;">
+                                        <a href="{{ $materi->file_url }}" target="_blank" style="color: var(--color-accent-dark); text-decoration: underline;">
                                             Klik di sini untuk membuka file
                                         </a>
                                     </p>
                                 </iframe>
                                 <div style="margin-top: 1rem;">
-                                    <a href="{{ Storage::url($materi->file_path) }}" target="_blank" class="btn btn-primary">
+                                    <a href="{{ $materi->file_url }}" target="_blank" class="btn btn-primary">
                                         <i data-lucide="download"></i>
                                         Download File
                                     </a>

@@ -17,6 +17,6 @@
       Psy\Exception\ParseErrorException::fromParseError(Object(PhpParser\Error))
 
   2   vendor\psy\psysh\src\CodeCleaner.php:269
-      Psy\CodeCleaner::parse("<?php dd(App\Models\Materi::where('tipe_konten','file')-,'judul','tipe_konten','file_path','cover_path')-;
+      Psy\CodeCleaner::parse("<?php dd(App\Models\Materi::where('tipe_konten','file')-,'judul','file_path','cover_path']));
 ")
 

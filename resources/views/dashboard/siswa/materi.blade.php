@@ -227,8 +227,8 @@
             <div class="featured-row">
                 @foreach($featured as $item)
                     <a href="{{ route('dashboard.siswa.materi.show', $item->id) }}" class="featured-card" data-title="{{ $item->judul }}" data-url="{{ route('dashboard.siswa.materi.show', $item->id) }}">
-                        <div class="featured-cover {{ $item->cover_path ? '' : 'placeholder' }}" style="{{ $item->cover_path ? "background-image:url('" . asset('storage/' . $item->cover_path) . "');" : '' }}">
-                            @if(!$item->cover_path)
+                        <div class="featured-cover {{ $item->cover_url ? '' : 'placeholder' }}" style="{{ $item->cover_url ? "background-image:url('" . $item->cover_url . "');" : '' }}">
+                            @if(!$item->cover_url)
                                 {{ $item->level->nama ?? 'Materi' }}
                             @endif
                         </div>
@@ -253,12 +253,12 @@
                 <div class="mapel-row">
                     @foreach($items as $item)
                         <a href="{{ route('dashboard.siswa.materi.show', $item->id) }}" class="book-card" data-title="{{ $item->judul }}" data-url="{{ route('dashboard.siswa.materi.show', $item->id) }}">
-                            <div class="book-cover {{ $item->cover_path ? 'has-image' : 'placeholder' }}" style="{{ $item->cover_path ? "background-image:url('" . asset('storage/' . $item->cover_path) . "');" : '' }}">
+                            <div class="book-cover {{ $item->cover_url ? 'has-image' : 'placeholder' }}" style="{{ $item->cover_url ? "background-image:url('" . $item->cover_url . "');" : '' }}">
                                 <span class="book-badge">{{ $item->mataPelajaran->nama ?? 'Umum' }}</span>
                                 @if(in_array($item->id, $rakMateriIds ?? []))
                                     <span class="book-rak"><i data-lucide="bookmark"></i></span>
                                 @endif
-                                @if(!$item->cover_path)
+                                @if(!$item->cover_url)
                                     <div class="book-placeholder-text">{{ $item->judul }}</div>
                                 @else
                                     <div class="book-meta">
