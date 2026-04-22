@@ -51,7 +51,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('materi', MateriController::class);
         // Also expose the dashboard-prefixed API endpoints so frontend
         // code that calls `/api/dashboard/materi` continues to work.
-        Route::apiResource('dashboard/materi', MateriController::class);
+        Route::apiResource('dashboard/materi', MateriController::class)->names([
+            'index' => 'dashboard.materi.index',
+            'store' => 'dashboard.materi.store',
+            'show' => 'dashboard.materi.show',
+            'update' => 'dashboard.materi.update',
+            'destroy' => 'dashboard.materi.destroy',
+        ]);
         Route::apiResource('fiksi', FiksiController::class);
         Route::apiResource('pengguna', PenggunaController::class);
         Route::apiResource('level', LevelController::class);
