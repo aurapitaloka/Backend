@@ -10,15 +10,12 @@ return new class extends Migration
     {
         Schema::create('kuis', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('materi_id')->nullable();
+            $table->foreignId('materi_id')->nullable()->constrained('materi')->nullOnDelete();
             $table->string('judul', 200);
             $table->text('deskripsi')->nullable();
             $table->boolean('status_aktif')->default(true);
-            $table->bigInteger('dibuat_oleh')->nullable();
+            $table->foreignId('dibuat_oleh')->nullable()->constrained('pengguna')->nullOnDelete();
             $table->timestamps();
-
-            $table->foreign('materi_id')->references('id')->on('materi')->nullOnDelete();
-            $table->foreign('dibuat_oleh')->references('id')->on('pengguna')->nullOnDelete();
         });
 
         Schema::create('kuis_pertanyaan', function (Blueprint $table) {
@@ -45,7 +42,7 @@ return new class extends Migration
         Schema::create('kuis_hasil', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('kuis_id');
-            $table->bigInteger('pengguna_id');
+            $table->foreignId('pengguna_id')->constrained('pengguna')->cascadeOnDelete();
             $table->unsignedInteger('skor')->default(0);
             $table->unsignedInteger('total_benar')->default(0);
             $table->unsignedInteger('total_pertanyaan')->default(0);
@@ -53,7 +50,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('kuis_id')->references('id')->on('kuis')->cascadeOnDelete();
-            $table->foreign('pengguna_id')->references('id')->on('pengguna')->cascadeOnDelete();
         });
 
         Schema::create('kuis_jawaban', function (Blueprint $table) {
