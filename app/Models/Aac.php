@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\URL;
 
 class Aac extends Model
 {
@@ -23,8 +24,21 @@ class Aac extends Model
         'urutan' => 'integer',
     ];
 
+    protected $appends = [
+        'gambar_url',
+    ];
+
     public function pengguna()
     {
         return $this->belongsTo(Pengguna::class, 'dibuat_oleh');
+    }
+
+    public function getGambarUrlAttribute(): ?string
+    {
+        if (!$this->gambar_path) {
+            return null;
+        }
+
+        return URL::route('media.public.show', ['path' => $this->gambar_path], true);
     }
 }

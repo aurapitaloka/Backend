@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\URL;
 
 class Materi extends Model
 {
@@ -28,6 +29,11 @@ class Materi extends Model
         'jumlah_halaman' => 'integer',
     ];
 
+    protected $appends = [
+        'file_url',
+        'cover_url',
+    ];
+
     public function pengguna()
     {
         return $this->belongsTo(Pengguna::class, 'dibuat_oleh');
@@ -46,5 +52,23 @@ class Materi extends Model
     public function kuis()
     {
         return $this->hasMany(Kuis::class, 'materi_id');
+    }
+
+    public function getFileUrlAttribute(): ?string
+    {
+        if (!$this->file_path) {
+            return null;
+        }
+
+        return URL::route('media.public.show', ['path' => $this->file_path], true);
+    }
+
+    public function getCoverUrlAttribute(): ?string
+    {
+        if (!$this->cover_path) {
+            return null;
+        }
+
+        return URL::route('media.public.show', ['path' => $this->cover_path], true);
     }
 }

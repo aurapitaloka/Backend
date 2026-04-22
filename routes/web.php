@@ -4,10 +4,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PanduanController;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing.home');
 Route::post('/ulasan', [LandingPageController::class, 'storeUlasan'])->name('landing.ulasan.store');
+Route::get('/media/{path}', [MediaController::class, 'show'])->where('path', '.*')->name('media.public.show');
 
 // Debug route to log sidebar clicks (enabled only in debug mode).
 if (config('app.debug')) {
