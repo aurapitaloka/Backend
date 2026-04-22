@@ -461,8 +461,9 @@
 
                     <div class="form-group">
                         <label class="form-label">Gambar (JPG/PNG/WEBP/SVG)</label>
-                        <input type="file" name="gambar_path" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-input">
-                        <small class="hint">Maksimal 5MB. Kosongkan jika tidak ingin mengubah gambar.</small>
+                        <input type="file" name="gambar_path" id="gambar_path" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-input">
+                        <small class="hint">Maksimal 5MB. Kosongkan jika tidak ingin mengubah gambar. JPG/PNG/WEBP yang lebih besar akan dicoba dikompres otomatis sebelum diupload.</small>
+                        <div id="gambar_compress_hint" class="hint" style="display:none;"></div>
                         @if($aac->gambar_path)
                             <div class="current-file">
                                 Gambar saat ini: <a href="{{ Storage::url($aac->gambar_path) }}" target="_blank">{{ basename($aac->gambar_path) }}</a>
@@ -521,6 +522,130 @@
     </script>
     <script>
     lucide.createIcons();
+    </script>
+    <script>
+        const aacImageInput = document.getElementById('gambar_path');
+        const aacImageHint = document.getElementById('gambar_compress_hint');
+        const AAC_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+        function setAacImageHint(message, isError = false) {
+            if (!aacImageHint) {
+                return;
+            }
+
+            aacImageHint.style.display = message ? 'block' : 'none';
+            aacImageHint.textContent = message || '';
+            aacImageHint.style.color = isError ? '#DC2626' : 'var(--color-text-light)';
+        }
+
+        async function fileToImageBitmap(file) {
+            const imageUrl = URL.createObjectURL(file);
+
+            try {
+                const image = new Image();
+                image.decoding = 'async';
+                image.src = imageUrl;
+                await image.decode();
+                return image;
+            } finally {
+                URL.revokeObjectURL(imageUrl);
+            }
+        }
+
+        async function compressAacImage(file) {
+            if (file.size <= AAC_MAX_IMAGE_BYTES || file.type === 'image/svg+xml') {
+                return file;
+            }
+
+            const image = await fileToImageBitmap(file);
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            let width = image.naturalWidth || image.width;
+            let height = image.naturalHeight || image.height;
+            let quality = 0.9;
+            let bestBlob = null;
+            const outputType = file.type === 'image/png' ? 'image/webp' : (file.type === 'image/webp' ? 'image/webp' : 'image/jpeg');
+
+            for (let attempt = 0; attempt < 10; attempt++) {
+                canvas.width = Math.max(1, Math.round(width));
+                canvas.height = Math.max(1, Math.round(height));
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                const blob = await new Promise((resolve) => canvas.toBlob(resolve, outputType, quality));
+                if (!blob) {
+                    break;
+                }
+
+                if (!bestBlob || blob.size < bestBlob.size) {
+                    bestBlob = blob;
+                }
+
+                if (blob.size <= AAC_MAX_IMAGE_BYTES) {
+                    bestBlob = blob;
+                    break;
+                }
+
+                if (quality > 0.45) {
+                    quality -= 0.1;
+                } else {
+                    width *= 0.85;
+                    height *= 0.85;
+                }
+            }
+
+            if (!bestBlob || bestBlob.size > AAC_MAX_IMAGE_BYTES) {
+                return null;
+            }
+
+            const extension = outputType === 'image/webp' ? 'webp' : 'jpg';
+            const baseName = file.name.replace(/\.[^.]+$/, '');
+
+            return new File([bestBlob], `${baseName}.${extension}`, {
+                type: outputType,
+                lastModified: Date.now(),
+            });
+        }
+
+        if (aacImageInput) {
+            aacImageInput.addEventListener('change', async () => {
+                const file = aacImageInput.files && aacImageInput.files[0] ? aacImageInput.files[0] : null;
+                setAacImageHint('');
+
+                if (!file) {
+                    return;
+                }
+
+                if (file.type === 'image/svg+xml') {
+                    return;
+                }
+
+                if (file.size <= AAC_MAX_IMAGE_BYTES) {
+                    return;
+                }
+
+                setAacImageHint('Gambar melebihi 5MB. Sedang dicoba dikompres otomatis...');
+
+                try {
+                    const compressedFile = await compressAacImage(file);
+
+                    if (!compressedFile) {
+                        aacImageInput.value = '';
+                        setAacImageHint('Gambar tidak berhasil dikompres sampai 5MB. Coba pilih gambar lain atau kompres manual.', true);
+                        return;
+                    }
+
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(compressedFile);
+                    aacImageInput.files = dataTransfer.files;
+
+                    setAacImageHint(`Gambar berhasil dikompres dari ${(file.size / 1024 / 1024).toFixed(2)} MB menjadi ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB.`);
+                } catch (error) {
+                    aacImageInput.value = '';
+                    setAacImageHint('Terjadi kesalahan saat kompres gambar otomatis. Coba lagi dengan file lain.', true);
+                }
+            });
+        }
     </script>
 
 </body>
