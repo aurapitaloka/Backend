@@ -48,7 +48,9 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard.siswa.materi.read');
     Route::get('/dashboard-siswa/materi/{materi}/kuis', [App\Http\Controllers\SiswaDashboardController::class, 'kuisMateri'])
         ->name('dashboard.siswa.materi.kuis');
-    Route::post('/dashboard-siswa/materi/{materi}/kuis', [App\Http\Controllers\SiswaDashboardController::class, 'submitKuisMateri'])
+    Route::get('/dashboard-siswa/materi/{materi}/kuis/{kuis}', [App\Http\Controllers\SiswaDashboardController::class, 'kuisMateriShow'])
+        ->name('dashboard.siswa.materi.kuis.show');
+    Route::post('/dashboard-siswa/materi/{materi}/kuis/{kuis}', [App\Http\Controllers\SiswaDashboardController::class, 'submitKuisMateri'])
         ->name('dashboard.siswa.materi.kuis.submit');
     Route::get('/dashboard-siswa/kuis', [App\Http\Controllers\SiswaDashboardController::class, 'kuisIndex'])
         ->name('dashboard.siswa.kuis');

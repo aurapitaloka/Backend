@@ -25,13 +25,8 @@ class MateriController extends Controller
         $user = Auth::user();
 
         $materi = Materi::with(['pengguna', 'level', 'mataPelajaran'])
-            ->when($this->isSiswaApiRequest(), function ($query) use ($user) {
-                $user->loadMissing('siswa');
-
-                $query->where('status_aktif', true)
-                    ->when($user->siswa?->level_id, function ($levelQuery) use ($user) {
-                        $levelQuery->where('level_id', $user->siswa->level_id);
-                    });
+            ->when($this->isSiswaApiRequest(), function ($query) {
+                $query->where('status_aktif', true);
             })
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($inner) use ($search) {
@@ -151,15 +146,8 @@ class MateriController extends Controller
         $materi = Materi::with(['pengguna', 'level', 'mataPelajaran'])->findOrFail($id);
 
         if ($this->isSiswaApiRequest()) {
-            $user = Auth::user();
-            $user->loadMissing('siswa');
-
             if (!$materi->status_aktif) {
                 return response()->json(['message' => 'Materi tidak tersedia'], 404);
-            }
-
-            if ($user->siswa?->level_id && (int) $materi->level_id !== (int) $user->siswa->level_id) {
-                return response()->json(['message' => 'Materi ini bukan untuk kelas kamu.'], 403);
             }
         }
 

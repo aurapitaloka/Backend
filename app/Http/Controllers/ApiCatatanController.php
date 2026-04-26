@@ -28,9 +28,6 @@ class ApiCatatanController extends Controller
 
         if ($request->boolean('with_materi_list')) {
             $materiList = Materi::where('status_aktif', true)
-                ->when(($user->siswa && $user->siswa->level_id), function ($query) use ($user) {
-                    $query->where('level_id', $user->siswa->level_id);
-                })
                 ->orderBy('judul')
                 ->get(['id', 'judul', 'level_id']);
 

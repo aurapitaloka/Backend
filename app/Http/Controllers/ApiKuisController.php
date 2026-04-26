@@ -23,26 +23,14 @@ class ApiKuisController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $levelId = $user->siswa?->level_id;
-
         $kuisAktif = Kuis::with(['materi'])
             ->withCount('pertanyaan')
             ->where('status_aktif', true)
-            ->when($levelId, function ($query) use ($levelId) {
-                $query->where(function ($inner) use ($levelId) {
-                    $inner->whereNull('materi_id')
-                        ->orWhereHas('materi', function ($materiQuery) use ($levelId) {
-                            $materiQuery->where('level_id', $levelId)
-                                ->where('status_aktif', true);
-                        });
-                });
-            }, function ($query) {
-                $query->where(function ($inner) {
-                    $inner->whereNull('materi_id')
-                        ->orWhereHas('materi', function ($materiQuery) {
-                            $materiQuery->where('status_aktif', true);
-                        });
-                });
+            ->where(function ($query) {
+                $query->whereNull('materi_id')
+                    ->orWhereHas('materi', function ($materiQuery) {
+                        $materiQuery->where('status_aktif', true);
+                    });
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -105,7 +93,7 @@ class ApiKuisController extends Controller
             return response()->json([
                 'message' => 'Kuis ini terhubung dengan materi.',
                 'materi_id' => $kuis->materi_id,
-                'redirect_to' => "/api/dashboard-siswa/materi/{$kuis->materi_id}/kuis",
+                'redirect_to' => "/api/dashboard-siswa/materi/{$kuis->materi_id}/kuis/{$kuis->id}",
             ], 409);
         }
 
@@ -134,21 +122,57 @@ class ApiKuisController extends Controller
             return response()->json(['message' => 'Materi tidak tersedia'], 404);
         }
 
-        if (!$this->isMateriCompleted($user->id, $materi->id)) {
-            return response()->json([
-                'message' => 'Selesaikan materi terlebih dahulu sebelum mengerjakan kuis.',
-                'materi_id' => $materi->id,
-            ], 403);
-        }
-
-        $kuis = Kuis::with('pertanyaan.opsi')
+        $kuisList = Kuis::withCount('pertanyaan')
             ->where('materi_id', $materi->id)
             ->where('status_aktif', true)
-            ->first();
+            ->orderByDesc('created_at')
+            ->get();
 
-        if (!$kuis) {
+        if ($kuisList->isEmpty()) {
             return response()->json(['message' => 'Kuis tidak ditemukan'], 404);
         }
+
+        $defaultKuis = $kuisList->first();
+
+        return response()->json([
+            'materi' => [
+                'id' => $materi->id,
+                'judul' => $materi->judul,
+                'level_id' => $materi->level_id,
+            ],
+            'default_kuis_id' => $defaultKuis?->id,
+            'kuis' => $defaultKuis ? $this->sanitizeKuisForSiswa($defaultKuis->load('pertanyaan.opsi')) : null,
+            'kuis_list' => $kuisList->map(function (Kuis $kuis) {
+                return [
+                    'id' => $kuis->id,
+                    'judul' => $kuis->judul,
+                    'deskripsi' => $kuis->deskripsi,
+                    'pertanyaan_count' => $kuis->pertanyaan_count ?? 0,
+                    'status_aktif' => (bool) $kuis->status_aktif,
+                    'show_url' => "/api/dashboard-siswa/materi/{$kuis->materi_id}/kuis/{$kuis->id}",
+                    'submit_url' => "/api/dashboard-siswa/materi/{$kuis->materi_id}/kuis/{$kuis->id}",
+                ];
+            })->values(),
+        ]);
+    }
+
+    public function showMateriKuis(Materi $materi, Kuis $kuis)
+    {
+        $user = $this->requireSiswa();
+        if (!$user) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        if ($block = $this->ensureMateriLevelAccess($user, $materi)) {
+            return $block;
+        }
+
+        if (!$materi->status_aktif) {
+            return response()->json(['message' => 'Materi tidak tersedia'], 404);
+        }
+
+        $kuis = $this->resolveMateriKuis($materi, $kuis);
+        $kuis->load('pertanyaan.opsi');
 
         return response()->json([
             'materi' => [
@@ -178,7 +202,7 @@ class ApiKuisController extends Controller
             return response()->json([
                 'message' => 'Kuis ini terhubung dengan materi.',
                 'materi_id' => $kuis->materi_id,
-                'redirect_to' => "/api/dashboard-siswa/materi/{$kuis->materi_id}/kuis",
+                'redirect_to' => "/api/dashboard-siswa/materi/{$kuis->materi_id}/kuis/{$kuis->id}",
             ], 409);
         }
 
@@ -202,7 +226,7 @@ class ApiKuisController extends Controller
     /**
      * Submit answers for materi quiz.
      */
-    public function submitMateri(Request $request, Materi $materi)
+    public function submitMateriKuis(Request $request, Materi $materi, Kuis $kuis)
     {
         $user = $this->requireSiswa();
         if (!$user) {
@@ -217,26 +241,13 @@ class ApiKuisController extends Controller
             return response()->json(['message' => 'Materi tidak tersedia'], 404);
         }
 
-        if (!$this->isMateriCompleted($user->id, $materi->id)) {
-            return response()->json([
-                'message' => 'Selesaikan materi terlebih dahulu sebelum mengerjakan kuis.',
-                'materi_id' => $materi->id,
-            ], 403);
-        }
-
         $request->validate([
             'jawaban' => 'array',
             'jawaban_teks' => 'array',
         ]);
 
-        $kuis = Kuis::with('pertanyaan.opsi')
-            ->where('materi_id', $materi->id)
-            ->where('status_aktif', true)
-            ->first();
-
-        if (!$kuis) {
-            return response()->json(['message' => 'Kuis tidak ditemukan'], 404);
-        }
+        $kuis = $this->resolveMateriKuis($materi, $kuis);
+        $kuis->load('pertanyaan.opsi');
 
         $result = $this->storeKuisHasil($request, $kuis, $user->id);
 
@@ -259,7 +270,6 @@ class ApiKuisController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $levelId = $user->siswa?->level_id;
         $kuisSort = $request->get('kuis_sort', 'latest');
         $perPage = (int) $request->get('per_page', 8);
 
@@ -268,12 +278,6 @@ class ApiKuisController extends Controller
             ->leftJoin('materi', 'materi.id', '=', 'kuis.materi_id')
             ->leftJoin('kuis_jawaban', 'kuis_jawaban.kuis_hasil_id', '=', 'kuis_hasil.id')
             ->where('kuis_hasil.pengguna_id', $user->id)
-            ->when($levelId, function ($query) use ($levelId) {
-                $query->where(function ($inner) use ($levelId) {
-                    $inner->whereNull('kuis.materi_id')
-                        ->orWhere('materi.level_id', $levelId);
-                });
-            })
             ->select(
                 'kuis_hasil.id as hasil_id',
                 'kuis.judul as kuis_judul',
@@ -345,18 +349,6 @@ class ApiKuisController extends Controller
 
     private function ensureMateriLevelAccess($user, Materi $materi)
     {
-        $levelId = $user->siswa?->level_id;
-        if (!$levelId) {
-            return null;
-        }
-
-        if ((int) ($materi->level_id ?? 0) !== (int) $levelId) {
-            return response()->json([
-                'message' => 'Materi ini bukan untuk kelas kamu.',
-                'materi_id' => $materi->id,
-            ], 403);
-        }
-
         return null;
     }
 
@@ -375,6 +367,18 @@ class ApiKuisController extends Controller
         }
 
         return (bool) ($row->selesai_flag ?? 0) || ((int) ($row->progres_persen ?? 0) >= 80);
+    }
+
+    private function resolveMateriKuis(Materi $materi, Kuis $kuis): Kuis
+    {
+        if (
+            !$kuis->status_aktif ||
+            (int) $kuis->materi_id !== (int) $materi->id
+        ) {
+            abort(404);
+        }
+
+        return $kuis;
     }
 
     private function storeKuisHasil(Request $request, Kuis $kuis, int $userId): array

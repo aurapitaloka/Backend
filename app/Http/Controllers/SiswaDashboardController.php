@@ -49,9 +49,6 @@ class SiswaDashboardController extends Controller
         $pageTitle = 'Materi';
         $materi = Materi::with(['mataPelajaran', 'level'])
             ->where('status_aktif', true)
-            ->when(($user->siswa && $user->siswa->level_id), function ($query) use ($user) {
-                $query->where('level_id', $user->siswa->level_id);
-            })
             ->orderBy('created_at', 'desc')
             ->paginate(12);
         $rakMateriIds = RakBuku::where('pengguna_id', $user->id)
@@ -77,14 +74,19 @@ class SiswaDashboardController extends Controller
         }
 
         $pageTitle = 'Detail Materi';
-        $hasKuis = Kuis::where('materi_id', $materi->id)->where('status_aktif', true)->exists();
+        $materiKuisList = Kuis::withCount('pertanyaan')
+            ->where('materi_id', $materi->id)
+            ->where('status_aktif', true)
+            ->orderByDesc('created_at')
+            ->get();
+        $hasKuis = $materiKuisList->isNotEmpty();
 
         $isMateriCompleted = $this->isMateriCompleted($user->id, $materi->id);
         $inRak = RakBuku::where('pengguna_id', $user->id)
             ->where('materi_id', $materi->id)
             ->exists();
 
-        return view('dashboard.siswa.materi-show', compact('user', 'pageTitle', 'materi', 'hasKuis', 'isMateriCompleted', 'inRak'));
+        return view('dashboard.siswa.materi-show', compact('user', 'pageTitle', 'materi', 'hasKuis', 'isMateriCompleted', 'inRak', 'materiKuisList'));
     }
 
     public function readMateri(Materi $materi)
@@ -134,14 +136,10 @@ class SiswaDashboardController extends Controller
         }
 
         $pageTitle = 'Rak Buku';
-        $levelId = $user->siswa?->level_id;
         $rak = RakBuku::with(['materi.mataPelajaran', 'materi.level'])
             ->where('pengguna_id', $user->id)
-            ->whereHas('materi', function ($query) use ($levelId) {
-                $query->where('status_aktif', true)
-                    ->when($levelId, function ($levelQuery) use ($levelId) {
-                        $levelQuery->where('level_id', $levelId);
-                    });
+            ->whereHas('materi', function ($query) {
+                $query->where('status_aktif', true);
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -206,9 +204,6 @@ class SiswaDashboardController extends Controller
 
         $pageTitle = 'Catatan';
         $materiList = Materi::where('status_aktif', true)
-            ->when(($user->siswa && $user->siswa->level_id), function ($query) use ($user) {
-                $query->where('level_id', $user->siswa->level_id);
-            })
             ->orderBy('judul')
             ->get();
         $catatan = CatatanSiswa::with('materi')
@@ -269,15 +264,10 @@ class SiswaDashboardController extends Controller
             return $redirect;
         }
 
-        $levelId = $user->siswa?->level_id;
-
         $pageTitle = 'Riwayat';
         $riwayat = DB::table('sesi_baca')
             ->join('materi', 'materi.id', '=', 'sesi_baca.materi_id')
             ->where('sesi_baca.pengguna_id', $user->id)
-            ->when($levelId, function ($query) use ($levelId) {
-                $query->where('materi.level_id', $levelId);
-            })
             ->select(
                 'materi.id as materi_id',
                 'materi.judul as judul',
@@ -298,12 +288,6 @@ class SiswaDashboardController extends Controller
             ->leftJoin('materi', 'materi.id', '=', 'kuis.materi_id')
             ->leftJoin('kuis_jawaban', 'kuis_jawaban.kuis_hasil_id', '=', 'kuis_hasil.id')
             ->where('kuis_hasil.pengguna_id', $user->id)
-            ->when($levelId, function ($query) use ($levelId) {
-                $query->where(function ($inner) use ($levelId) {
-                    $inner->whereNull('kuis.materi_id')
-                        ->orWhere('materi.level_id', $levelId);
-                });
-            })
             ->select(
                 'kuis_hasil.id as hasil_id',
                 'kuis.judul as kuis_judul',
@@ -457,41 +441,78 @@ class SiswaDashboardController extends Controller
             abort(404);
         }
 
-        if (!$this->isMateriCompleted($user->id, $materi->id)) {
-            return redirect()
-                ->route('dashboard.siswa.materi.show', $materi->id)
-                ->with('error', 'Selesaikan materi terlebih dahulu sebelum mengerjakan kuis.');
-        }
-
-        $kuis = Kuis::with('pertanyaan.opsi')
+        $kuis = Kuis::query()
             ->where('materi_id', $materi->id)
             ->where('status_aktif', true)
+            ->orderByDesc('created_at')
             ->first();
 
-        $pageTitle = 'Kuis Materi';
-        $submitRoute = route('dashboard.siswa.materi.kuis.submit', $materi->id);
-        $backUrl = route('dashboard.siswa.materi.show', $materi->id);
-        $displayTitle = $materi->judul;
+        if (!$kuis) {
+            return redirect()
+                ->route('dashboard.siswa.materi.show', $materi->id)
+                ->with('error', 'Kuis untuk materi ini belum tersedia.');
+        }
 
-        return view('dashboard.siswa.kuis', compact('user', 'pageTitle', 'materi', 'kuis', 'submitRoute', 'backUrl', 'displayTitle'));
+        return redirect()->route('dashboard.siswa.materi.kuis.show', [
+            'materi' => $materi->id,
+            'kuis' => $kuis->id,
+        ]);
     }
 
-    public function submitKuisMateri(Request $request, Materi $materi)
+    public function kuisMateriShow(Materi $materi, Kuis $kuis)
     {
         [$user, $redirect] = $this->requireSiswa();
         if ($redirect) {
             return $redirect;
         }
 
-        $kuis = Kuis::with('pertanyaan.opsi')
-            ->where('materi_id', $materi->id)
-            ->where('status_aktif', true)
-            ->firstOrFail();
+        if ($block = $this->ensureMateriLevelAccess($user, $materi)) {
+            return $block;
+        }
+
+        if (!$materi->status_aktif) {
+            abort(404);
+        }
+
+        $kuis = $this->resolveMateriKuis($materi, $kuis);
+        $kuis->load('pertanyaan.opsi');
+
+        $pageTitle = 'Kuis Materi';
+        $submitRoute = route('dashboard.siswa.materi.kuis.submit', [
+            'materi' => $materi->id,
+            'kuis' => $kuis->id,
+        ]);
+        $backUrl = route('dashboard.siswa.materi.show', $materi->id);
+        $displayTitle = $kuis->judul ?: $materi->judul;
+
+        return view('dashboard.siswa.kuis', compact('user', 'pageTitle', 'materi', 'kuis', 'submitRoute', 'backUrl', 'displayTitle'));
+    }
+
+    public function submitKuisMateri(Request $request, Materi $materi, Kuis $kuis)
+    {
+        [$user, $redirect] = $this->requireSiswa();
+        if ($redirect) {
+            return $redirect;
+        }
+
+        if ($block = $this->ensureMateriLevelAccess($user, $materi)) {
+            return $block;
+        }
+
+        if (!$materi->status_aktif) {
+            abort(404);
+        }
+
+        $kuis = $this->resolveMateriKuis($materi, $kuis);
+        $kuis->load('pertanyaan.opsi');
 
         $skor = $this->storeKuisHasil($request, $kuis, $user->id);
 
         return redirect()
-            ->route('dashboard.siswa.materi.kuis', $materi->id)
+            ->route('dashboard.siswa.materi.kuis.show', [
+                'materi' => $materi->id,
+                'kuis' => $kuis->id,
+            ])
             ->with('success', 'Kuis selesai. Skor kamu: ' . $skor);
     }
 
@@ -502,27 +523,16 @@ class SiswaDashboardController extends Controller
             return $redirect;
         }
 
-        $levelId = $user->siswa?->level_id;
         $pageTitle = 'Kuis';
 
         $kuisAktif = Kuis::with(['materi'])
             ->withCount('pertanyaan')
             ->where('status_aktif', true)
-            ->when($levelId, function ($query) use ($levelId) {
-                $query->where(function ($inner) use ($levelId) {
-                    $inner->whereNull('materi_id')
-                        ->orWhereHas('materi', function ($materiQuery) use ($levelId) {
-                            $materiQuery->where('level_id', $levelId)
-                                ->where('status_aktif', true);
-                        });
-                });
-            }, function ($query) {
-                $query->where(function ($inner) {
-                    $inner->whereNull('materi_id')
-                        ->orWhereHas('materi', function ($materiQuery) {
-                            $materiQuery->where('status_aktif', true);
-                        });
-                });
+            ->where(function ($query) {
+                $query->whereNull('materi_id')
+                    ->orWhereHas('materi', function ($materiQuery) {
+                        $materiQuery->where('status_aktif', true);
+                    });
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -578,7 +588,10 @@ class SiswaDashboardController extends Controller
             if ($kuis->materi && ($block = $this->ensureMateriLevelAccess($user, $kuis->materi))) {
                 return $block;
             }
-            return redirect()->route('dashboard.siswa.materi.kuis', $kuis->materi_id);
+            return redirect()->route('dashboard.siswa.materi.kuis.show', [
+                'materi' => $kuis->materi_id,
+                'kuis' => $kuis->id,
+            ]);
         }
 
         $kuis->load('pertanyaan.opsi');
@@ -602,7 +615,10 @@ class SiswaDashboardController extends Controller
         }
 
         if ($kuis->materi_id) {
-            return redirect()->route('dashboard.siswa.materi.kuis', $kuis->materi_id);
+            return redirect()->route('dashboard.siswa.materi.kuis.show', [
+                'materi' => $kuis->materi_id,
+                'kuis' => $kuis->id,
+            ]);
         }
 
         $kuis->load('pertanyaan.opsi');
@@ -627,17 +643,6 @@ class SiswaDashboardController extends Controller
 
     private function ensureMateriLevelAccess($user, Materi $materi)
     {
-        $levelId = $user->siswa?->level_id;
-        if (!$levelId) {
-            return null;
-        }
-
-        if ((int) ($materi->level_id ?? 0) !== (int) $levelId) {
-            return redirect()
-                ->route('dashboard.siswa.materi')
-                ->with('error', 'Materi ini bukan untuk kelas kamu.');
-        }
-
         return null;
     }
 
@@ -757,5 +762,17 @@ class SiswaDashboardController extends Controller
         ]);
 
         return $skor;
+    }
+
+    private function resolveMateriKuis(Materi $materi, Kuis $kuis): Kuis
+    {
+        if (
+            !$kuis->status_aktif ||
+            (int) $kuis->materi_id !== (int) $materi->id
+        ) {
+            abort(404);
+        }
+
+        return $kuis;
     }
 }

@@ -98,7 +98,7 @@
                 </div>
                 <div class="meta-item">
                     Status
-                    <strong>{{ $hasKuis ? ($isMateriCompleted ? 'Kuis Terbuka' : 'Selesaikan Materi') : 'Tanpa Kuis' }}</strong>
+                    <strong>{{ $hasKuis ? 'Kuis Tersedia' : 'Tanpa Kuis' }}</strong>
                 </div>
             </div>
 
@@ -118,10 +118,10 @@
                     </form>
                 @endif
                 @if($hasKuis)
-                    @if($isMateriCompleted)
-                        <a href="{{ route('dashboard.siswa.materi.kuis', $materi->id) }}" class="btn btn-primary pill-btn">Mulai Kuis</a>
+                    @if(($materiKuisList ?? collect())->count() === 1)
+                        <a href="{{ route('dashboard.siswa.materi.kuis.show', ['materi' => $materi->id, 'kuis' => $materiKuisList->first()->id]) }}" class="btn btn-primary pill-btn">Mulai Kuis</a>
                     @else
-                        <button class="btn btn-secondary pill-btn" type="button" disabled>Selesaikan Materi Dulu</button>
+                        <a href="#daftar-kuis-materi" class="btn btn-primary pill-btn">Lihat Daftar Kuis</a>
                     @endif
                 @endif
                 <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-secondary pill-btn">Kembali ke Daftar</a>
@@ -154,8 +154,27 @@
 
     @if(!$hasKuis)
         <p class="section-desc" style="margin-top:0.75rem;">Kuis untuk materi ini belum tersedia.</p>
-    @elseif(!$isMateriCompleted)
-        <p class="section-desc" style="margin-top:0.75rem;">Selesaikan materi dulu agar kuis terbuka.</p>
+    @endif
+
+    @if($hasKuis)
+        <div class="content-section" id="daftar-kuis-materi">
+            <span class="tag">Kuis Materi</span>
+            <h3 class="section-title">Daftar Kuis</h3>
+            <p class="section-desc">Setiap kuis di bawah ini berdiri sendiri, jadi nilai masing-masing tidak akan tercampur walau materinya sama.</p>
+
+            <div style="display:grid; gap:0.75rem; margin-top:1rem;">
+                @foreach(($materiKuisList ?? collect()) as $item)
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding:0.9rem 1rem; border:1px solid rgba(0,0,0,0.08); border-radius:14px; background:#F9FAFB;">
+                        <div>
+                            <div style="font-weight:700;">{{ $item->judul }}</div>
+                            <div class="section-desc" style="margin-top:0.2rem;">{{ $item->deskripsi ?? 'Tanpa deskripsi.' }}</div>
+                            <div class="section-desc" style="margin-top:0.2rem;">{{ $item->pertanyaan_count ?? 0 }} soal</div>
+                        </div>
+                        <a href="{{ route('dashboard.siswa.materi.kuis.show', ['materi' => $materi->id, 'kuis' => $item->id]) }}" class="btn btn-primary">Mulai Kuis</a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
     @endif
 
     <div class="content-section">

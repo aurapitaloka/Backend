@@ -93,7 +93,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard-siswa/kuis/{kuis}', [ApiKuisController::class, 'show']);
     Route::post('/dashboard-siswa/kuis/{kuis}', [ApiKuisController::class, 'submitKuis']);
     Route::get('/dashboard-siswa/materi/{materi}/kuis', [ApiKuisController::class, 'showMateri']);
-    Route::post('/dashboard-siswa/materi/{materi}/kuis', [ApiKuisController::class, 'submitMateri']);
+    Route::get('/dashboard-siswa/materi/{materi}/kuis/{kuis}', [ApiKuisController::class, 'showMateriKuis']);
+    Route::post('/dashboard-siswa/materi/{materi}/kuis/{kuis}', [ApiKuisController::class, 'submitMateriKuis']);
     Route::get('/dashboard-siswa/riwayat/kuis', [ApiKuisController::class, 'riwayat']);
     Route::get('/dashboard-siswa/riwayat/kuis/{hasil}', [ApiKuisController::class, 'riwayatShow']);
 

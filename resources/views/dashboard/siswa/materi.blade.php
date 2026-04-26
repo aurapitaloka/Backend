@@ -207,11 +207,7 @@
         <div class="section-card">
             <span class="tag">Info</span>
             <h3 class="section-title">Belum ada materi</h3>
-            @if($user->siswa && $user->siswa->level)
-                <p class="section-desc">Belum ada materi untuk kelas {{ $user->siswa->level->nama }}.</p>
-            @else
-                <p class="section-desc">Saat ini belum ada materi aktif. Silakan cek kembali nanti.</p>
-            @endif
+            <p class="section-desc">Saat ini belum ada materi aktif. Silakan cek kembali nanti.</p>
         </div>
     @else
         @php

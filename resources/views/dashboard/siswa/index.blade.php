@@ -194,7 +194,7 @@
                 <div class="action-icon"><i data-lucide="book-open"></i></div>
                 <div class="action-content">
                     <h4>Materi Belajar</h4>
-                    <p>Cari materi sesuai kelas dan mulai belajar sekarang.</p>
+                    <p>Cari semua materi aktif dan mulai belajar sekarang.</p>
                     <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Lihat Materi</a>
                 </div>
             </div>

@@ -143,7 +143,7 @@
             <div class="quiz-hero-icon"><i data-lucide="list-check"></i></div>
             <div class="quiz-hero-text">
                 <h2 class="section-title">Daftar Kuis</h2>
-                <p class="section-desc">Kuis yang terhubung materi terbuka setelah materi selesai. Kuis umum bisa langsung dikerjakan.</p>
+                <p class="section-desc">Kuis umum maupun kuis materi bisa langsung dikerjakan.</p>
             </div>
         </div>
     </div>
@@ -188,7 +188,7 @@
         <div style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem; flex-wrap:wrap;">
             <div>
                 <div class="section-title">Kuis Materi</div>
-                <div class="section-desc">Selesaikan materi dulu agar kuis terbuka.</div>
+                <div class="section-desc">Semua kuis yang terhubung ke materi tersedia langsung.</div>
             </div>
         </div>
 
@@ -200,7 +200,6 @@
                     @php
                         $materi = $item->materi;
                         $progress = $materi ? ($progressMap[$materi->id]['progres'] ?? 0) : 0;
-                        $isDone = $materi ? in_array($materi->id, $completedMateriIds, true) : false;
                     @endphp
                     <div class="quiz-card">
                         <div class="quiz-cover">Materi</div>
@@ -212,16 +211,10 @@
                             <div class="quiz-actions">
                                 @if($materi)
                                     <a href="{{ route('dashboard.siswa.materi.show', $materi->id) }}" class="btn btn-secondary">Buka Materi</a>
-                                @endif
-                                @if($isDone)
-                                    <a href="{{ route('dashboard.siswa.materi.kuis', $materi->id) }}" class="btn btn-primary">Mulai Kuis</a>
-                                @else
-                                    <button class="btn btn-secondary" type="button" disabled>Terkunci</button>
+                                    <a href="{{ route('dashboard.siswa.materi.kuis.show', ['materi' => $materi->id, 'kuis' => $item->id]) }}" class="btn btn-primary">Mulai Kuis</a>
                                 @endif
                             </div>
-                            @if(!$isDone)
-                                <div class="quiz-meta">Selesaikan materi (progress minimal 80% atau sesi selesai).</div>
-                            @endif
+                            <div class="quiz-meta">Progress materi tetap tercatat, tetapi kuis sudah bisa langsung diakses.</div>
                         </div>
                     </div>
                 @endforeach
