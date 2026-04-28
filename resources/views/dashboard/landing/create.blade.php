@@ -375,8 +375,9 @@
 
                     <div class="form-group">
                         <label class="form-label">Gambar</label>
-                        <input type="file" name="image" class="form-input" accept="image/*">
+                        <input type="file" name="image" id="image" class="form-input" accept=".jpg,.jpeg,.png,.webp,.svg">
                         <div class="form-help">Format: jpg, jpeg, png, webp. Maks 5MB.</div>
+                        <div id="image_compress_hint" class="form-help" style="display:none;"></div>
                         @error('image')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
@@ -426,6 +427,122 @@
         }
 
         lucide.createIcons();
+    </script>
+    <script>
+        const landingImageInput = document.getElementById('image');
+        const landingImageHint = document.getElementById('image_compress_hint');
+        const LANDING_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+        function setLandingImageHint(message, isError = false) {
+            if (!landingImageHint) {
+                return;
+            }
+
+            landingImageHint.style.display = message ? 'block' : 'none';
+            landingImageHint.textContent = message || '';
+            landingImageHint.style.color = isError ? '#DC2626' : 'var(--color-text-light)';
+        }
+
+        async function fileToImageBitmap(file) {
+            const imageUrl = URL.createObjectURL(file);
+
+            try {
+                const image = new Image();
+                image.decoding = 'async';
+                image.src = imageUrl;
+                await image.decode();
+                return image;
+            } finally {
+                URL.revokeObjectURL(imageUrl);
+            }
+        }
+
+        async function compressLandingImage(file) {
+            if (file.size <= LANDING_MAX_IMAGE_BYTES || file.type === 'image/svg+xml') {
+                return file;
+            }
+
+            const image = await fileToImageBitmap(file);
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            let width = image.naturalWidth || image.width;
+            let height = image.naturalHeight || image.height;
+            let quality = 0.9;
+            let bestBlob = null;
+            const outputType = file.type === 'image/png' ? 'image/webp' : (file.type === 'image/webp' ? 'image/webp' : 'image/jpeg');
+
+            for (let attempt = 0; attempt < 10; attempt++) {
+                canvas.width = Math.max(1, Math.round(width));
+                canvas.height = Math.max(1, Math.round(height));
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                const blob = await new Promise((resolve) => canvas.toBlob(resolve, outputType, quality));
+                if (!blob) {
+                    break;
+                }
+
+                if (!bestBlob || blob.size < bestBlob.size) {
+                    bestBlob = blob;
+                }
+
+                if (blob.size <= LANDING_MAX_IMAGE_BYTES) {
+                    bestBlob = blob;
+                    break;
+                }
+
+                if (quality > 0.45) {
+                    quality -= 0.1;
+                } else {
+                    width *= 0.85;
+                    height *= 0.85;
+                }
+            }
+
+            if (!bestBlob || bestBlob.size > LANDING_MAX_IMAGE_BYTES) {
+                return null;
+            }
+
+            const extension = outputType === 'image/webp' ? 'webp' : 'jpg';
+            const baseName = file.name.replace(/\.[^.]+$/, '');
+
+            return new File([bestBlob], `${baseName}.${extension}`, {
+                type: outputType,
+                lastModified: Date.now(),
+            });
+        }
+
+        if (landingImageInput) {
+            landingImageInput.addEventListener('change', async () => {
+                const file = landingImageInput.files && landingImageInput.files[0] ? landingImageInput.files[0] : null;
+                setLandingImageHint('');
+
+                if (!file || file.type === 'image/svg+xml' || file.size <= LANDING_MAX_IMAGE_BYTES) {
+                    return;
+                }
+
+                setLandingImageHint('Gambar melebihi 5MB. Sedang dicoba dikompres otomatis...');
+
+                try {
+                    const compressedFile = await compressLandingImage(file);
+
+                    if (!compressedFile) {
+                        landingImageInput.value = '';
+                        setLandingImageHint('Gambar tidak berhasil dikompres sampai 5MB. Coba pilih gambar lain atau kompres manual.', true);
+                        return;
+                    }
+
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(compressedFile);
+                    landingImageInput.files = dataTransfer.files;
+
+                    setLandingImageHint(`Gambar berhasil dikompres dari ${(file.size / 1024 / 1024).toFixed(2)} MB menjadi ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB.`);
+                } catch (error) {
+                    landingImageInput.value = '';
+                    setLandingImageHint('Terjadi kesalahan saat kompres gambar otomatis. Coba lagi dengan file lain.', true);
+                }
+            });
+        }
     </script>
 </body>
 </html>

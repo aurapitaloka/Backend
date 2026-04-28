@@ -687,8 +687,9 @@
 
                     <div class="form-group">
                         <label class="form-label">Cover Image (JPG/PNG/WebP)</label>
-                        <input type="file" name="cover_path" accept="image/*" class="form-input">
+                        <input type="file" name="cover_path" id="cover_path" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-input">
                         <small class="hint">Opsional. Jika kosong, sistem menampilkan cover putih dengan judul.</small>
+                        <div id="cover_compress_hint" class="hint" style="display:none;"></div>
                         @error('cover_path')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
@@ -1056,7 +1057,123 @@
     </script>
     <script>
     lucide.createIcons();
-</script>
+    </script>
+    <script>
+        const coverImageInput = document.getElementById('cover_path');
+        const coverImageHint = document.getElementById('cover_compress_hint');
+        const COVER_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+        function setCoverImageHint(message, isError = false) {
+            if (!coverImageHint) {
+                return;
+            }
+
+            coverImageHint.style.display = message ? 'block' : 'none';
+            coverImageHint.textContent = message || '';
+            coverImageHint.style.color = isError ? '#DC2626' : 'var(--color-text-light)';
+        }
+
+        async function fileToImageBitmap(file) {
+            const imageUrl = URL.createObjectURL(file);
+
+            try {
+                const image = new Image();
+                image.decoding = 'async';
+                image.src = imageUrl;
+                await image.decode();
+                return image;
+            } finally {
+                URL.revokeObjectURL(imageUrl);
+            }
+        }
+
+        async function compressCoverImage(file) {
+            if (file.size <= COVER_MAX_IMAGE_BYTES || file.type === 'image/svg+xml') {
+                return file;
+            }
+
+            const image = await fileToImageBitmap(file);
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            let width = image.naturalWidth || image.width;
+            let height = image.naturalHeight || image.height;
+            let quality = 0.9;
+            let bestBlob = null;
+            const outputType = file.type === 'image/png' ? 'image/webp' : (file.type === 'image/webp' ? 'image/webp' : 'image/jpeg');
+
+            for (let attempt = 0; attempt < 10; attempt++) {
+                canvas.width = Math.max(1, Math.round(width));
+                canvas.height = Math.max(1, Math.round(height));
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                const blob = await new Promise((resolve) => canvas.toBlob(resolve, outputType, quality));
+                if (!blob) {
+                    break;
+                }
+
+                if (!bestBlob || blob.size < bestBlob.size) {
+                    bestBlob = blob;
+                }
+
+                if (blob.size <= COVER_MAX_IMAGE_BYTES) {
+                    bestBlob = blob;
+                    break;
+                }
+
+                if (quality > 0.45) {
+                    quality -= 0.1;
+                } else {
+                    width *= 0.85;
+                    height *= 0.85;
+                }
+            }
+
+            if (!bestBlob || bestBlob.size > COVER_MAX_IMAGE_BYTES) {
+                return null;
+            }
+
+            const extension = outputType === 'image/webp' ? 'webp' : 'jpg';
+            const baseName = file.name.replace(/\.[^.]+$/, '');
+
+            return new File([bestBlob], `${baseName}.${extension}`, {
+                type: outputType,
+                lastModified: Date.now(),
+            });
+        }
+
+        if (coverImageInput) {
+            coverImageInput.addEventListener('change', async () => {
+                const file = coverImageInput.files && coverImageInput.files[0] ? coverImageInput.files[0] : null;
+                setCoverImageHint('');
+
+                if (!file || file.type === 'image/svg+xml' || file.size <= COVER_MAX_IMAGE_BYTES) {
+                    return;
+                }
+
+                setCoverImageHint('Cover melebihi 5MB. Sedang dicoba dikompres otomatis...');
+
+                try {
+                    const compressedFile = await compressCoverImage(file);
+
+                    if (!compressedFile) {
+                        coverImageInput.value = '';
+                        setCoverImageHint('Cover tidak berhasil dikompres sampai 5MB. Coba pilih gambar lain atau kompres manual.', true);
+                        return;
+                    }
+
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(compressedFile);
+                    coverImageInput.files = dataTransfer.files;
+
+                    setCoverImageHint(`Cover berhasil dikompres dari ${(file.size / 1024 / 1024).toFixed(2)} MB menjadi ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB.`);
+                } catch (error) {
+                    coverImageInput.value = '';
+                    setCoverImageHint('Terjadi kesalahan saat kompres cover otomatis. Coba lagi dengan file lain.', true);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
 
