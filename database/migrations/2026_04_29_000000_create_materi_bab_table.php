@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('materi_bab', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('materi_id');
+            $table->unsignedBigInteger('materi_id');
             $table->string('judul_bab', 200);
             $table->unsignedInteger('urutan')->default(1);
             $table->string('tipe_konten', 20)->comment('teks / file');
