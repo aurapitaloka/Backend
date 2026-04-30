@@ -28,10 +28,28 @@ class MateriBabController extends Controller
         $payload = $this->prepareBabPayload($request, $validated);
         $payload['materi_id'] = $materi->id;
 
-        MateriBab::create($payload);
+        $bab = MateriBab::create($payload);
+
+        if ($this->isApiRequest($request)) {
+            return response()->json([
+                'message' => 'Bab materi berhasil ditambahkan.',
+                'data' => $this->formatBabResponse($bab),
+            ], 201);
+        }
 
         return redirect()->route('materi.show', $materi->id)
             ->with('success', 'Bab materi berhasil ditambahkan.');
+    }
+
+    public function show(Request $request, Materi $materi, MateriBab $bab)
+    {
+        abort_unless((int) $bab->materi_id === (int) $materi->id, 404);
+
+        if ($this->isApiRequest($request)) {
+            return response()->json($this->formatBabResponse($bab));
+        }
+
+        return redirect()->route('materi.show', $materi->id);
     }
 
     public function edit(Materi $materi, MateriBab $bab)
@@ -50,11 +68,18 @@ class MateriBabController extends Controller
 
         $bab->update($payload);
 
+        if ($this->isApiRequest($request)) {
+            return response()->json([
+                'message' => 'Bab materi berhasil diperbarui.',
+                'data' => $this->formatBabResponse($bab->fresh()),
+            ]);
+        }
+
         return redirect()->route('materi.show', $materi->id)
             ->with('success', 'Bab materi berhasil diperbarui.');
     }
 
-    public function destroy(Materi $materi, MateriBab $bab)
+    public function destroy(Request $request, Materi $materi, MateriBab $bab)
     {
         abort_unless((int) $bab->materi_id === (int) $materi->id, 404);
 
@@ -65,11 +90,17 @@ class MateriBabController extends Controller
             Storage::disk('public')->delete($filePath);
         }
 
+        if ($this->isApiRequest($request)) {
+            return response()->json([
+                'message' => 'Bab materi berhasil dihapus.',
+            ]);
+        }
+
         return redirect()->route('materi.show', $materi->id)
             ->with('success', 'Bab materi berhasil dihapus.');
     }
 
-    public function generateSummary(Materi $materi, MateriBab $bab, GeminiBabSummaryService $summaryService)
+    public function generateSummary(Request $request, Materi $materi, MateriBab $bab, GeminiBabSummaryService $summaryService)
     {
         abort_unless((int) $bab->materi_id === (int) $materi->id, 404);
 
@@ -79,12 +110,40 @@ class MateriBabController extends Controller
                 'summary_generated_at' => now(),
             ]));
 
+            if ($this->isApiRequest($request)) {
+                return response()->json([
+                    'message' => 'Rangkuman AI untuk bab berhasil dibuat.',
+                    'data' => $this->formatBabResponse($bab->fresh()),
+                ]);
+            }
+
             return redirect()->route('materi.show', $materi->id)
                 ->with('success', 'Rangkuman AI untuk bab berhasil dibuat.');
         } catch (GeminiCoverException $exception) {
+            if ($this->isApiRequest($request)) {
+                return response()->json([
+                    'message' => $exception->getMessage(),
+                ], $exception->status());
+            }
+
             return redirect()->route('materi.show', $materi->id)
                 ->with('error', $exception->getMessage());
         }
+    }
+
+    public function index(Request $request, Materi $materi)
+    {
+        $bab = $materi->bab()
+            ->with('kuis')
+            ->withCount('kuis')
+            ->orderBy('urutan')
+            ->get();
+
+        return response()->json([
+            'materi_id' => $materi->id,
+            'total' => $bab->count(),
+            'data' => $bab->map(fn (MateriBab $item) => $this->formatBabResponse($item)),
+        ]);
     }
 
     private function validateBabPayload(Request $request, bool $isCreate): array
@@ -350,5 +409,15 @@ class MateriBabController extends Controller
             'k' => (int) round($number),
             default => (int) round($number / 1024),
         };
+    }
+
+    private function isApiRequest(Request $request): bool
+    {
+        return $request->wantsJson() || $request->is('api/*');
+    }
+
+    private function formatBabResponse(MateriBab $bab): MateriBab
+    {
+        return $bab->loadMissing('kuis')->loadCount('kuis');
     }
 }

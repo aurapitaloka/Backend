@@ -7,6 +7,7 @@ use App\Http\Controllers\FiksiController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\MateriController;
+use App\Http\Controllers\MateriBabController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SesiBacaController;
@@ -49,6 +50,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Resources (prefix route names to avoid collision with web routes)
     Route::name('api.')->group(function () {
         Route::apiResource('materi', MateriController::class);
+        Route::get('materi/{materi}/bab', [MateriBabController::class, 'index'])->name('materi.bab.index');
+        Route::post('materi/{materi}/bab', [MateriBabController::class, 'store'])->name('materi.bab.store');
+        Route::get('materi/{materi}/bab/{bab}', [MateriBabController::class, 'show'])->name('materi.bab.show');
+        Route::put('materi/{materi}/bab/{bab}', [MateriBabController::class, 'update'])->name('materi.bab.update');
+        Route::delete('materi/{materi}/bab/{bab}', [MateriBabController::class, 'destroy'])->name('materi.bab.destroy');
+        Route::post('materi/{materi}/bab/{bab}/generate-summary', [MateriBabController::class, 'generateSummary'])->name('materi.bab.generate-summary');
         // Also expose the dashboard-prefixed API endpoints so frontend
         // code that calls `/api/dashboard/materi` continues to work.
         Route::apiResource('dashboard/materi', MateriController::class)->names([
@@ -58,6 +65,12 @@ Route::middleware('auth:sanctum')->group(function () {
             'update' => 'dashboard.materi.update',
             'destroy' => 'dashboard.materi.destroy',
         ]);
+        Route::get('dashboard/materi/{materi}/bab', [MateriBabController::class, 'index'])->name('dashboard.materi.bab.index');
+        Route::post('dashboard/materi/{materi}/bab', [MateriBabController::class, 'store'])->name('dashboard.materi.bab.store');
+        Route::get('dashboard/materi/{materi}/bab/{bab}', [MateriBabController::class, 'show'])->name('dashboard.materi.bab.show');
+        Route::put('dashboard/materi/{materi}/bab/{bab}', [MateriBabController::class, 'update'])->name('dashboard.materi.bab.update');
+        Route::delete('dashboard/materi/{materi}/bab/{bab}', [MateriBabController::class, 'destroy'])->name('dashboard.materi.bab.destroy');
+        Route::post('dashboard/materi/{materi}/bab/{bab}/generate-summary', [MateriBabController::class, 'generateSummary'])->name('dashboard.materi.bab.generate-summary');
         Route::apiResource('fiksi', FiksiController::class);
         Route::apiResource('pengguna', PenggunaController::class);
         Route::apiResource('level', LevelController::class);
