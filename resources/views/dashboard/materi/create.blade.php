@@ -227,6 +227,194 @@
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.5rem;
         }
+
+        .book-hero-grid {
+            display: grid;
+            grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+            gap: 1.75rem;
+            align-items: start;
+            margin-bottom: 1.75rem;
+        }
+
+        .book-cover-column,
+        .book-detail-column {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 20px;
+            background: #FFFFFF;
+        }
+
+        .book-cover-column {
+            padding: 1.25rem;
+            background: linear-gradient(180deg, #FFFCF2 0%, #FFFFFF 100%);
+        }
+
+        .book-detail-column {
+            padding: 1.5rem;
+        }
+
+        .book-cover-stage {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            border-radius: 18px;
+            border: 1px dashed rgba(17, 24, 39, 0.14);
+            background: linear-gradient(180deg, rgba(248, 184, 3, 0.12) 0%, rgba(255, 255, 255, 0.94) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .book-cover-stage:hover {
+            transform: translateY(-2px);
+            border-color: rgba(248, 184, 3, 0.55);
+            box-shadow: 0 14px 28px rgba(17, 24, 39, 0.08);
+        }
+
+        .book-cover-stage img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .book-cover-placeholder {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--color-text-light);
+        }
+
+        .book-cover-placeholder i {
+            width: 42px;
+            height: 42px;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .book-cover-placeholder strong {
+            display: block;
+            color: var(--color-text);
+            font-size: 1rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .book-cover-caption {
+            margin-top: 0.9rem;
+            padding: 0.9rem 1rem;
+            border-radius: 14px;
+            background: rgba(17, 24, 39, 0.03);
+            color: var(--color-text-light);
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        .cover-stage-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 0.85rem;
+        }
+
+        .cover-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.56);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            z-index: 2200;
+        }
+
+        .cover-modal.is-open {
+            display: flex;
+        }
+
+        .cover-modal-dialog {
+            width: min(980px, 100%);
+            max-height: calc(100vh - 3rem);
+            overflow-y: auto;
+            border-radius: 24px;
+            background: #FFFFFF;
+            box-shadow: 0 30px 70px rgba(15, 23, 42, 0.26);
+            border: 1px solid rgba(17, 24, 39, 0.08);
+        }
+
+        .cover-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.4rem 1.5rem 1rem;
+            border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+        }
+
+        .cover-modal-close {
+            border: none;
+            background: rgba(17, 24, 39, 0.06);
+            color: var(--color-text);
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-modal-body {
+            padding: 1.5rem;
+        }
+
+        .cover-modal-grid {
+            display: grid;
+            grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .cover-modal-preview-card {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 18px;
+            padding: 1rem;
+            background: linear-gradient(180deg, #FFFCF2 0%, #FFFFFF 100%);
+            position: sticky;
+            top: 0;
+        }
+
+        .cover-modal-preview-card img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 14px;
+            display: none;
+            background: #F8FAFC;
+        }
+
+        .cover-modal-preview-empty {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            border-radius: 14px;
+            border: 1px dashed rgba(17, 24, 39, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--color-text-light);
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .cover-modal-panel {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 18px;
+            padding: 1rem;
+            background: #FFFFFF;
+        }
         
         .form-group {
             margin-bottom: 1.5rem;
@@ -687,7 +875,27 @@
             margin-bottom: 1rem;
         }
 
+        .book-cover-column .cover-mode-grid,
+        .book-cover-column .cover-ai-preview {
+            grid-template-columns: 1fr;
+        }
+
+        .book-cover-column .cover-mode-card,
+        .book-cover-column .cover-ai-panel,
+        .book-cover-column .cover-ai-preview-card,
+        .book-cover-column .cover-ai-preview-meta {
+            border-radius: 14px;
+        }
+
         @media (max-width: 640px) {
+            .book-hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cover-modal-grid {
+                grid-template-columns: 1fr;
+            }
+
             .cover-ai-preview {
                 grid-template-columns: 1fr;
             }
@@ -728,7 +936,7 @@
             
             <!-- Header Bar -->
             <header class="header-bar">
-                <h1 class="header-title">Tambah Materi Baru</h1>
+                <h1 class="header-title">Tambah Buku Baru</h1>
             </header>
             
             <!-- Content Area -->
@@ -753,73 +961,203 @@
 
                 <form action="{{ route('materi.store') }}" method="POST" enctype="multipart/form-data" class="form-container">
                     @csrf
-                    <div class="section-title"><i data-lucide="file-text"></i> Informasi Utama</div>
-                    <div class="section-subtitle">Masukkan judul, deskripsi, mata pelajaran, dan level.</div>
+                    <input type="hidden" name="generated_cover_temp_path" id="generated_cover_temp_path" value="{{ old('generated_cover_temp_path') }}">
+                    <input type="hidden" name="use_generated_cover" id="use_generated_cover" value="{{ old('use_generated_cover', 0) }}">
+
+                    <div class="section-title"><i data-lucide="book-open-text"></i> Detail Buku</div>
+                    <div class="section-subtitle">Lengkapi cover, judul, deskripsi, mata pelajaran, dan level terlebih dulu sebelum mengisi Bab 1.</div>
+
+                    <div class="book-hero-grid">
+                        <div class="book-cover-column">
+                            <button type="button" id="open_cover_modal_btn" class="book-cover-stage">
+                                <img id="book_cover_stage_image" src="" alt="Preview cover buku">
+                                <div id="book_cover_stage_placeholder" class="book-cover-placeholder">
+                                    <i data-lucide="image-plus"></i>
+                                    <strong>Tambahkan cover buku</strong>
+                                    Cover akan tampil di daftar buku dan halaman detail materi.
+                                </div>
+                            </button>
+
+                            <div class="book-cover-caption">
+                                Cover buku akan dipakai sebagai identitas utama materi di daftar buku, halaman detail, dan area baca siswa.
+                            </div>
+
+                            <button type="button" id="open_cover_modal_secondary_btn" class="btn btn-secondary cover-stage-trigger">
+                                <i data-lucide="image-plus"></i>
+                                Atur Cover Buku
+                            </button>
+                        </div>
+
+                        <div class="book-detail-column">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Judul Buku <span class="required">*</span>
+                                </label>
+                                <input type="text" name="judul" value="{{ old('judul') }}" class="form-input" required>
+                                <span class="hint">Masukkan judul buku atau judul materi utamanya.</span>
+                                @error('judul')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Deskripsi Buku</label>
+                                <textarea name="deskripsi" rows="6" class="form-textarea">{{ old('deskripsi') }}</textarea>
+                                <span class="hint">Deskripsi ini membantu guru dan siswa memahami fokus isi buku sebelum masuk ke bab-babnya.</span>
+                                @error('deskripsi')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Mata Pelajaran</label>
+                                    <select name="mata_pelajaran_id" class="form-select">
+                                        <option value="">Pilih Mata Pelajaran</option>
+                                        @foreach($mataPelajarans as $mp)
+                                            <option value="{{ $mp->id }}" {{ old('mata_pelajaran_id') == $mp->id ? 'selected' : '' }}>
+                                                {{ $mp->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('mata_pelajaran_id')
+                                        <span class="error-message">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Level</label>
+                                    <select name="level_id" class="form-select">
+                                        <option value="">Pilih Level</option>
+                                        @foreach($levels as $level)
+                                            <option value="{{ $level->id }}" {{ old('level_id') == $level->id ? 'selected' : '' }}>
+                                                {{ $level->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('level_id')
+                                        <span class="error-message">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="book-cover-caption" style="margin-top: 1.25rem;">
+                                Cover dikelola lewat popup agar form buku tetap rapi. Klik preview cover di samping atau tombol <strong>Atur Cover Buku</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cover_modal" class="cover-modal" aria-hidden="true">
+                        <div class="cover-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="cover_modal_title">
+                            <div class="cover-modal-header">
+                                <div>
+                                    <div id="cover_modal_title" class="section-title" style="margin-bottom: 0.2rem;"><i data-lucide="image"></i> Atur Cover Buku</div>
+                                    <div class="section-subtitle" style="margin-bottom: 0;">Pilih upload manual atau generate dengan Gemini. Cover ini akan dipakai sebagai identitas buku.</div>
+                                </div>
+                                <button type="button" id="close_cover_modal_btn" class="cover-modal-close" aria-label="Tutup popup cover">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="cover-modal-body">
+                                <div class="cover-modal-grid">
+                                    <div class="cover-modal-preview-card">
+                                        <img id="cover_modal_preview_image" src="" alt="Preview cover di popup">
+                                        <div id="cover_modal_preview_empty" class="cover-modal-preview-empty">
+                                            Preview cover akan muncul di sini setelah kamu upload atau generate.
+                                        </div>
+                                        <div class="book-cover-caption">
+                                            Setelah cover dikonfirmasi, preview di halaman utama akan langsung ikut diperbarui.
+                                        </div>
+                                    </div>
+
+                                    <div class="cover-modal-panel">
+                                        <div class="cover-mode-grid">
+                                            <label class="cover-mode-card active" data-cover-mode-card="manual">
+                                                <div>
+                                                    <input type="radio" name="cover_mode" value="manual" checked>
+                                                    <span class="cover-mode-title">Upload Manual</span>
+                                                </div>
+                                                <div class="cover-mode-desc">Pilih gambar cover sendiri dari perangkat.</div>
+                                            </label>
+                                            <label class="cover-mode-card" data-cover-mode-card="ai">
+                                                <div>
+                                                    <input type="radio" name="cover_mode" value="ai">
+                                                    <span class="cover-mode-title">Generate dengan AI</span>
+                                                </div>
+                                                <div class="cover-mode-desc">Buat cover otomatis dari judul, mata pelajaran, level, dan deskripsi.</div>
+                                            </label>
+                                        </div>
+
+                                        <div id="cover_manual_panel" class="form-group">
+                                            <label class="form-label">Cover Image (JPG/PNG/WebP)</label>
+                                            <input type="file" name="cover_path" id="cover_path" accept=".jpg,.jpeg,.png,.webp" class="form-input">
+                                            <small class="hint">Opsional. Jika kosong, sistem menampilkan cover default berbasis judul buku.</small>
+                                            <div id="cover_compress_hint" class="hint" style="display:none;"></div>
+                                            @error('cover_path')
+                                                <span class="error-message">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div id="cover_ai_panel" class="cover-ai-panel" style="display: none;">
+                                            <div class="form-group" style="margin-bottom: 0;">
+                                                <label class="form-label">Prompt Tambahan (Opsional)</label>
+                                                <textarea id="cover_ai_prompt_tambahan" class="form-textarea" rows="3" placeholder="Contoh: gunakan warna cerah, ilustrasi anak belajar, nuansa sains modern."></textarea>
+                                                <span class="hint">Kalau kosong, sistem tetap membuat prompt otomatis dari field buku.</span>
+                                            </div>
+
+                                            <div class="cover-ai-actions">
+                                                <button type="button" id="generate_ai_cover_btn" class="btn btn-primary" style="flex: 0 0 auto;">
+                                                    <i data-lucide="sparkles"></i>
+                                                    Generate Cover
+                                                </button>
+                                                <button type="button" id="regenerate_ai_cover_btn" class="btn btn-secondary" style="flex: 0 0 auto; display: none;">
+                                                    <i data-lucide="refresh-cw"></i>
+                                                    Generate Ulang
+                                                </button>
+                                                <button type="button" id="discard_ai_cover_btn" class="btn btn-secondary" style="flex: 0 0 auto; display: none;">
+                                                    <i data-lucide="trash-2"></i>
+                                                    Batal Pakai
+                                                </button>
+                                            </div>
+
+                                            <div id="cover_ai_loading" class="cover-ai-loading">Gemini sedang membuat preview cover...</div>
+
+                                            <div id="cover_ai_preview" class="cover-ai-preview">
+                                                <div class="cover-ai-preview-card">
+                                                    <img id="cover_ai_preview_image" src="" alt="Preview cover AI">
+                                                </div>
+                                                <div class="cover-ai-preview-meta">
+                                                    <div class="section-title" style="margin-bottom: 0;">Preview Cover AI</div>
+                                                    <div class="section-subtitle" style="margin-top: 0.35rem; margin-bottom: 0;">Preview ini belum dipakai sebelum kamu konfirmasi.</div>
+                                                    <div id="cover_ai_status" class="cover-ai-status pending">Status: menunggu konfirmasi.</div>
+                                                    <div class="cover-ai-actions">
+                                                        <button type="button" id="confirm_ai_cover_btn" class="btn btn-primary" style="flex: 0 0 auto;">
+                                                            <i data-lucide="check"></i>
+                                                            Gunakan Cover Ini
+                                                        </button>
+                                                    </div>
+                                                    <div id="cover_ai_prompt_preview" class="cover-ai-prompt" style="display: none;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="layers"></i> Bab 1 - Konten Materi</div>
+                    <div class="section-subtitle">Setelah buku dibuat, isi konten pertama ini akan otomatis disimpan sebagai Bab 1.</div>
 
                     <div class="form-group">
                         <label class="form-label">
-                            Judul <span class="required">*</span>
-                        </label>
-                        <input type="text" name="judul" value="{{ old('judul') }}" class="form-input" required>
-                        <span class="hint">Contoh: Materi Bahasa Indonesia Bab 1</span>
-                        @error('judul')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Deskripsi</label>
-                        <textarea name="deskripsi" rows="4" class="form-textarea">{{ old('deskripsi') }}</textarea>
-                        @error('deskripsi')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Mata Pelajaran</label>
-                            <select name="mata_pelajaran_id" class="form-select">
-                                <option value="">Pilih Mata Pelajaran</option>
-                                @foreach($mataPelajarans as $mp)
-                                    <option value="{{ $mp->id }}" {{ old('mata_pelajaran_id') == $mp->id ? 'selected' : '' }}>
-                                        {{ $mp->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('mata_pelajaran_id')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Level</label>
-                            <select name="level_id" class="form-select">
-                                <option value="">Pilih Level</option>
-                                @foreach($levels as $level)
-                                    <option value="{{ $level->id }}" {{ old('level_id') == $level->id ? 'selected' : '' }}>
-                                        {{ $level->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('level_id')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="layers"></i> Konten Materi</div>
-                    <div class="section-subtitle">Pilih tipe konten dan unggah file atau isi teks.</div>
-
-                    <div class="form-group">
-                        <label class="form-label">
-                            Tipe Konten <span class="required">*</span>
+                            Tipe Konten Bab 1 <span class="required">*</span>
                         </label>
                         <select name="tipe_konten" id="tipe_konten" class="form-select" required>
-                            <option value="">Pilih Tipe Konten</option>
+                            <option value="">Pilih Tipe Konten Bab 1</option>
                             <option value="teks" {{ old('tipe_konten') == 'teks' ? 'selected' : '' }}>Teks</option>
                             <option value="file" {{ old('tipe_konten') == 'file' ? 'selected' : '' }}>File</option>
-                            <option value="bab" {{ old('tipe_konten') == 'bab' ? 'selected' : '' }}>Per Bab</option>
                         </select>
-                        <span class="hint">Pilih Teks untuk isi langsung, File untuk upload dokumen, atau Per Bab jika buku akan dipecah ke beberapa chapter.</span>
+                        <span class="hint">Pilih Teks untuk isi langsung atau File untuk upload dokumen sebagai Bab 1.</span>
                         @error('tipe_konten')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
@@ -827,7 +1165,7 @@
 
                     <div id="konten_teks_field" class="form-group" style="display: none;">
                         <label class="form-label">
-                            Konten Teks <span class="required">*</span>
+                            Konten Teks Bab 1 <span class="required">*</span>
                         </label>
                         <textarea name="konten_teks" rows="8" class="form-textarea">{{ old('konten_teks') }}</textarea>
                         @error('konten_teks')
@@ -837,7 +1175,7 @@
 
                     <div id="file_path_field" class="form-group" style="display: none;">
                         <label class="form-label">
-                            File (PDF, DOC, DOCX) <span class="required">*</span>
+                            File Bab 1 (PDF, DOC, DOCX) <span class="required">*</span>
                         </label>
                         <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx" class="form-input">
                         <small class="hint">PDF di atas 10 MB akan dicoba dikompres otomatis sampai 10 MB. DOC/DOCX tetap maksimal 10 MB, dan total upload tetap mengikuti batas server.</small>
@@ -876,8 +1214,8 @@
                     <div id="chapter_builder" class="chapter-builder">
                         <div class="chapter-builder-head">
                             <div>
-                                <div class="section-title" style="margin-bottom:0.2rem;"><i data-lucide="library-big"></i> Struktur Bab Buku</div>
-                                <div class="section-subtitle" style="margin-bottom:0;">Buat buku utama lalu susun Bab 1, Bab 2, dan seterusnya dalam satu halaman yang sama.</div>
+                                <div class="section-title" style="margin-bottom:0.2rem;"><i data-lucide="library-big"></i> Bab Tambahan (Opsional)</div>
+                                <div class="section-subtitle" style="margin-bottom:0;">Kalau perlu, kamu bisa langsung menambahkan Bab 2, Bab 3, dan seterusnya pada saat buku dibuat.</div>
                             </div>
                             <button type="button" id="add_chapter_btn" class="btn btn-primary" style="flex: 0 0 auto;">
                                 <i data-lucide="plus-circle"></i>
@@ -885,110 +1223,25 @@
                             </button>
                         </div>
                         <div class="chapter-builder-note">
-                            Setiap bab akan tersimpan sebagai bagian dari buku ini, bukan menjadi materi terpisah. Setelah buku berhasil disimpan, kamu bisa membuat kuis per bab dari halaman detail buku agar alurnya lebih rapi, profesional, dan mudah dikelola.
+                            Bab 1 dibuat dari konten materi utama di atas. Bagian ini hanya untuk bab tambahan agar struktur buku langsung lengkap sejak awal.
                         </div>
                         <div id="chapter_list" class="chapter-list"></div>
                     </div>
 
-                    <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="image"></i> Cover Materi</div>
-                    <div class="section-subtitle">Pilih upload manual atau generate cover AI, lalu konfirmasi dulu sebelum cover dipakai.</div>
-
-                    <input type="hidden" name="generated_cover_temp_path" id="generated_cover_temp_path" value="{{ old('generated_cover_temp_path') }}">
-                    <input type="hidden" name="use_generated_cover" id="use_generated_cover" value="{{ old('use_generated_cover', 0) }}">
-
-                    <div class="cover-mode-grid">
-                        <label class="cover-mode-card active" data-cover-mode-card="manual">
-                            <div>
-                                <input type="radio" name="cover_mode" value="manual" checked>
-                                <span class="cover-mode-title">Upload Manual</span>
-                            </div>
-                            <div class="cover-mode-desc">Pilih gambar cover sendiri dari perangkat.</div>
-                        </label>
-                        <label class="cover-mode-card" data-cover-mode-card="ai">
-                            <div>
-                                <input type="radio" name="cover_mode" value="ai">
-                                <span class="cover-mode-title">Generate dengan AI</span>
-                            </div>
-                            <div class="cover-mode-desc">Buat cover otomatis dari judul, mata pelajaran, level, dan deskripsi.</div>
-                        </label>
-                    </div>
-
-                    <div id="cover_manual_panel" class="form-group">
-                        <label class="form-label">Cover Image (JPG/PNG/WebP)</label>
-                        <input type="file" name="cover_path" id="cover_path" accept=".jpg,.jpeg,.png,.webp" class="form-input">
-                        <small class="hint">Opsional. Jika kosong, sistem menampilkan cover putih dengan judul.</small>
-                        <div id="cover_compress_hint" class="hint" style="display:none;"></div>
-                        @error('cover_path')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div id="cover_ai_panel" class="cover-ai-panel" style="display: none;">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label">Prompt Tambahan (Opsional)</label>
-                            <textarea id="cover_ai_prompt_tambahan" class="form-textarea" rows="3" placeholder="Contoh: gunakan warna cerah, ilustrasi anak belajar, nuansa sains modern."></textarea>
-                            <span class="hint">Kalau kosong, sistem tetap membuat prompt otomatis dari field materi.</span>
-                        </div>
-
-                        <div class="cover-ai-actions">
-                            <button type="button" id="generate_ai_cover_btn" class="btn btn-primary" style="flex: 0 0 auto;">
-                                <i data-lucide="sparkles"></i>
-                                Generate Cover
-                            </button>
-                            <button type="button" id="regenerate_ai_cover_btn" class="btn btn-secondary" style="flex: 0 0 auto; display: none;">
-                                <i data-lucide="refresh-cw"></i>
-                                Generate Ulang
-                            </button>
-                            <button type="button" id="discard_ai_cover_btn" class="btn btn-secondary" style="flex: 0 0 auto; display: none;">
-                                <i data-lucide="trash-2"></i>
-                                Batal Pakai
-                            </button>
-                        </div>
-
-                        <div id="cover_ai_loading" class="cover-ai-loading">Gemini sedang membuat preview cover...</div>
-
-                        <div id="cover_ai_preview" class="cover-ai-preview">
-                            <div class="cover-ai-preview-card">
-                                <img id="cover_ai_preview_image" src="" alt="Preview cover AI">
-                            </div>
-                            <div class="cover-ai-preview-meta">
-                                <div class="section-title" style="margin-bottom: 0;">Preview Cover AI</div>
-                                <div class="section-subtitle" style="margin-top: 0.35rem; margin-bottom: 0;">Preview ini belum dipakai sebelum kamu konfirmasi.</div>
-                                <div id="cover_ai_status" class="cover-ai-status pending">Status: menunggu konfirmasi.</div>
-                                <div class="cover-ai-actions">
-                                    <button type="button" id="confirm_ai_cover_btn" class="btn btn-primary" style="flex: 0 0 auto;">
-                                        <i data-lucide="check"></i>
-                                        Gunakan Cover Ini
-                                    </button>
-                                </div>
-                                <div id="cover_ai_prompt_preview" class="cover-ai-prompt" style="display: none;"></div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="settings"></i> Pengaturan</div>
-                    <div class="section-subtitle">Atur detail tambahan dan status materi.</div>
-
-                    <div class="form-group">
-                        <label class="form-label">Jumlah Halaman</label>
-                        <input type="number" name="jumlah_halaman" value="{{ old('jumlah_halaman') }}" min="1" class="form-input">
-                        <span class="hint">Isi jika konten berupa dokumen.</span>
-                        @error('jumlah_halaman')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    <div class="section-subtitle">Atur status buku sebelum disimpan.</div>
 
                     <div class="form-group">
                         <label class="form-checkbox">
                             <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', true) ? 'checked' : '' }}>
-                            <span>Status Aktif</span>
+                            <span>Status Buku Aktif</span>
                         </label>
                     </div>
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
                             <i data-lucide="save"></i>
-                            Simpan Materi
+                            Simpan Buku
                         </button>
                         <a href="{{ route('materi.index') }}" class="btn btn-secondary">
                             <i data-lucide="x"></i>
@@ -1217,7 +1470,7 @@
                 kontenTeksField.style.display = 'block';
                 filePathField.style.display = 'none';
                 if (chapterBuilder) {
-                    chapterBuilder.style.display = 'none';
+                    chapterBuilder.style.display = 'block';
                 }
                 kontenTeksField.querySelector('textarea').required = true;
                 filePathField.querySelector('input').required = false;
@@ -1225,26 +1478,15 @@
                 kontenTeksField.style.display = 'none';
                 filePathField.style.display = 'block';
                 if (chapterBuilder) {
-                    chapterBuilder.style.display = 'none';
+                    chapterBuilder.style.display = 'block';
                 }
                 kontenTeksField.querySelector('textarea').required = false;
                 filePathField.querySelector('input').required = true;
-            } else if (tipeKonten === 'bab') {
-                kontenTeksField.style.display = 'none';
-                filePathField.style.display = 'none';
-                if (chapterBuilder) {
-                    chapterBuilder.style.display = 'block';
-                    if (!chapterList.children.length) {
-                        ensureInitialChapterItems();
-                    }
-                }
-                kontenTeksField.querySelector('textarea').required = false;
-                filePathField.querySelector('input').required = false;
             } else {
                 kontenTeksField.style.display = 'none';
                 filePathField.style.display = 'none';
                 if (chapterBuilder) {
-                    chapterBuilder.style.display = 'none';
+                    chapterBuilder.style.display = 'block';
                 }
                 kontenTeksField.querySelector('textarea').required = false;
                 filePathField.querySelector('input').required = false;
@@ -1323,23 +1565,13 @@
                 const currentFile = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
                 const isPdf = currentFile && (currentFile.type === 'application/pdf' || currentFile.name.toLowerCase().endsWith('.pdf'));
                 const selectedCoverMode = getSelectedCoverMode();
-                const currentTipeKonten = tipeKontenSelect ? tipeKontenSelect.value : '';
 
                 if (isPdf && totalPdfPages > 0 && selectedPdfPages.size === 0) {
                     event.preventDefault();
                     alert('Pilih minimal satu halaman PDF yang ingin disimpan.');
                     return;
                 }
-
-                if (currentTipeKonten === 'bab') {
-                    if (!chapterList || chapterList.children.length === 0) {
-                        event.preventDefault();
-                        alert('Tambahkan minimal satu bab sebelum buku disimpan.');
-                        return;
-                    }
-
-                    renumberChapterItems();
-                }
+                renumberChapterItems();
 
                 if (
                     selectedCoverMode === 'ai'
@@ -1378,6 +1610,12 @@
         const coverModeCards = document.querySelectorAll('[data-cover-mode-card]');
         const coverManualPanel = document.getElementById('cover_manual_panel');
         const coverAiPanel = document.getElementById('cover_ai_panel');
+        const coverModal = document.getElementById('cover_modal');
+        const openCoverModalButton = document.getElementById('open_cover_modal_btn');
+        const openCoverModalSecondaryButton = document.getElementById('open_cover_modal_secondary_btn');
+        const closeCoverModalButton = document.getElementById('close_cover_modal_btn');
+        const coverModalPreviewImage = document.getElementById('cover_modal_preview_image');
+        const coverModalPreviewEmpty = document.getElementById('cover_modal_preview_empty');
         const generatedCoverTempPathInput = document.getElementById('generated_cover_temp_path');
         const useGeneratedCoverInput = document.getElementById('use_generated_cover');
         const generateAiCoverButton = document.getElementById('generate_ai_cover_btn');
@@ -1393,8 +1631,11 @@
         const chapterBuilder = document.getElementById('chapter_builder');
         const chapterList = document.getElementById('chapter_list');
         const addChapterButton = document.getElementById('add_chapter_btn');
+        const bookCoverStageImage = document.getElementById('book_cover_stage_image');
+        const bookCoverStagePlaceholder = document.getElementById('book_cover_stage_placeholder');
         const COVER_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
         const initialBabData = @json(old('bab', []));
+        let manualCoverPreviewUrl = null;
 
         function setCoverImageHint(message, isError = false) {
             if (!coverImageHint) {
@@ -1409,6 +1650,89 @@
         function getSelectedCoverMode() {
             const checkedInput = document.querySelector('input[name="cover_mode"]:checked');
             return checkedInput ? checkedInput.value : 'manual';
+        }
+
+        function revokeManualCoverPreview() {
+            if (manualCoverPreviewUrl) {
+                URL.revokeObjectURL(manualCoverPreviewUrl);
+                manualCoverPreviewUrl = null;
+            }
+        }
+
+        function setBookCoverStage(url) {
+            if (!bookCoverStageImage || !bookCoverStagePlaceholder) {
+                return;
+            }
+
+            if (url) {
+                bookCoverStageImage.src = url;
+                bookCoverStageImage.style.display = 'block';
+                bookCoverStagePlaceholder.style.display = 'none';
+                return;
+            }
+
+            bookCoverStageImage.src = '';
+            bookCoverStageImage.style.display = 'none';
+            bookCoverStagePlaceholder.style.display = 'block';
+        }
+
+        function setCoverModalPreview(url) {
+            if (!coverModalPreviewImage || !coverModalPreviewEmpty) {
+                return;
+            }
+
+            if (url) {
+                coverModalPreviewImage.src = url;
+                coverModalPreviewImage.style.display = 'block';
+                coverModalPreviewEmpty.style.display = 'none';
+                return;
+            }
+
+            coverModalPreviewImage.src = '';
+            coverModalPreviewImage.style.display = 'none';
+            coverModalPreviewEmpty.style.display = 'flex';
+        }
+
+        function syncBookCoverStage() {
+            if (getSelectedCoverMode() === 'ai' && generatedCoverTempPathInput.value && coverAiPreviewImage.src) {
+                setBookCoverStage(coverAiPreviewImage.src);
+                setCoverModalPreview(coverAiPreviewImage.src);
+                return;
+            }
+
+            if (coverImageInput && coverImageInput.files && coverImageInput.files[0]) {
+                revokeManualCoverPreview();
+                manualCoverPreviewUrl = URL.createObjectURL(coverImageInput.files[0]);
+                setBookCoverStage(manualCoverPreviewUrl);
+                setCoverModalPreview(manualCoverPreviewUrl);
+                return;
+            }
+
+            revokeManualCoverPreview();
+            setBookCoverStage('');
+            setCoverModalPreview('');
+        }
+
+        function openCoverModal() {
+            if (!coverModal) {
+                return;
+            }
+
+            coverModal.classList.add('is-open');
+            coverModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            syncBookCoverStage();
+            lucide.createIcons();
+        }
+
+        function closeCoverModal() {
+            if (!coverModal) {
+                return;
+            }
+
+            coverModal.classList.remove('is-open');
+            coverModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
         }
 
         function syncCoverModeUi() {
@@ -1429,6 +1753,8 @@
             if (selectedMode === 'manual') {
                 useGeneratedCoverInput.value = '0';
             }
+
+            syncBookCoverStage();
         }
 
         function resetGeneratedCoverSelection() {
@@ -1457,7 +1783,6 @@
             const tipeKonten = data.tipe_konten || 'teks';
             const kontenTeks = data.konten_teks || '';
             const pdfSelection = data.pdf_page_selection || '';
-            const jumlahHalaman = data.jumlah_halaman || '';
             const isAktif = data.status_aktif === undefined ? true : Boolean(Number(data.status_aktif) || data.status_aktif === true || data.status_aktif === '1');
 
             wrapper.innerHTML = `
@@ -1478,18 +1803,12 @@
                         <input type="number" name="bab[${index}][urutan]" value="${urutan}" min="1" class="form-input" required>
                     </div>
                 </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Tipe Konten Bab <span class="required">*</span></label>
-                        <select name="bab[${index}][tipe_konten]" class="form-select chapter-type-select">
-                            <option value="teks" ${tipeKonten === 'teks' ? 'selected' : ''}>Teks</option>
-                            <option value="file" ${tipeKonten === 'file' ? 'selected' : ''}>File</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Jumlah Halaman</label>
-                        <input type="number" name="bab[${index}][jumlah_halaman]" value="${jumlahHalaman}" min="1" class="form-input">
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Tipe Konten Bab <span class="required">*</span></label>
+                    <select name="bab[${index}][tipe_konten]" class="form-select chapter-type-select">
+                        <option value="teks" ${tipeKonten === 'teks' ? 'selected' : ''}>Teks</option>
+                        <option value="file" ${tipeKonten === 'file' ? 'selected' : ''}>File</option>
+                    </select>
                 </div>
                 <div class="form-group chapter-text-field" style="display:${tipeKonten === 'teks' ? 'block' : 'none'};">
                     <label class="form-label">Konten Teks Bab <span class="required">*</span></label>
@@ -1587,8 +1906,6 @@
                 initialBabData.forEach((item, index) => {
                     chapterList.appendChild(buildChapterItem(index, item));
                 });
-            } else {
-                chapterList.appendChild(buildChapterItem(0));
             }
             renumberChapterItems();
         }
@@ -1604,6 +1921,7 @@
             coverAiPromptPreview.textContent = payload.prompt || '';
             regenerateAiCoverButton.style.display = payload.url ? 'inline-flex' : 'none';
             discardAiCoverButton.style.display = payload.url ? 'inline-flex' : 'none';
+            syncBookCoverStage();
         }
 
         async function discardGeneratedCover({ silent = false } = {}) {
@@ -1617,6 +1935,7 @@
             regenerateAiCoverButton.style.display = 'none';
             discardAiCoverButton.style.display = 'none';
             resetGeneratedCoverSelection();
+            syncBookCoverStage();
 
             if (!tempPath) {
                 return;
@@ -1784,6 +2103,7 @@
                 if (file) {
                     useGeneratedCoverInput.value = '0';
                 }
+                syncBookCoverStage();
 
                 if (!file || file.size <= COVER_MAX_IMAGE_BYTES) {
                     return;
@@ -1805,9 +2125,11 @@
                     coverImageInput.files = dataTransfer.files;
 
                     setCoverImageHint(`Cover berhasil dikompres dari ${(file.size / 1024 / 1024).toFixed(2)} MB menjadi ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB.`);
+                    syncBookCoverStage();
                 } catch (error) {
                     coverImageInput.value = '';
                     setCoverImageHint('Terjadi kesalahan saat kompres cover otomatis. Coba lagi dengan file lain.', true);
+                    syncBookCoverStage();
                 }
             });
         }
@@ -1815,6 +2137,26 @@
         coverModeInputs.forEach((input) => {
             input.addEventListener('change', syncCoverModeUi);
         });
+
+        if (openCoverModalButton) {
+            openCoverModalButton.addEventListener('click', openCoverModal);
+        }
+
+        if (openCoverModalSecondaryButton) {
+            openCoverModalSecondaryButton.addEventListener('click', openCoverModal);
+        }
+
+        if (closeCoverModalButton) {
+            closeCoverModalButton.addEventListener('click', closeCoverModal);
+        }
+
+        if (coverModal) {
+            coverModal.addEventListener('click', (event) => {
+                if (event.target === coverModal) {
+                    closeCoverModal();
+                }
+            });
+        }
 
         if (generateAiCoverButton) {
             generateAiCoverButton.addEventListener('click', generateAiCover);
@@ -1838,6 +2180,8 @@
                 useGeneratedCoverInput.value = '1';
                 coverAiStatus.textContent = 'Status: cover AI akan dipakai saat materi disimpan.';
                 coverAiStatus.className = 'cover-ai-status confirmed';
+                syncBookCoverStage();
+                closeCoverModal();
             });
         }
 
@@ -1856,6 +2200,12 @@
         }
 
         syncCoverModeUi();
+        syncBookCoverStage();
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && coverModal && coverModal.classList.contains('is-open')) {
+                closeCoverModal();
+            }
+        });
 
     </script>
 </body>

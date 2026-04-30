@@ -59,11 +59,6 @@
 </div>
 
 <div class="form-group">
-    <label class="form-label">Jumlah Halaman</label>
-    <input type="number" name="jumlah_halaman" value="{{ old('jumlah_halaman', $bab->jumlah_halaman ?? '') }}" min="1" class="form-input">
-</div>
-
-<div class="form-group">
     <label class="form-checkbox">
         <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', $bab->status_aktif ?? true) ? 'checked' : '' }}>
         <span>Bab Aktif</span>

@@ -98,7 +98,6 @@ class MateriBabController extends Controller
             'konten_teks' => 'nullable|string|required_if:tipe_konten,teks',
             'file_path' => ($isCreate ? 'nullable|file|mimes:pdf,doc,docx|max:' . $maxUploadKb . '|required_if:tipe_konten,file' : "nullable|file|mimes:pdf,doc,docx|max:{$maxUploadKb}"),
             'pdf_page_selection' => 'nullable|string',
-            'jumlah_halaman' => 'nullable|integer|min:1',
             'status_aktif' => 'boolean',
         ], [
             'judul_bab.required' => 'Judul bab wajib diisi.',
@@ -123,9 +122,6 @@ class MateriBabController extends Controller
 
             $validated['file_path'] = $storedFile['path'];
             $validated['pdf_page_selection'] = $request->input('pdf_page_selection');
-            if ($storedFile['page_count'] !== null) {
-                $validated['jumlah_halaman'] = $storedFile['page_count'];
-            }
         } else {
             $validated['file_path'] = $bab?->file_path;
             $validated['pdf_page_selection'] = $bab?->pdf_page_selection;

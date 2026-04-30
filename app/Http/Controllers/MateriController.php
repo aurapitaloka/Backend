@@ -85,7 +85,7 @@ class MateriController extends Controller
             'deskripsi' => 'nullable|string',
             'mata_pelajaran_id' => 'nullable|exists:mata_pelajaran,id',
             'level_id' => 'nullable|exists:level,id',
-            'tipe_konten' => 'required|in:teks,file,bab',
+            'tipe_konten' => 'required|in:teks,file',
             'konten_teks' => 'nullable|string|required_if:tipe_konten,teks',
             'file_path' => "nullable|file|mimes:pdf,doc,docx|max:{$maxUploadKb}|required_if:tipe_konten,file",
             'pdf_page_selection' => 'nullable|string',
@@ -95,18 +95,16 @@ class MateriController extends Controller
             'bab.*.tipe_konten' => 'nullable|in:teks,file',
             'bab.*.konten_teks' => 'nullable|string',
             'bab.*.pdf_page_selection' => 'nullable|string',
-            'bab.*.jumlah_halaman' => 'nullable|integer|min:1',
             'bab.*.status_aktif' => 'nullable|boolean',
             'bab_files' => 'nullable|array',
             'bab_files.*' => "nullable|file|mimes:pdf,doc,docx|max:{$maxUploadKb}",
             'cover_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'generated_cover_temp_path' => 'nullable|string',
             'use_generated_cover' => 'nullable|boolean',
-            'jumlah_halaman' => 'nullable|integer|min:1',
             'status_aktif' => 'boolean',
         ], [
             'judul.required' => 'Judul wajib diisi',
-            'tipe_konten.required' => 'Tipe konten wajib dipilih',
+            'tipe_konten.required' => 'Tipe konten Bab 1 wajib dipilih',
             'konten_teks.required_if' => 'Konten teks wajib diisi jika tipe konten adalah teks',
             'file_path.required_if' => 'File wajib diupload jika tipe konten adalah file',
             'file_path.file' => 'File materi tidak valid. Pilih file PDF, DOC, atau DOCX.',
@@ -118,31 +116,28 @@ class MateriController extends Controller
             'cover_path.mimes' => 'Format cover buku harus JPG, JPEG, PNG, atau WEBP.',
             'cover_path.max' => 'Ukuran cover buku terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
             'generated_cover_temp_path.string' => 'Path cover AI tidak valid.',
-            'jumlah_halaman.integer' => 'Jumlah halaman harus berupa angka.',
-            'jumlah_halaman.min' => 'Jumlah halaman minimal 1.',
             'bab.array' => 'Data bab tidak valid.',
         ]);
 
-        $this->validateBabEntries($request, $validated);
+        $this->validateBabEntries($request);
 
-        // Handle file upload
+        $firstBabPayload = [
+            'judul_bab' => 'Bab 1',
+            'urutan' => 1,
+            'tipe_konten' => (string) $validated['tipe_konten'],
+            'konten_teks' => $validated['tipe_konten'] === 'teks' ? ($validated['konten_teks'] ?? null) : null,
+            'file_path' => null,
+            'pdf_page_selection' => null,
+            'status_aktif' => true,
+        ];
+
         if ($request->hasFile('file_path')) {
             $storedFile = $this->storeMateriFile(
                 $request->file('file_path'),
                 $request->input('pdf_page_selection')
             );
-            $validated['file_path'] = $storedFile['path'];
-            $validated['pdf_page_selection'] = $request->input('pdf_page_selection');
-            if ($storedFile['page_count'] !== null) {
-                $validated['jumlah_halaman'] = $storedFile['page_count'];
-            }
-        } elseif (($validated['tipe_konten'] ?? null) === 'bab') {
-            $validated['file_path'] = null;
-            $validated['pdf_page_selection'] = null;
-            $validated['konten_teks'] = null;
-            $validated['jumlah_halaman'] = null;
-        } else {
-            $validated['pdf_page_selection'] = null;
+            $firstBabPayload['file_path'] = $storedFile['path'];
+            $firstBabPayload['pdf_page_selection'] = $request->input('pdf_page_selection');
         }
 
         if ($request->hasFile('cover_path')) {
@@ -158,22 +153,27 @@ class MateriController extends Controller
             $this->deleteGeneratedTempCover((string) $request->input('generated_cover_temp_path'));
         }
 
+        $validated['tipe_konten'] = 'bab';
+        $validated['konten_teks'] = null;
+        $validated['file_path'] = null;
+        $validated['pdf_page_selection'] = null;
+        $validated['jumlah_halaman'] = null;
         $validated['dibuat_oleh'] = Auth::id();
         $validated['status_aktif'] = $request->has('status_aktif') ? true : false;
 
-        DB::transaction(function () use ($validated, $request) {
+        DB::transaction(function () use ($validated, $request, $firstBabPayload) {
             $materi = Materi::create($validated);
-
-            if (($validated['tipe_konten'] ?? null) === 'bab') {
-                $this->storeBabEntries($materi, $request);
-            }
+            MateriBab::create(array_merge($firstBabPayload, [
+                'materi_id' => $materi->id,
+            ]));
+            $this->storeBabEntries($materi, $request, 2);
         });
         if ($request->wantsJson() || $request->is('api/*')) {
-            return response()->json(['message' => 'Materi berhasil ditambahkan!'], 201);
+            return response()->json(['message' => 'Buku berhasil ditambahkan!'], 201);
         }
 
         return redirect()->route('materi.index')
-            ->with('success', 'Materi berhasil ditambahkan!');
+            ->with('success', 'Buku berhasil ditambahkan!');
     }
 
     public function generateCoverPreview(
@@ -274,66 +274,25 @@ class MateriController extends Controller
     public function update(Request $request, string $id)
     {
         $materi = Materi::findOrFail($id);
-        $maxUploadKb = $this->getServerUploadLimitInKb();
 
         $validated = $request->validate([
             'judul' => 'required|string|max:200',
             'deskripsi' => 'nullable|string',
             'mata_pelajaran_id' => 'nullable|exists:mata_pelajaran,id',
             'level_id' => 'nullable|exists:level,id',
-            'tipe_konten' => 'required|in:teks,file,bab',
-            'konten_teks' => 'nullable|string|required_if:tipe_konten,teks',
-            'file_path' => "nullable|file|mimes:pdf,doc,docx|max:{$maxUploadKb}",
-            'pdf_page_selection' => 'nullable|string',
             'cover_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-            'jumlah_halaman' => 'nullable|integer|min:1',
             'status_aktif' => 'boolean',
         ], [
             'judul.required' => 'Judul wajib diisi',
-            'tipe_konten.required' => 'Tipe konten wajib dipilih',
-            'konten_teks.required_if' => 'Konten teks wajib diisi jika tipe konten adalah teks',
-            'file_path.file' => 'File materi tidak valid. Pilih file PDF, DOC, atau DOCX.',
-            'file_path.mimes' => 'Format file materi harus PDF, DOC, atau DOCX.',
-            'file_path.max' => 'Ukuran file materi melebihi batas upload server.',
             'mata_pelajaran_id.exists' => 'Mata pelajaran yang dipilih tidak valid',
             'level_id.exists' => 'Level yang dipilih tidak valid',
             'cover_path.image' => 'Cover buku harus berupa gambar.',
             'cover_path.mimes' => 'Format cover buku harus JPG, JPEG, PNG, atau WEBP.',
             'cover_path.max' => 'Ukuran cover buku terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
-            'jumlah_halaman.integer' => 'Jumlah halaman harus berupa angka.',
-            'jumlah_halaman.min' => 'Jumlah halaman minimal 1.',
         ]);
 
-        // Handle file upload if new file is provided
-        if ($request->hasFile('file_path')) {
-            $storedFile = $this->storeMateriFile(
-                $request->file('file_path'),
-                $request->input('pdf_page_selection')
-            );
-            $newFilePath = $storedFile['path'];
-
-            if ($materi->file_path && Storage::disk('public')->exists($materi->file_path)) {
-                Storage::disk('public')->delete($materi->file_path);
-            }
-
-            $validated['file_path'] = $newFilePath;
-            $validated['pdf_page_selection'] = $request->input('pdf_page_selection');
-            if ($storedFile['page_count'] !== null) {
-                $validated['jumlah_halaman'] = $storedFile['page_count'];
-            }
-        } elseif (($validated['tipe_konten'] ?? null) === 'bab') {
-            if ($materi->file_path && Storage::disk('public')->exists($materi->file_path)) {
-                Storage::disk('public')->delete($materi->file_path);
-            }
-
-            $validated['file_path'] = null;
-            $validated['pdf_page_selection'] = null;
-            $validated['konten_teks'] = null;
-            $validated['jumlah_halaman'] = null;
-        } else {
-            // Keep existing file if not uploading new one
-            $validated['file_path'] = $materi->file_path;
-            $validated['pdf_page_selection'] = $materi->pdf_page_selection;
+        if ($materi->file_path && Storage::disk('public')->exists($materi->file_path)) {
+            Storage::disk('public')->delete($materi->file_path);
         }
 
         if ($request->hasFile('cover_path')) {
@@ -348,6 +307,11 @@ class MateriController extends Controller
             $validated['cover_path'] = $materi->cover_path;
         }
 
+        $validated['tipe_konten'] = 'bab';
+        $validated['konten_teks'] = null;
+        $validated['file_path'] = null;
+        $validated['pdf_page_selection'] = null;
+        $validated['jumlah_halaman'] = null;
         $validated['status_aktif'] = $request->has('status_aktif') ? true : false;
 
         $materi->update($validated);
@@ -358,7 +322,7 @@ class MateriController extends Controller
         }
 
         return redirect()->route('materi.index')
-            ->with('success', 'Materi berhasil diperbarui!');
+            ->with('success', 'Buku berhasil diperbarui!');
     }
 
     /**
@@ -410,17 +374,11 @@ class MateriController extends Controller
             && $user->peran === 'siswa';
     }
 
-    private function validateBabEntries(Request $request, array $validated): void
+    private function validateBabEntries(Request $request): void
     {
-        if (($validated['tipe_konten'] ?? null) !== 'bab') {
-            return;
-        }
-
         $babEntries = $request->input('bab', []);
         if (!is_array($babEntries) || count($babEntries) === 0) {
-            throw ValidationException::withMessages([
-                'bab' => 'Tambahkan minimal 1 bab untuk materi dengan tipe Per Bab.',
-            ]);
+            return;
         }
 
         $babFiles = $request->file('bab_files', []);
@@ -455,7 +413,7 @@ class MateriController extends Controller
         }
     }
 
-    private function storeBabEntries(Materi $materi, Request $request): void
+    private function storeBabEntries(Materi $materi, Request $request, int $defaultStartUrutan = 1): void
     {
         $babEntries = $request->input('bab', []);
         $babFiles = $request->file('bab_files', []);
@@ -464,11 +422,10 @@ class MateriController extends Controller
             $payload = [
                 'materi_id' => $materi->id,
                 'judul_bab' => trim((string) ($bab['judul_bab'] ?? '')),
-                'urutan' => (int) ($bab['urutan'] ?? ($index + 1)),
+                'urutan' => (int) ($bab['urutan'] ?? ($defaultStartUrutan + $index)),
                 'tipe_konten' => (string) ($bab['tipe_konten'] ?? 'teks'),
                 'konten_teks' => $bab['tipe_konten'] === 'teks' ? ($bab['konten_teks'] ?? null) : null,
                 'pdf_page_selection' => null,
-                'jumlah_halaman' => !empty($bab['jumlah_halaman']) ? (int) $bab['jumlah_halaman'] : null,
                 'status_aktif' => array_key_exists('status_aktif', $bab) ? (bool) $bab['status_aktif'] : true,
             ];
 
@@ -479,9 +436,6 @@ class MateriController extends Controller
                 );
                 $payload['file_path'] = $storedFile['path'];
                 $payload['pdf_page_selection'] = $bab['pdf_page_selection'] ?? null;
-                if ($storedFile['page_count'] !== null) {
-                    $payload['jumlah_halaman'] = $storedFile['page_count'];
-                }
             } else {
                 $payload['file_path'] = null;
             }

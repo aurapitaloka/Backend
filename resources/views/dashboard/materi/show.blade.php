@@ -22,26 +22,25 @@
             --color-muted: #6B7280;
             --sidebar-width: 280px;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--color-gray-light);
             color: var(--color-text);
             overflow-x: hidden;
         }
-        
+
         .dashboard-container {
             display: flex;
             min-height: 100vh;
         }
-        
-        /* Sidebar */
+
         .sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(180deg, var(--color-sidebar) 0%, var(--color-sidebar-dark) 100%);
@@ -54,18 +53,18 @@
             flex-direction: column;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.35);
         }
-        
+
         .sidebar-header {
             padding: 2rem 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
-        
+
         .logo-container {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
-        
+
         .logo-circle {
             width: 50px;
             height: 50px;
@@ -76,32 +75,26 @@
             justify-content: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
-        
-        .logo-icon {
-            width: 26px;
-            height: 26px;
-            color: var(--color-accent);
-        }
-        
+
         .logo-text {
             font-size: 1.5rem;
             font-weight: 800;
             color: var(--color-white);
             letter-spacing: 1px;
         }
-        
+
         .sidebar-nav {
             flex: 1;
             padding: 1.5rem 0;
             overflow-y: auto;
         }
-        
+
         .nav-item {
             margin: 0.5rem 1rem;
             border-radius: 12px;
             transition: all 0.3s ease;
         }
-        
+
         .nav-item a {
             display: flex;
             align-items: center;
@@ -113,7 +106,7 @@
             border-radius: 12px;
             transition: all 0.3s ease;
         }
-        
+
         .nav-item.active a {
             background: rgba(248, 184, 3, 0.06);
             color: var(--color-white);
@@ -121,11 +114,11 @@
             border-left: 4px solid var(--color-accent);
             padding-left: calc(1.25rem - 4px);
         }
-        
+
         .nav-item:not(.active):hover a {
             background: rgba(255, 255, 255, 0.03);
         }
-        
+
         .nav-icon {
             width: 24px;
             height: 24px;
@@ -134,7 +127,7 @@
             justify-content: center;
             font-size: 1.25rem;
         }
-        
+
         .logout-btn {
             margin: 1rem;
             padding: 0.75rem 1.5rem;
@@ -147,12 +140,11 @@
             transition: all 0.3s ease;
             text-align: center;
         }
-        
+
         .logout-btn:hover {
             background: rgba(255, 255, 255, 0.08);
         }
-        
-        /* Main Content */
+
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
@@ -160,52 +152,22 @@
             display: flex;
             flex-direction: column;
         }
-        
-        .top-header-strip {
-            background: var(--color-sidebar);
-            padding: 0.75rem 2rem;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        
-        .user-info-top {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--color-white);
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .user-icon-small {
-            width: 24px;
-            height: 24px;
-            background: rgba(255,255,255,0.06);
-            color: var(--color-white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-        
+
         .header-bar {
             background: linear-gradient(135deg, var(--color-sidebar) 0%, var(--color-sidebar-dark) 100%);
-            padding: 1.5rem 2rem;
+            padding: 1.15rem 2rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
         }
-        
+
         .header-title {
             font-size: 1.75rem;
             font-weight: 700;
             color: var(--color-white);
         }
-        
+
         .content-area {
             flex: 1;
-            padding: 2rem;
+            padding: 1.25rem 2rem 2rem;
         }
 
         .back-link {
@@ -228,15 +190,15 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.12);
             background: var(--color-accent-light);
         }
-        
+
         .detail-container {
             background: var(--color-white);
             border-radius: 16px;
-            padding: 2rem;
+            padding: 1.35rem 2rem 2rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             border: 1px solid rgba(0,0,0,0.04);
         }
-        
+
         .detail-header {
             display: flex;
             justify-content: space-between;
@@ -245,21 +207,21 @@
             padding-bottom: 1.5rem;
             border-bottom: 2px solid var(--color-gray);
         }
-        
+
         .detail-title {
             font-size: 2rem;
             font-weight: 700;
             color: var(--color-text);
             margin-bottom: 0.5rem;
         }
-        
+
         .detail-meta {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin-top: 1rem;
         }
-        
+
         .meta-item {
             display: flex;
             align-items: center;
@@ -272,7 +234,7 @@
             width: 16px;
             height: 16px;
         }
-        
+
         .meta-badge {
             padding: 0.25rem 0.75rem;
             border-radius: 6px;
@@ -284,38 +246,34 @@
             background: var(--color-accent-light);
             color: var(--color-accent-dark);
         }
-        
+
         .badge-success {
             background: #E8F5E9;
             color: #2E7D32;
         }
-        
+
         .badge-danger {
             background: #FFEBEE;
             color: #C62828;
         }
-        
-        .detail-content {
-            margin-top: 2rem;
-        }
-        
+
         .content-section {
             margin-bottom: 2rem;
         }
-        
+
         .section-title {
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--color-text);
             margin-bottom: 1rem;
         }
-        
+
         .section-content {
             color: var(--color-text);
             line-height: 1.8;
             white-space: pre-wrap;
         }
-        
+
         .pdf-viewer {
             width: 100%;
             height: 80vh;
@@ -323,7 +281,7 @@
             border-radius: 12px;
             margin-top: 1rem;
         }
-        
+
         .text-content {
             background: var(--color-gray-light);
             padding: 1.5rem;
@@ -333,7 +291,7 @@
             font-size: 1rem;
             color: var(--color-text);
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 1rem;
@@ -341,13 +299,13 @@
             padding-top: 2rem;
             border-top: 2px solid var(--color-gray);
         }
-        
+
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1.2rem;
             border: none;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
@@ -355,7 +313,7 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .btn-primary {
             background: var(--color-accent);
             color: var(--color-sidebar);
@@ -366,23 +324,23 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(248, 184, 3, 0.35);
         }
-        
+
         .btn-secondary {
             background: var(--color-gray);
             color: var(--color-text);
         }
-        
+
         .btn-secondary:hover {
             background: #D1D5DB;
         }
-        
+
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
             margin-bottom: 2rem;
         }
-        
+
         .info-card {
             background: var(--color-accent-light);
             padding: 1rem 1.25rem;
@@ -408,59 +366,17 @@
             width: 18px;
             height: 18px;
         }
-        
+
         .info-label {
             font-size: 0.85rem;
             color: var(--color-muted);
             margin-bottom: 0.25rem;
         }
-        
+
         .info-value {
             font-size: 1rem;
             font-weight: 600;
             color: var(--color-text);
-        }
-
-        .chapter-section {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid var(--color-gray);
-        }
-
-        .chapter-list {
-            display: grid;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .chapter-card {
-            border: 1px solid rgba(17, 24, 39, 0.08);
-            border-radius: 16px;
-            padding: 1rem 1.1rem;
-            background: #fffdf7;
-        }
-
-        .chapter-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .chapter-meta {
-            margin-top: 0.35rem;
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            color: var(--color-muted);
-            font-size: 0.9rem;
-        }
-
-        .chapter-actions {
-            display: flex;
-            gap: 0.65rem;
-            flex-wrap: wrap;
-            margin-top: 0.9rem;
         }
 
         .flash-alert {
@@ -480,6 +396,269 @@
             background: #FEF2F2;
             color: #991B1B;
             border-color: #FECACA;
+        }
+
+        .chapter-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--color-gray);
+        }
+
+        .chapter-library {
+            display: grid;
+            grid-template-columns: 300px minmax(0, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+            margin-top: 1rem;
+        }
+
+        .chapter-side {
+            position: sticky;
+            top: 1.25rem;
+            border-radius: 22px;
+            background: linear-gradient(180deg, #FFFDF6 0%, #FFFFFF 100%);
+            border: 1px solid rgba(248, 184, 3, 0.18);
+            padding: 1.2rem;
+        }
+
+        .chapter-cover {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            border-radius: 18px;
+            overflow: hidden;
+            background: linear-gradient(160deg, #FFF2C7 0%, #F8FAFC 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 12px 26px rgba(17, 24, 39, 0.12);
+        }
+
+        .chapter-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .chapter-cover-fallback {
+            padding: 1.3rem;
+            text-align: center;
+        }
+
+        .chapter-cover-fallback strong {
+            font-size: 1.45rem;
+            line-height: 1.2;
+            color: var(--color-text);
+            display: block;
+        }
+
+        .chapter-cover-fallback span {
+            display: block;
+            margin-top: 0.7rem;
+            color: var(--color-muted);
+            font-size: 0.88rem;
+        }
+
+        .chapter-side-title {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: var(--color-text);
+            margin-top: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .chapter-side-copy {
+            margin-top: 0.5rem;
+            color: var(--color-muted);
+            line-height: 1.58;
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .chapter-side-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.65rem;
+            margin-top: 0.95rem;
+        }
+
+        .chapter-stat {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 14px;
+            background: #FFFFFF;
+            padding: 0.75rem 0.8rem;
+            min-height: 84px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .chapter-stat-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+        }
+
+        .chapter-stat-value {
+            margin-top: 0.3rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--color-text);
+            line-height: 1.35;
+            word-break: break-word;
+        }
+
+        .chapter-side-actions {
+            display: grid;
+            gap: 0.6rem;
+            margin-top: 0.95rem;
+        }
+
+        .chapter-side-actions .btn {
+            width: 100%;
+            justify-content: flex-start;
+            padding: 0.88rem 1rem;
+            border-radius: 14px;
+            font-size: 0.95rem;
+        }
+
+        .chapter-main {
+            border-radius: 22px;
+            background: #FFFFFF;
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            box-shadow: 0 14px 30px rgba(17, 24, 39, 0.08);
+            overflow: hidden;
+        }
+
+        .chapter-main-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1.1rem 1.25rem;
+            border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFFCF4 100%);
+        }
+
+        .chapter-main-title {
+            font-size: 1.14rem;
+            font-weight: 800;
+            color: var(--color-text);
+        }
+
+        .chapter-main-subtitle {
+            margin-top: 0.25rem;
+            color: var(--color-muted);
+            font-size: 0.9rem;
+        }
+
+        .chapter-list {
+            display: grid;
+        }
+
+        .chapter-row {
+            border-top: 1px solid rgba(17, 24, 39, 0.08);
+            padding: 1.05rem 1.25rem 1.15rem;
+        }
+
+        .chapter-row:first-child {
+            border-top: none;
+        }
+
+        .chapter-row-head {
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .chapter-copy {
+            min-width: 0;
+        }
+
+        .chapter-handle {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            background: #F8FAFC;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-muted);
+        }
+
+        .chapter-title {
+            font-size: 1.12rem;
+            font-weight: 800;
+            color: var(--color-text);
+            line-height: 1.35;
+        }
+
+        .chapter-meta {
+            margin-top: 0.4rem;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            color: var(--color-muted);
+            font-size: 0.88rem;
+        }
+
+        .chapter-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.28rem 0.65rem;
+            border-radius: 999px;
+            background: #F8FAFC;
+            border: 1px solid rgba(17, 24, 39, 0.06);
+            color: var(--color-text);
+            font-weight: 700;
+        }
+
+        .chapter-actions {
+            display: flex;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            grid-column: 2 / -1;
+            margin-top: 0.9rem;
+        }
+
+        .chapter-actions form {
+            margin: 0;
+        }
+
+        .chapter-actions .btn,
+        .chapter-actions button {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            padding: 0.78rem 1rem;
+            font-size: 0.92rem;
+        }
+
+        .chapter-outline {
+            margin-top: 0.85rem;
+            color: var(--color-text);
+            line-height: 1.7;
+            background: #FAFAFA;
+            border-radius: 14px;
+            padding: 0.9rem 1rem;
+        }
+
+        .chapter-note {
+            margin-top: 0.75rem;
+            padding: 0.78rem 0.92rem;
+            border-radius: 12px;
+            background: #F8FAFC;
+            color: var(--color-muted);
+            font-size: 0.88rem;
+            line-height: 1.6;
         }
 
         .summary-shell {
@@ -561,16 +740,33 @@
             color: var(--color-muted);
         }
 
+        @media (max-width: 1080px) {
+            .chapter-library {
+                grid-template-columns: 1fr;
+            }
+
+            .chapter-side {
+                position: static;
+            }
+        }
+
         @media (max-width: 860px) {
             .summary-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .chapter-row-head {
+                grid-template-columns: 1fr;
+            }
+
+            .chapter-actions {
+                justify-content: flex-start;
             }
         }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-container">
@@ -578,27 +774,22 @@
                     <div class="logo-text">Ruma</div>
                 </div>
             </div>
-            
+
             @include('components.sidebar')
-            
-           <div class="logout-btn" onclick="handleLogout()" style="display:flex; align-items:center; gap:8px; justify-content:center;">
-    <i data-lucide="log-out"></i>
-    <span>Keluar</span>
-</div>
+
+            <div class="logout-btn" onclick="handleLogout()" style="display:flex; align-items:center; gap:8px; justify-content:center;">
+                <i data-lucide="log-out"></i>
+                <span>Keluar</span>
+            </div>
         </aside>
-        
-        <!-- Main Content -->
+
         <main class="main-content">
-           
-            
-            <!-- Header Bar -->
             <header class="header-bar">
                 <h1 class="header-title">Detail Materi</h1>
             </header>
-            
-            <!-- Content Area -->
+
             <div class="content-area">
-                <div style="margin-bottom: 1.5rem;">
+                <div style="margin-bottom: 1rem;">
                     <a href="{{ route('materi.index') }}" class="back-link">
                         <i data-lucide="arrow-left"></i>
                         Kembali ke Daftar Materi
@@ -614,239 +805,201 @@
                         <div class="flash-alert error">{{ session('error') }}</div>
                     @endif
 
-                    <!-- Header -->
-                    <div class="detail-header">
-                        <div style="flex: 1;">
-                            <h2 class="detail-title">{{ $materi->judul }}</h2>
-                            <div class="detail-meta">
-                                <span class="meta-badge badge-primary">{{ ucfirst($materi->tipe_konten) }}</span>
-                                <span class="meta-badge {{ $materi->status_aktif ? 'badge-success' : 'badge-danger' }}">
-                                    {{ $materi->status_aktif ? 'Aktif' : 'Nonaktif' }}
-                                </span>
-                                @if($materi->mataPelajaran)
-                                    <span class="meta-item"><i data-lucide="book-open"></i> {{ $materi->mataPelajaran->nama }}</span>
-                                @endif
-                                @if($materi->level)
-                                    <span class="meta-item"><i data-lucide="layers"></i> {{ $materi->level->nama }}</span>
-                                @endif
-                                @if($materi->jumlah_halaman)
-                                    <span class="meta-item"><i data-lucide="file-text"></i> {{ $materi->jumlah_halaman }} halaman</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Info Grid -->
-                    <div class="info-grid">
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="user"></i></div>
-                            <div>
-                                <div class="info-label">Dibuat Oleh</div>
-                                <div class="info-value">{{ $materi->pengguna->nama ?? '-' }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="calendar-plus"></i></div>
-                            <div>
-                                <div class="info-label">Tanggal Dibuat</div>
-                                <div class="info-value">{{ $materi->created_at->format('d M Y H:i') }}</div>
-                            </div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-icon"><i data-lucide="refresh-cw"></i></div>
-                            <div>
-                                <div class="info-label">Terakhir Diupdate</div>
-                                <div class="info-value">{{ $materi->updated_at->format('d M Y H:i') }}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Deskripsi -->
-                    @if($materi->deskripsi)
-                        <div class="content-section">
-                            <h3 class="section-title">Deskripsi</h3>
-                            <div class="section-content">{{ $materi->deskripsi }}</div>
-                        </div>
-                    @endif
-
-                    <!-- Konten -->
-                    <div class="content-section">
-                        <h3 class="section-title">Konten Materi</h3>
-                        
-                        @if($materi->tipe_konten == 'file' && $materi->file_url)
-                            <div>
-                                <p style="margin-bottom: 1rem; color: var(--color-muted);">
-                                    File: <strong>{{ basename($materi->file_path) }}</strong>
-                                </p>
-                                <iframe 
-                                    src="{{ $materi->file_url }}" 
-                                    class="pdf-viewer"
-                                    type="application/pdf">
-                                    <p style="padding: 2rem; text-align: center; color: var(--color-muted);">
-                                        Browser Anda tidak mendukung preview PDF. 
-                                        <a href="{{ $materi->file_url }}" target="_blank" style="color: var(--color-accent-dark); text-decoration: underline;">
-                                            Klik di sini untuk membuka file
-                                        </a>
-                                    </p>
-                                </iframe>
-                                <div style="margin-top: 1rem;">
-                                    <a href="{{ $materi->file_url }}" target="_blank" class="btn btn-primary">
-                                        <i data-lucide="download"></i>
-                                        Download File
+                    <div class="chapter-section">
+                        <div class="chapter-library">
+                            <aside class="chapter-side">
+                                <div class="chapter-cover">
+                                    @if($materi->cover_url)
+                                        <img src="{{ $materi->cover_url }}" alt="Cover {{ $materi->judul }}">
+                                    @else
+                                        <div class="chapter-cover-fallback">
+                                            <strong>{{ \Illuminate\Support\Str::limit($materi->judul, 42) }}</strong>
+                                            <span>Struktur buku per bab</span>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="chapter-side-title">{{ $materi->judul }}</div>
+                                <div class="chapter-side-copy">
+                                    {{ \Illuminate\Support\Str::limit($materi->deskripsi ?: 'Kelola bab seperti daftar isi buku agar kuis dan rangkuman AI tetap terhubung rapi di setiap chapter.', 150) }}
+                                </div>
+                                <div class="chapter-side-stats">
+                                    <div class="chapter-stat">
+                                        <div class="chapter-stat-label">Total Bab</div>
+                                        <div class="chapter-stat-value">{{ $materi->bab->count() }}</div>
+                                    </div>
+                                    <div class="chapter-stat">
+                                        <div class="chapter-stat-label">Status</div>
+                                        <div class="chapter-stat-value">{{ $materi->status_aktif ? 'Aktif' : 'Nonaktif' }}</div>
+                                    </div>
+                                    <div class="chapter-stat">
+                                        <div class="chapter-stat-label">Mapel</div>
+                                        <div class="chapter-stat-value">{{ $materi->mataPelajaran->nama ?? '-' }}</div>
+                                    </div>
+                                    <div class="chapter-stat">
+                                        <div class="chapter-stat-label">Level</div>
+                                        <div class="chapter-stat-value">{{ $materi->level->nama ?? '-' }}</div>
+                                    </div>
+                                    <div class="chapter-stat">
+                                        <div class="chapter-stat-label">Dibuat Oleh</div>
+                                        <div class="chapter-stat-value">{{ $materi->pengguna->nama ?? '-' }}</div>
+                                    </div>
+                                    <div class="chapter-stat">
+                                        <div class="chapter-stat-label">Terakhir Update</div>
+                                        <div class="chapter-stat-value">{{ $materi->updated_at->format('d M Y') }}</div>
+                                    </div>
+                                </div>
+                                <div class="chapter-side-actions">
+                                    <a href="{{ route('materi.bab.create', $materi->id) }}" class="btn btn-primary">
+                                        <i data-lucide="plus-circle"></i>
+                                        Bab Baru
+                                    </a>
+                                    <a href="{{ route('materi.edit', $materi->id) }}" class="btn btn-secondary">
+                                        <i data-lucide="edit-3"></i>
+                                        Edit Buku
                                     </a>
                                 </div>
-                            </div>
-                        @elseif($materi->tipe_konten == 'bab')
-                            <div style="padding: 1.25rem; background: var(--color-accent-light); border-radius: 12px; color: var(--color-text);">
-                                Buku ini menggunakan struktur <strong>Per Bab</strong>. Isi utama dibaca melalui daftar bab di bawah, bukan dari satu file penuh.
-                            </div>
-                        @elseif($materi->tipe_konten == 'teks' && $materi->konten_teks)
-                            <div class="text-content">{{ $materi->konten_teks }}</div>
-                        @else
-                            <div style="padding: 2rem; text-align: center; color: var(--color-muted); background: var(--color-gray-light); border-radius: 12px;">
-                                <p>Konten belum tersedia</p>
-                            </div>
-                        @endif
-                    </div>
+                            </aside>
 
-                    <div class="chapter-section">
-                        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
-                            <div>
-                                <h3 class="section-title" style="margin-bottom:0.2rem;">Daftar Bab</h3>
-                                <div style="color: var(--color-muted);">Satu buku bisa memiliki banyak bab seperti reader Wattpad.</div>
-                            </div>
-                            <a href="{{ route('materi.bab.create', $materi->id) }}" class="btn btn-primary">
-                                <i data-lucide="plus-circle"></i>
-                                Tambah Bab
-                            </a>
-                        </div>
-
-                        @if($materi->bab->count() > 0)
-                            <div class="chapter-list">
-                                @foreach($materi->bab as $bab)
-                                    <div class="chapter-card">
-                                        <div class="chapter-head">
-                                            <div>
-                                                <div style="font-size:1.05rem; font-weight:700;">Bab {{ $bab->urutan }}. {{ $bab->judul_bab }}</div>
-                                                <div class="chapter-meta">
-                                                    <span>{{ ucfirst($bab->tipe_konten) }}</span>
-                                                    <span>{{ $bab->status_aktif ? 'Aktif' : 'Nonaktif' }}</span>
-                                                    @if($bab->jumlah_halaman)
-                                                        <span>{{ $bab->jumlah_halaman }} halaman</span>
-                                                    @endif
-                                                    <span>{{ $bab->kuis_count }} kuis</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        @if($bab->tipe_konten === 'teks' && $bab->konten_teks)
-                                            <div style="margin-top:0.75rem; color:var(--color-text); line-height:1.7;">
-                                                {{ \Illuminate\Support\Str::limit($bab->konten_teks, 220) }}
-                                            </div>
-                                        @elseif($bab->file_path)
-                                            <div style="margin-top:0.75rem; color:var(--color-muted);">
-                                                File: {{ basename($bab->file_path) }}
-                                            </div>
-                                        @endif
-
-                                        <div class="chapter-actions">
-                                            <form method="POST" action="{{ route('materi.bab.generate-summary', [$materi->id, $bab->id]) }}">
-                                                @csrf
-                                                <button type="submit" class="btn btn-secondary" style="background:#FFF7D6; color:#8A6500;">
-                                                    <i data-lucide="sparkles"></i>
-                                                    {{ $bab->summary_generated_at ? 'Perbarui Rangkuman AI' : 'Generate Rangkuman AI' }}
-                                                </button>
-                                            </form>
-                                            @if($bab->kuis->isNotEmpty())
-                                                <a href="{{ route('kuis.edit', $bab->kuis->first()->id) }}" class="btn btn-primary">
-                                                    <i data-lucide="clipboard-check"></i>
-                                                    Kelola Kuis Bab
-                                                </a>
-                                            @else
-                                                <a href="{{ route('kuis.create', ['materi_id' => $materi->id, 'materi_bab_id' => $bab->id]) }}" class="btn btn-primary">
-                                                    <i data-lucide="clipboard-plus"></i>
-                                                    Buat Kuis Bab
-                                                </a>
-                                            @endif
-                                            <a href="{{ route('materi.bab.edit', [$materi->id, $bab->id]) }}" class="btn btn-secondary">
-                                                <i data-lucide="edit-3"></i>
-                                                Edit Bab
-                                            </a>
-                                            <form method="POST" action="{{ route('materi.bab.destroy', [$materi->id, $bab->id]) }}" onsubmit="return confirm('Hapus bab ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-secondary" style="background:#FEE2E2; color:#991B1B;">
-                                                    <i data-lucide="trash-2"></i>
-                                                    Hapus Bab
-                                                </button>
-                                            </form>
-                                        </div>
-                                        <div style="margin-top:0.85rem; padding:0.8rem 0.95rem; border-radius:12px; background:#F8FAFC; color:var(--color-muted); font-size:0.88rem; line-height:1.6;">
-                                            Kuis ditempatkan di akhir bab agar alur belajar tetap runtut. Guru dapat langsung membuat atau mengelola kuis untuk bab ini tanpa memisahkan materi menjadi item terpisah.
-                                        </div>
-
-                                        @if($bab->summary_short || ($bab->summary_key_points ?? []))
-                                            <div class="summary-shell">
-                                                <div class="summary-head">
-                                                    <div>
-                                                        <div class="summary-title">{{ $bab->summary_title ?: 'Rangkuman Bab' }}</div>
-                                                        <div class="summary-generated">
-                                                            Visual rangkuman AI untuk akhir bab
-                                                            @if($bab->summary_generated_at)
-                                                                • diperbarui {{ $bab->summary_generated_at->format('d M Y H:i') }}
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="summary-grid">
-                                                    <div class="summary-card">
-                                                        <div class="summary-label">Inti Bab</div>
-                                                        <div class="summary-text">{{ $bab->summary_short }}</div>
-                                                    </div>
-                                                    <div class="summary-card">
-                                                        <div class="summary-label">Kata Kunci</div>
-                                                        <div class="keyword-wrap">
-                                                            @forelse(($bab->summary_keywords ?? []) as $keyword)
-                                                                <span class="keyword-chip">{{ $keyword }}</span>
-                                                            @empty
-                                                                <span class="summary-text" style="color:var(--color-muted);">Belum ada kata kunci.</span>
-                                                            @endforelse
-                                                        </div>
-                                                    </div>
-                                                    <div class="summary-card">
-                                                        <div class="summary-label">Poin Utama</div>
-                                                        <ul class="summary-list">
-                                                            @foreach(($bab->summary_key_points ?? []) as $point)
-                                                                <li>{{ $point }}</li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                    <div class="summary-card">
-                                                        <div class="summary-label">Ingat Ini</div>
-                                                        <div class="summary-text">{{ $bab->summary_memory_tip ?: 'Belum ada tips mengingat.' }}</div>
-                                                        @if($bab->summary_example)
-                                                            <div class="summary-label" style="margin-top:0.85rem;">Contoh Sederhana</div>
-                                                            <div class="summary-text">{{ $bab->summary_example }}</div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                            <div class="chapter-main">
+                                <div class="chapter-main-top">
+                                    <div>
+                                        <div class="chapter-main-title">Daftar Isi Buku</div>
+                                        <div class="chapter-main-subtitle">Kelola bab langsung dari sini agar buku terasa seperti chapter reader, bukan kumpulan file yang terpisah.</div>
                                     </div>
-                                @endforeach
+                                    <a href="{{ route('materi.bab.create', $materi->id) }}" class="btn btn-primary">
+                                        <i data-lucide="plus-circle"></i>
+                                        Bab Baru
+                                    </a>
+                                </div>
+
+                                @if($materi->bab->count() > 0)
+                                    <div class="chapter-list">
+                                        @foreach($materi->bab as $bab)
+                                            <div class="chapter-row">
+                                                <div class="chapter-row-head">
+                                                    <div class="chapter-handle">
+                                                        <i data-lucide="grip"></i>
+                                                    </div>
+                                                    <div class="chapter-copy">
+                                                        <div class="chapter-title">Bab {{ $bab->urutan }}. {{ $bab->judul_bab }}</div>
+                                                        <div class="chapter-meta">
+                                                            <span class="chapter-badge">{{ ucfirst($bab->tipe_konten) }}</span>
+                                                            <span class="chapter-badge">{{ $bab->status_aktif ? 'Aktif' : 'Nonaktif' }}</span>
+                                                            <span class="chapter-badge">{{ $bab->kuis_count }} kuis</span>
+                                                            <span>{{ $bab->updated_at->format('d M Y') }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="chapter-actions">
+                                                        <form method="POST" action="{{ route('materi.bab.generate-summary', [$materi->id, $bab->id]) }}">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-secondary" style="background:#FFF7D6; color:#8A6500;">
+                                                                <i data-lucide="sparkles"></i>
+                                                                {{ $bab->summary_generated_at ? 'Perbarui Rangkuman' : 'Generate Rangkuman' }}
+                                                            </button>
+                                                        </form>
+                                                        @if($bab->kuis->isNotEmpty())
+                                                            <a href="{{ route('kuis.edit', $bab->kuis->first()->id) }}" class="btn btn-primary">
+                                                                <i data-lucide="clipboard-check"></i>
+                                                                Kelola Kuis
+                                                            </a>
+                                                        @else
+                                                            <a href="{{ route('kuis.create', ['materi_id' => $materi->id, 'materi_bab_id' => $bab->id]) }}" class="btn btn-primary">
+                                                                <i data-lucide="clipboard-plus"></i>
+                                                                Buat Kuis
+                                                            </a>
+                                                        @endif
+                                                        <a href="{{ route('materi.bab.edit', [$materi->id, $bab->id]) }}" class="btn btn-secondary">
+                                                            <i data-lucide="edit-3"></i>
+                                                            Edit
+                                                        </a>
+                                                        <form method="POST" action="{{ route('materi.bab.destroy', [$materi->id, $bab->id]) }}" onsubmit="return confirm('Hapus bab ini?');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-secondary" style="background:#FEE2E2; color:#991B1B;">
+                                                                <i data-lucide="trash-2"></i>
+                                                                Hapus
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+
+                                                @if($bab->tipe_konten === 'teks' && $bab->konten_teks)
+                                                    <div class="chapter-outline">
+                                                        {{ \Illuminate\Support\Str::limit($bab->konten_teks, 240) }}
+                                                    </div>
+                                                @elseif($bab->file_path)
+                                                    <div class="chapter-outline" style="color:var(--color-muted);">
+                                                        File bab tersimpan: {{ basename($bab->file_path) }}
+                                                    </div>
+                                                @endif
+
+                                                <div class="chapter-note">
+                                                    Letakkan kuis dan rangkuman di akhir bab agar pengalaman membaca tetap runtut seperti chapter book, bukan kumpulan materi yang terpisah.
+                                                </div>
+
+                                                @if($bab->summary_short || ($bab->summary_key_points ?? []))
+                                                    <div class="summary-shell">
+                                                        <div class="summary-head">
+                                                            <div>
+                                                                <div class="summary-title">{{ $bab->summary_title ?: 'Rangkuman Bab' }}</div>
+                                                                <div class="summary-generated">
+                                                                    Visual rangkuman AI untuk akhir bab
+                                                                    @if($bab->summary_generated_at)
+                                                                        • diperbarui {{ $bab->summary_generated_at->format('d M Y H:i') }}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="summary-grid">
+                                                            <div class="summary-card">
+                                                                <div class="summary-label">Inti Bab</div>
+                                                                <div class="summary-text">{{ $bab->summary_short }}</div>
+                                                            </div>
+                                                            <div class="summary-card">
+                                                                <div class="summary-label">Kata Kunci</div>
+                                                                <div class="keyword-wrap">
+                                                                    @forelse(($bab->summary_keywords ?? []) as $keyword)
+                                                                        <span class="keyword-chip">{{ $keyword }}</span>
+                                                                    @empty
+                                                                        <span class="summary-text" style="color:var(--color-muted);">Belum ada kata kunci.</span>
+                                                                    @endforelse
+                                                                </div>
+                                                            </div>
+                                                            <div class="summary-card">
+                                                                <div class="summary-label">Poin Utama</div>
+                                                                <ul class="summary-list">
+                                                                    @foreach(($bab->summary_key_points ?? []) as $point)
+                                                                        <li>{{ $point }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
+                                                            <div class="summary-card">
+                                                                <div class="summary-label">Ingat Ini</div>
+                                                                <div class="summary-text">{{ $bab->summary_memory_tip ?: 'Belum ada tips mengingat.' }}</div>
+                                                                @if($bab->summary_example)
+                                                                    <div class="summary-label" style="margin-top:0.85rem;">Contoh Sederhana</div>
+                                                                    <div class="summary-text">{{ $bab->summary_example }}</div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div style="padding:1.2rem 1.25rem; color:var(--color-muted);">
+                                        Buku ini belum punya bab. Tambahkan bab pertama agar daftar isi mulai terbentuk dengan rapi.
+                                    </div>
+                                @endif
                             </div>
-                        @else
-                            <div style="margin-top:1rem; padding:1rem 1.1rem; border-radius:14px; background:#F9FAFB; color:var(--color-muted);">
-                                Buku ini belum punya bab. Tambahkan bab pertama agar materi tersusun per chapter.
-                            </div>
-                        @endif
+                        </div>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="action-buttons">
                         <a href="{{ route('materi.edit', $materi->id) }}" class="btn btn-primary">
                             <i data-lucide="edit-3"></i>
-                            Edit Materi
+                            Edit Buku
                         </a>
                         <a href="{{ route('materi.index') }}" class="btn btn-secondary">
                             <i data-lucide="arrow-left"></i>
@@ -857,7 +1010,7 @@
             </div>
         </main>
     </div>
-    
+
     <script>
         function handleLogout() {
             showModal({
@@ -879,10 +1032,7 @@
         }
     </script>
     <script>
-    lucide.createIcons();
-</script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
-
-
-
