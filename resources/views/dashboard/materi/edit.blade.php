@@ -616,6 +616,7 @@
                             <option value="">Pilih Tipe Konten</option>
                             <option value="teks" {{ old('tipe_konten', $materi->tipe_konten) == 'teks' ? 'selected' : '' }}>Teks</option>
                             <option value="file" {{ old('tipe_konten', $materi->tipe_konten) == 'file' ? 'selected' : '' }}>File</option>
+                            <option value="bab" {{ old('tipe_konten', $materi->tipe_konten) == 'bab' ? 'selected' : '' }}>Per Bab</option>
                         </select>
                         @error('tipe_konten')
                             <span class="error-message">{{ $message }}</span>
@@ -963,6 +964,11 @@
                 if (!currentFile) {
                     filePathField.querySelector('input').required = true;
                 }
+            } else if (tipeKonten === 'bab') {
+                kontenTeksField.style.display = 'none';
+                filePathField.style.display = 'none';
+                kontenTeksField.querySelector('textarea').required = false;
+                filePathField.querySelector('input').required = false;
             } else {
                 kontenTeksField.style.display = 'none';
                 filePathField.style.display = 'none';

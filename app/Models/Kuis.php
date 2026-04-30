@@ -10,6 +10,7 @@ class Kuis extends Model
 
     protected $fillable = [
         'materi_id',
+        'materi_bab_id',
         'judul',
         'deskripsi',
         'status_aktif',
@@ -28,6 +29,11 @@ class Kuis extends Model
     public function pertanyaan()
     {
         return $this->hasMany(KuisPertanyaan::class, 'kuis_id')->orderBy('urutan');
+    }
+
+    public function materiBab()
+    {
+        return $this->belongsTo(MateriBab::class, 'materi_bab_id');
     }
 
     public function hasil()

@@ -367,6 +367,192 @@
             display: block;
         }
 
+        .cover-mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .cover-mode-card {
+            border: 1px solid rgba(17, 24, 39, 0.1);
+            border-radius: 16px;
+            padding: 1rem;
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .cover-mode-card.active {
+            border-color: var(--color-accent);
+            box-shadow: 0 10px 24px rgba(248, 184, 3, 0.18);
+            transform: translateY(-1px);
+        }
+
+        .cover-mode-card input {
+            margin-right: 0.55rem;
+        }
+
+        .cover-mode-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .cover-mode-desc {
+            margin-top: 0.4rem;
+            font-size: 0.86rem;
+            color: var(--color-text-light);
+            line-height: 1.5;
+        }
+
+        .cover-ai-panel {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--color-gray);
+            border-radius: 16px;
+            background: linear-gradient(180deg, #FFFCF2 0%, #FFFFFF 100%);
+        }
+
+        .cover-ai-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .cover-ai-preview {
+            margin-top: 1rem;
+            display: none;
+            grid-template-columns: minmax(220px, 280px) 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .cover-ai-preview-card {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 18px;
+            padding: 0.8rem;
+            background: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(17, 24, 39, 0.08);
+        }
+
+        .cover-ai-preview-card img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+            background: #F8FAFC;
+        }
+
+        .cover-ai-preview-meta {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 18px;
+            padding: 1rem;
+            background: #FFFFFF;
+        }
+
+        .cover-ai-status {
+            margin-top: 0.8rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .cover-ai-status.pending {
+            color: #92400E;
+        }
+
+        .cover-ai-status.confirmed {
+            color: #166534;
+        }
+
+        .cover-ai-prompt {
+            margin-top: 0.85rem;
+            padding: 0.85rem 1rem;
+            border-radius: 12px;
+            background: #F8FAFC;
+            color: var(--color-text-light);
+            font-size: 0.83rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .cover-ai-loading {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.85rem 1rem;
+            border-radius: 12px;
+            background: #FFF7D6;
+            color: #8A6500;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .chapter-builder {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--color-gray);
+            border-radius: 16px;
+            background: linear-gradient(180deg, #FFFCF2 0%, #FFFFFF 100%);
+        }
+
+        .chapter-builder-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .chapter-builder-note {
+            padding: 0.9rem 1rem;
+            border-radius: 12px;
+            background: #F8FAFC;
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .chapter-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .chapter-item {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 16px;
+            padding: 1rem;
+            background: var(--color-white);
+            box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
+        }
+
+        .chapter-item-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .chapter-item-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .chapter-quiz-note {
+            margin-top: 0.85rem;
+            padding: 0.8rem 0.95rem;
+            border-radius: 12px;
+            background: #FFF7D6;
+            color: #8A6500;
+            font-size: 0.87rem;
+        }
+
         .pdf-selection-panel {
             margin-top: 1rem;
             padding: 1rem;
@@ -502,6 +688,10 @@
         }
 
         @media (max-width: 640px) {
+            .cover-ai-preview {
+                grid-template-columns: 1fr;
+            }
+
             .pdf-selection-range {
                 grid-template-columns: 1fr;
             }
@@ -627,8 +817,9 @@
                             <option value="">Pilih Tipe Konten</option>
                             <option value="teks" {{ old('tipe_konten') == 'teks' ? 'selected' : '' }}>Teks</option>
                             <option value="file" {{ old('tipe_konten') == 'file' ? 'selected' : '' }}>File</option>
+                            <option value="bab" {{ old('tipe_konten') == 'bab' ? 'selected' : '' }}>Per Bab</option>
                         </select>
-                        <span class="hint">Pilih Teks untuk isi langsung, atau File untuk upload dokumen.</span>
+                        <span class="hint">Pilih Teks untuk isi langsung, File untuk upload dokumen, atau Per Bab jika buku akan dipecah ke beberapa chapter.</span>
                         @error('tipe_konten')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
@@ -682,17 +873,97 @@
                         @enderror
                     </div>
 
-                    <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="image"></i> Cover Materi</div>
-                    <div class="section-subtitle">Upload cover agar materi tampil seperti buku di halaman siswa.</div>
+                    <div id="chapter_builder" class="chapter-builder">
+                        <div class="chapter-builder-head">
+                            <div>
+                                <div class="section-title" style="margin-bottom:0.2rem;"><i data-lucide="library-big"></i> Struktur Bab Buku</div>
+                                <div class="section-subtitle" style="margin-bottom:0;">Buat buku utama lalu susun Bab 1, Bab 2, dan seterusnya dalam satu halaman yang sama.</div>
+                            </div>
+                            <button type="button" id="add_chapter_btn" class="btn btn-primary" style="flex: 0 0 auto;">
+                                <i data-lucide="plus-circle"></i>
+                                Tambah Bab
+                            </button>
+                        </div>
+                        <div class="chapter-builder-note">
+                            Setiap bab akan tersimpan sebagai bagian dari buku ini, bukan menjadi materi terpisah. Setelah buku berhasil disimpan, kamu bisa membuat kuis per bab dari halaman detail buku agar alurnya lebih rapi, profesional, dan mudah dikelola.
+                        </div>
+                        <div id="chapter_list" class="chapter-list"></div>
+                    </div>
 
-                    <div class="form-group">
+                    <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="image"></i> Cover Materi</div>
+                    <div class="section-subtitle">Pilih upload manual atau generate cover AI, lalu konfirmasi dulu sebelum cover dipakai.</div>
+
+                    <input type="hidden" name="generated_cover_temp_path" id="generated_cover_temp_path" value="{{ old('generated_cover_temp_path') }}">
+                    <input type="hidden" name="use_generated_cover" id="use_generated_cover" value="{{ old('use_generated_cover', 0) }}">
+
+                    <div class="cover-mode-grid">
+                        <label class="cover-mode-card active" data-cover-mode-card="manual">
+                            <div>
+                                <input type="radio" name="cover_mode" value="manual" checked>
+                                <span class="cover-mode-title">Upload Manual</span>
+                            </div>
+                            <div class="cover-mode-desc">Pilih gambar cover sendiri dari perangkat.</div>
+                        </label>
+                        <label class="cover-mode-card" data-cover-mode-card="ai">
+                            <div>
+                                <input type="radio" name="cover_mode" value="ai">
+                                <span class="cover-mode-title">Generate dengan AI</span>
+                            </div>
+                            <div class="cover-mode-desc">Buat cover otomatis dari judul, mata pelajaran, level, dan deskripsi.</div>
+                        </label>
+                    </div>
+
+                    <div id="cover_manual_panel" class="form-group">
                         <label class="form-label">Cover Image (JPG/PNG/WebP)</label>
-                        <input type="file" name="cover_path" id="cover_path" accept=".jpg,.jpeg,.png,.webp,.svg" class="form-input">
+                        <input type="file" name="cover_path" id="cover_path" accept=".jpg,.jpeg,.png,.webp" class="form-input">
                         <small class="hint">Opsional. Jika kosong, sistem menampilkan cover putih dengan judul.</small>
                         <div id="cover_compress_hint" class="hint" style="display:none;"></div>
                         @error('cover_path')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
+                    </div>
+
+                    <div id="cover_ai_panel" class="cover-ai-panel" style="display: none;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Prompt Tambahan (Opsional)</label>
+                            <textarea id="cover_ai_prompt_tambahan" class="form-textarea" rows="3" placeholder="Contoh: gunakan warna cerah, ilustrasi anak belajar, nuansa sains modern."></textarea>
+                            <span class="hint">Kalau kosong, sistem tetap membuat prompt otomatis dari field materi.</span>
+                        </div>
+
+                        <div class="cover-ai-actions">
+                            <button type="button" id="generate_ai_cover_btn" class="btn btn-primary" style="flex: 0 0 auto;">
+                                <i data-lucide="sparkles"></i>
+                                Generate Cover
+                            </button>
+                            <button type="button" id="regenerate_ai_cover_btn" class="btn btn-secondary" style="flex: 0 0 auto; display: none;">
+                                <i data-lucide="refresh-cw"></i>
+                                Generate Ulang
+                            </button>
+                            <button type="button" id="discard_ai_cover_btn" class="btn btn-secondary" style="flex: 0 0 auto; display: none;">
+                                <i data-lucide="trash-2"></i>
+                                Batal Pakai
+                            </button>
+                        </div>
+
+                        <div id="cover_ai_loading" class="cover-ai-loading">Gemini sedang membuat preview cover...</div>
+
+                        <div id="cover_ai_preview" class="cover-ai-preview">
+                            <div class="cover-ai-preview-card">
+                                <img id="cover_ai_preview_image" src="" alt="Preview cover AI">
+                            </div>
+                            <div class="cover-ai-preview-meta">
+                                <div class="section-title" style="margin-bottom: 0;">Preview Cover AI</div>
+                                <div class="section-subtitle" style="margin-top: 0.35rem; margin-bottom: 0;">Preview ini belum dipakai sebelum kamu konfirmasi.</div>
+                                <div id="cover_ai_status" class="cover-ai-status pending">Status: menunggu konfirmasi.</div>
+                                <div class="cover-ai-actions">
+                                    <button type="button" id="confirm_ai_cover_btn" class="btn btn-primary" style="flex: 0 0 auto;">
+                                        <i data-lucide="check"></i>
+                                        Gunakan Cover Ini
+                                    </button>
+                                </div>
+                                <div id="cover_ai_prompt_preview" class="cover-ai-prompt" style="display: none;"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="settings"></i> Pengaturan</div>
@@ -945,16 +1216,36 @@
             if (tipeKonten === 'teks') {
                 kontenTeksField.style.display = 'block';
                 filePathField.style.display = 'none';
+                if (chapterBuilder) {
+                    chapterBuilder.style.display = 'none';
+                }
                 kontenTeksField.querySelector('textarea').required = true;
                 filePathField.querySelector('input').required = false;
             } else if (tipeKonten === 'file') {
                 kontenTeksField.style.display = 'none';
                 filePathField.style.display = 'block';
+                if (chapterBuilder) {
+                    chapterBuilder.style.display = 'none';
+                }
                 kontenTeksField.querySelector('textarea').required = false;
                 filePathField.querySelector('input').required = true;
+            } else if (tipeKonten === 'bab') {
+                kontenTeksField.style.display = 'none';
+                filePathField.style.display = 'none';
+                if (chapterBuilder) {
+                    chapterBuilder.style.display = 'block';
+                    if (!chapterList.children.length) {
+                        ensureInitialChapterItems();
+                    }
+                }
+                kontenTeksField.querySelector('textarea').required = false;
+                filePathField.querySelector('input').required = false;
             } else {
                 kontenTeksField.style.display = 'none';
                 filePathField.style.display = 'none';
+                if (chapterBuilder) {
+                    chapterBuilder.style.display = 'none';
+                }
                 kontenTeksField.querySelector('textarea').required = false;
                 filePathField.querySelector('input').required = false;
             }
@@ -1031,10 +1322,32 @@
             materiForm.addEventListener('submit', (event) => {
                 const currentFile = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
                 const isPdf = currentFile && (currentFile.type === 'application/pdf' || currentFile.name.toLowerCase().endsWith('.pdf'));
+                const selectedCoverMode = getSelectedCoverMode();
+                const currentTipeKonten = tipeKontenSelect ? tipeKontenSelect.value : '';
 
                 if (isPdf && totalPdfPages > 0 && selectedPdfPages.size === 0) {
                     event.preventDefault();
                     alert('Pilih minimal satu halaman PDF yang ingin disimpan.');
+                    return;
+                }
+
+                if (currentTipeKonten === 'bab') {
+                    if (!chapterList || chapterList.children.length === 0) {
+                        event.preventDefault();
+                        alert('Tambahkan minimal satu bab sebelum buku disimpan.');
+                        return;
+                    }
+
+                    renumberChapterItems();
+                }
+
+                if (
+                    selectedCoverMode === 'ai'
+                    && generatedCoverTempPathInput.value
+                    && useGeneratedCoverInput.value !== '1'
+                ) {
+                    event.preventDefault();
+                    alert('Preview cover AI sudah dibuat, tapi belum dikonfirmasi. Klik "Gunakan Cover Ini" atau "Batal Pakai" dulu.');
                 }
             });
         }
@@ -1061,7 +1374,27 @@
     <script>
         const coverImageInput = document.getElementById('cover_path');
         const coverImageHint = document.getElementById('cover_compress_hint');
+        const coverModeInputs = document.querySelectorAll('input[name="cover_mode"]');
+        const coverModeCards = document.querySelectorAll('[data-cover-mode-card]');
+        const coverManualPanel = document.getElementById('cover_manual_panel');
+        const coverAiPanel = document.getElementById('cover_ai_panel');
+        const generatedCoverTempPathInput = document.getElementById('generated_cover_temp_path');
+        const useGeneratedCoverInput = document.getElementById('use_generated_cover');
+        const generateAiCoverButton = document.getElementById('generate_ai_cover_btn');
+        const regenerateAiCoverButton = document.getElementById('regenerate_ai_cover_btn');
+        const discardAiCoverButton = document.getElementById('discard_ai_cover_btn');
+        const confirmAiCoverButton = document.getElementById('confirm_ai_cover_btn');
+        const coverAiLoading = document.getElementById('cover_ai_loading');
+        const coverAiPreview = document.getElementById('cover_ai_preview');
+        const coverAiPreviewImage = document.getElementById('cover_ai_preview_image');
+        const coverAiStatus = document.getElementById('cover_ai_status');
+        const coverAiPromptPreview = document.getElementById('cover_ai_prompt_preview');
+        const coverAiPromptTambahan = document.getElementById('cover_ai_prompt_tambahan');
+        const chapterBuilder = document.getElementById('chapter_builder');
+        const chapterList = document.getElementById('chapter_list');
+        const addChapterButton = document.getElementById('add_chapter_btn');
         const COVER_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+        const initialBabData = @json(old('bab', []));
 
         function setCoverImageHint(message, isError = false) {
             if (!coverImageHint) {
@@ -1071,6 +1404,308 @@
             coverImageHint.style.display = message ? 'block' : 'none';
             coverImageHint.textContent = message || '';
             coverImageHint.style.color = isError ? '#DC2626' : 'var(--color-text-light)';
+        }
+
+        function getSelectedCoverMode() {
+            const checkedInput = document.querySelector('input[name="cover_mode"]:checked');
+            return checkedInput ? checkedInput.value : 'manual';
+        }
+
+        function syncCoverModeUi() {
+            const selectedMode = getSelectedCoverMode();
+
+            coverModeCards.forEach((card) => {
+                card.classList.toggle('active', card.dataset.coverModeCard === selectedMode);
+            });
+
+            if (coverManualPanel) {
+                coverManualPanel.style.display = selectedMode === 'manual' ? 'block' : 'none';
+            }
+
+            if (coverAiPanel) {
+                coverAiPanel.style.display = selectedMode === 'ai' ? 'block' : 'none';
+            }
+
+            if (selectedMode === 'manual') {
+                useGeneratedCoverInput.value = '0';
+            }
+        }
+
+        function resetGeneratedCoverSelection() {
+            useGeneratedCoverInput.value = '0';
+            if (coverAiStatus) {
+                coverAiStatus.textContent = 'Status: menunggu konfirmasi.';
+                coverAiStatus.className = 'cover-ai-status pending';
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function buildChapterItem(index, data = {}) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'chapter-item';
+            wrapper.dataset.chapterIndex = String(index);
+            const babTitle = data.judul_bab || '';
+            const urutan = data.urutan || (index + 1);
+            const tipeKonten = data.tipe_konten || 'teks';
+            const kontenTeks = data.konten_teks || '';
+            const pdfSelection = data.pdf_page_selection || '';
+            const jumlahHalaman = data.jumlah_halaman || '';
+            const isAktif = data.status_aktif === undefined ? true : Boolean(Number(data.status_aktif) || data.status_aktif === true || data.status_aktif === '1');
+
+            wrapper.innerHTML = `
+                <div class="chapter-item-head">
+                    <div class="chapter-item-title">Bab ${index + 1}</div>
+                    <button type="button" class="btn btn-secondary remove-chapter-btn" style="flex: 0 0 auto;">
+                        <i data-lucide="trash-2"></i>
+                        Hapus
+                    </button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Judul Bab <span class="required">*</span></label>
+                        <input type="text" name="bab[${index}][judul_bab]" value="${escapeHtml(babTitle)}" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Urutan <span class="required">*</span></label>
+                        <input type="number" name="bab[${index}][urutan]" value="${urutan}" min="1" class="form-input" required>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Tipe Konten Bab <span class="required">*</span></label>
+                        <select name="bab[${index}][tipe_konten]" class="form-select chapter-type-select">
+                            <option value="teks" ${tipeKonten === 'teks' ? 'selected' : ''}>Teks</option>
+                            <option value="file" ${tipeKonten === 'file' ? 'selected' : ''}>File</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Jumlah Halaman</label>
+                        <input type="number" name="bab[${index}][jumlah_halaman]" value="${jumlahHalaman}" min="1" class="form-input">
+                    </div>
+                </div>
+                <div class="form-group chapter-text-field" style="display:${tipeKonten === 'teks' ? 'block' : 'none'};">
+                    <label class="form-label">Konten Teks Bab <span class="required">*</span></label>
+                    <textarea name="bab[${index}][konten_teks]" rows="7" class="form-textarea">${escapeHtml(kontenTeks)}</textarea>
+                </div>
+                <div class="chapter-file-field" style="display:${tipeKonten === 'file' ? 'block' : 'none'};">
+                    <div class="form-group">
+                        <label class="form-label">File Bab (PDF, DOC, DOCX) <span class="required">*</span></label>
+                        <input type="file" name="bab_files[${index}]" accept=".pdf,.doc,.docx" class="form-input chapter-file-input">
+                        <span class="hint">Kalau PDF, isi pilihan halaman dengan nomor yang dipisahkan koma. Contoh: 1,2,3,4</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pilihan Halaman PDF</label>
+                        <input type="text" name="bab[${index}][pdf_page_selection]" value="${escapeHtml(pdfSelection)}" class="form-input" placeholder="Contoh: 1,2,3,4">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" name="bab[${index}][status_aktif]" value="1" ${isAktif ? 'checked' : ''}>
+                        <span>Bab Aktif</span>
+                    </label>
+                </div>
+                <div class="chapter-quiz-note">
+                    Kuis bab akan dibuat setelah buku disimpan. Sistem akan menyediakan tombol cepat ke menu kuis dari halaman detail buku.
+                </div>
+            `;
+
+            const removeButton = wrapper.querySelector('.remove-chapter-btn');
+            const typeSelect = wrapper.querySelector('.chapter-type-select');
+            const textField = wrapper.querySelector('.chapter-text-field');
+            const fileField = wrapper.querySelector('.chapter-file-field');
+            const textarea = textField.querySelector('textarea');
+            const fileInputLocal = wrapper.querySelector('.chapter-file-input');
+
+            function syncChapterType() {
+                const typeValue = typeSelect.value;
+                textField.style.display = typeValue === 'teks' ? 'block' : 'none';
+                fileField.style.display = typeValue === 'file' ? 'block' : 'none';
+                textarea.required = typeValue === 'teks';
+                fileInputLocal.required = typeValue === 'file';
+            }
+
+            typeSelect.addEventListener('change', syncChapterType);
+            syncChapterType();
+
+            removeButton.addEventListener('click', () => {
+                wrapper.remove();
+                renumberChapterItems();
+            });
+
+            return wrapper;
+        }
+
+        function renumberChapterItems() {
+            if (!chapterList) {
+                return;
+            }
+
+            Array.from(chapterList.children).forEach((item, index) => {
+                item.dataset.chapterIndex = String(index);
+                const title = item.querySelector('.chapter-item-title');
+                if (title) {
+                    title.textContent = `Bab ${index + 1}`;
+                }
+
+                item.querySelectorAll('input, textarea, select').forEach((field) => {
+                    if (!field.name) {
+                        return;
+                    }
+
+                    if (field.name.startsWith('bab[')) {
+                        field.name = field.name.replace(/bab\[\d+\]/, `bab[${index}]`);
+                    }
+
+                    if (field.name.startsWith('bab_files[')) {
+                        field.name = field.name.replace(/bab_files\[\d+\]/, `bab_files[${index}]`);
+                    }
+                });
+
+                const urutanInput = item.querySelector('input[name$="[urutan]"]');
+                if (urutanInput && !urutanInput.value) {
+                    urutanInput.value = index + 1;
+                }
+            });
+            lucide.createIcons();
+        }
+
+        function ensureInitialChapterItems() {
+            if (!chapterList) {
+                return;
+            }
+
+            chapterList.innerHTML = '';
+            if (Array.isArray(initialBabData) && initialBabData.length > 0) {
+                initialBabData.forEach((item, index) => {
+                    chapterList.appendChild(buildChapterItem(index, item));
+                });
+            } else {
+                chapterList.appendChild(buildChapterItem(0));
+            }
+            renumberChapterItems();
+        }
+
+        function applyGeneratedCoverPreview(payload) {
+            generatedCoverTempPathInput.value = payload.temp_path || '';
+            useGeneratedCoverInput.value = '0';
+            coverAiPreviewImage.src = payload.url || '';
+            coverAiPreview.style.display = payload.url ? 'grid' : 'none';
+            coverAiStatus.textContent = 'Status: menunggu konfirmasi.';
+            coverAiStatus.className = 'cover-ai-status pending';
+            coverAiPromptPreview.style.display = payload.prompt ? 'block' : 'none';
+            coverAiPromptPreview.textContent = payload.prompt || '';
+            regenerateAiCoverButton.style.display = payload.url ? 'inline-flex' : 'none';
+            discardAiCoverButton.style.display = payload.url ? 'inline-flex' : 'none';
+        }
+
+        async function discardGeneratedCover({ silent = false } = {}) {
+            const tempPath = generatedCoverTempPathInput.value;
+
+            generatedCoverTempPathInput.value = '';
+            useGeneratedCoverInput.value = '0';
+            coverAiPreviewImage.src = '';
+            coverAiPreview.style.display = 'none';
+            coverAiPromptPreview.style.display = 'none';
+            regenerateAiCoverButton.style.display = 'none';
+            discardAiCoverButton.style.display = 'none';
+            resetGeneratedCoverSelection();
+
+            if (!tempPath) {
+                return;
+            }
+
+            try {
+                await fetch('{{ route("materi.discard-cover-preview", [], false) }}', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ temp_path: tempPath }),
+                });
+            } catch (error) {
+                if (!silent) {
+                    alert('Preview cover sempat dibersihkan di form, tetapi server gagal menghapus file sementara.');
+                }
+            }
+        }
+
+        async function generateAiCover() {
+            const judulInput = document.querySelector('input[name="judul"]');
+            const deskripsiInput = document.querySelector('textarea[name="deskripsi"]');
+            const mataPelajaranSelect = document.querySelector('select[name="mata_pelajaran_id"]');
+            const levelSelect = document.querySelector('select[name="level_id"]');
+            const judul = judulInput ? judulInput.value.trim() : '';
+
+            if (!judul) {
+                alert('Isi judul materi dulu sebelum generate cover AI.');
+                if (judulInput) {
+                    judulInput.focus();
+                }
+                return;
+            }
+
+            const selectedMapelText = mataPelajaranSelect && mataPelajaranSelect.selectedIndex >= 0
+                ? mataPelajaranSelect.options[mataPelajaranSelect.selectedIndex].text
+                : '';
+            const selectedLevelText = levelSelect && levelSelect.selectedIndex >= 0
+                ? levelSelect.options[levelSelect.selectedIndex].text
+                : '';
+
+            coverAiLoading.style.display = 'block';
+            generateAiCoverButton.disabled = true;
+            regenerateAiCoverButton.disabled = true;
+            discardAiCoverButton.disabled = true;
+            confirmAiCoverButton.disabled = true;
+
+            try {
+                const response = await fetch('{{ route("materi.generate-cover-preview", [], false) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        judul,
+                        deskripsi: deskripsiInput ? deskripsiInput.value.trim() : '',
+                        mata_pelajaran: selectedMapelText && selectedMapelText !== 'Pilih Mata Pelajaran' ? selectedMapelText : '',
+                        level: selectedLevelText && selectedLevelText !== 'Pilih Level' ? selectedLevelText : '',
+                        prompt_tambahan: coverAiPromptTambahan ? coverAiPromptTambahan.value.trim() : '',
+                        previous_temp_path: generatedCoverTempPathInput.value || '',
+                    }),
+                });
+
+                const payload = await response.json();
+
+                if (!response.ok) {
+                    const errorMessage = payload.message
+                        || payload.error
+                        || (payload.errors ? Object.values(payload.errors).flat()[0] : null)
+                        || 'Generate cover gagal.';
+                    throw new Error(errorMessage);
+                }
+
+                applyGeneratedCoverPreview(payload);
+            } catch (error) {
+                alert(error.message || 'Generate cover AI gagal.');
+            } finally {
+                coverAiLoading.style.display = 'none';
+                generateAiCoverButton.disabled = false;
+                regenerateAiCoverButton.disabled = false;
+                discardAiCoverButton.disabled = false;
+                confirmAiCoverButton.disabled = false;
+                lucide.createIcons();
+            }
         }
 
         async function fileToImageBitmap(file) {
@@ -1146,8 +1781,11 @@
             coverImageInput.addEventListener('change', async () => {
                 const file = coverImageInput.files && coverImageInput.files[0] ? coverImageInput.files[0] : null;
                 setCoverImageHint('');
+                if (file) {
+                    useGeneratedCoverInput.value = '0';
+                }
 
-                if (!file || file.type === 'image/svg+xml' || file.size <= COVER_MAX_IMAGE_BYTES) {
+                if (!file || file.size <= COVER_MAX_IMAGE_BYTES) {
                     return;
                 }
 
@@ -1173,6 +1811,52 @@
                 }
             });
         }
+
+        coverModeInputs.forEach((input) => {
+            input.addEventListener('change', syncCoverModeUi);
+        });
+
+        if (generateAiCoverButton) {
+            generateAiCoverButton.addEventListener('click', generateAiCover);
+        }
+
+        if (regenerateAiCoverButton) {
+            regenerateAiCoverButton.addEventListener('click', generateAiCover);
+        }
+
+        if (confirmAiCoverButton) {
+            confirmAiCoverButton.addEventListener('click', () => {
+                if (!generatedCoverTempPathInput.value) {
+                    alert('Generate cover dulu sebelum dikonfirmasi.');
+                    return;
+                }
+
+                if (coverImageInput) {
+                    coverImageInput.value = '';
+                }
+
+                useGeneratedCoverInput.value = '1';
+                coverAiStatus.textContent = 'Status: cover AI akan dipakai saat materi disimpan.';
+                coverAiStatus.className = 'cover-ai-status confirmed';
+            });
+        }
+
+        if (discardAiCoverButton) {
+            discardAiCoverButton.addEventListener('click', () => {
+                discardGeneratedCover();
+            });
+        }
+
+        if (addChapterButton) {
+            addChapterButton.addEventListener('click', () => {
+                const nextIndex = chapterList.children.length;
+                chapterList.appendChild(buildChapterItem(nextIndex));
+                renumberChapterItems();
+            });
+        }
+
+        syncCoverModeUi();
+
     </script>
 </body>
 </html>

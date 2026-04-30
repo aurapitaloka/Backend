@@ -105,6 +105,22 @@ Route::middleware('auth')->group(function () {
         'update' => 'materi.update',
         'destroy' => 'materi.destroy',
     ]);
+    Route::post('dashboard/materi/cover-preview/generate', [App\Http\Controllers\MateriController::class, 'generateCoverPreview'])
+        ->name('materi.generate-cover-preview');
+    Route::delete('dashboard/materi/cover-preview/discard', [App\Http\Controllers\MateriController::class, 'discardCoverPreview'])
+        ->name('materi.discard-cover-preview');
+    Route::get('dashboard/materi/{materi}/bab/create', [App\Http\Controllers\MateriBabController::class, 'create'])
+        ->name('materi.bab.create');
+    Route::post('dashboard/materi/{materi}/bab', [App\Http\Controllers\MateriBabController::class, 'store'])
+        ->name('materi.bab.store');
+    Route::get('dashboard/materi/{materi}/bab/{bab}/edit', [App\Http\Controllers\MateriBabController::class, 'edit'])
+        ->name('materi.bab.edit');
+    Route::put('dashboard/materi/{materi}/bab/{bab}', [App\Http\Controllers\MateriBabController::class, 'update'])
+        ->name('materi.bab.update');
+    Route::post('dashboard/materi/{materi}/bab/{bab}/generate-summary', [App\Http\Controllers\MateriBabController::class, 'generateSummary'])
+        ->name('materi.bab.generate-summary');
+    Route::delete('dashboard/materi/{materi}/bab/{bab}', [App\Http\Controllers\MateriBabController::class, 'destroy'])
+        ->name('materi.bab.destroy');
 
     Route::resource('dashboard/fiksi', App\Http\Controllers\FiksiController::class)->names([
         'index' => 'fiksi.index',
@@ -165,6 +181,8 @@ Route::middleware('auth')->group(function () {
         'update' => 'kuis.update',
         'destroy' => 'kuis.destroy',
     ]);
+    Route::post('dashboard/kuis/generate-from-materi', [App\Http\Controllers\KuisController::class, 'generateFromMateri'])
+        ->name('kuis.generate-from-materi');
     Route::get('dashboard/kuis-hasil', [App\Http\Controllers\KuisController::class, 'hasilIndex'])
         ->name('kuis.hasil.index');
     Route::get('dashboard/kuis-hasil/{hasil}', [App\Http\Controllers\KuisController::class, 'hasilShow'])

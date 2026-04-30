@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeminiCoverException;
 use App\Models\Kuis;
 use App\Models\KuisHasil;
 use App\Models\KuisJawaban;
 use App\Models\KuisPertanyaan;
 use App\Models\KuisOpsi;
 use App\Models\Materi;
+use App\Models\MateriBab;
+use App\Services\GeminiQuizService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -42,20 +45,72 @@ class KuisController extends Controller
 
     public function create()
     {
-        $materiList = Materi::where('status_aktif', true)
+        $materiList = Materi::with(['mataPelajaran', 'level', 'bab'])
+            ->where('status_aktif', true)
             ->orderBy('judul')
             ->get();
 
-        return view('dashboard.kuis.create', compact('materiList'));
+        $prefillMateriId = request('materi_id');
+        $prefillMateriBabId = request('materi_bab_id');
+
+        return view('dashboard.kuis.create', compact('materiList', 'prefillMateriId', 'prefillMateriBabId'));
+    }
+
+    public function generateFromMateri(Request $request, GeminiQuizService $geminiQuizService)
+    {
+        $validated = $request->validate([
+            'materi_id' => [
+                'required',
+                Rule::exists('materi', 'id')->where('status_aktif', true),
+            ],
+            'materi_bab_id' => [
+                'nullable',
+                Rule::exists('materi_bab', 'id')->where('status_aktif', true),
+            ],
+            'jumlah_soal' => 'nullable|integer|min:1|max:10',
+            'kesulitan' => 'nullable|in:mudah,sedang,sulit',
+            'jenis_soal' => 'nullable|in:pilihan,essay,listening,speaking',
+        ], [
+            'materi_id.required' => 'Pilih materi dulu sebelum generate kuis.',
+        ]);
+
+        $materi = Materi::with(['mataPelajaran', 'level'])->findOrFail($validated['materi_id']);
+        $bab = !empty($validated['materi_bab_id']) ? MateriBab::findOrFail($validated['materi_bab_id']) : null;
+        if ($bab && (int) $bab->materi_id !== (int) $materi->id) {
+            return response()->json([
+                'message' => 'Bab yang dipilih tidak sesuai dengan materi.',
+            ], 422);
+        }
+
+        try {
+            $draft = $geminiQuizService->generateFromMateri(
+                $materi,
+                (int) ($validated['jumlah_soal'] ?? 5),
+                (string) ($validated['kesulitan'] ?? 'sedang'),
+                (string) ($validated['jenis_soal'] ?? 'pilihan'),
+                $bab
+            );
+
+            return response()->json([
+                'message' => 'Draft kuis berhasil dibuat.',
+                'data' => $draft,
+            ]);
+        } catch (GeminiCoverException $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], $exception->status());
+        }
     }
 
     public function store(Request $request)
     {
         $validated = $this->validatePayload($request);
+        $relationPayload = $this->resolveMateriRelationPayload($validated);
 
-        DB::transaction(function () use ($validated, $request) {
+        DB::transaction(function () use ($validated, $request, $relationPayload) {
             $kuis = Kuis::create([
-                'materi_id' => $validated['materi_id'] ?? null,
+                'materi_id' => $relationPayload['materi_id'],
+                'materi_bab_id' => $relationPayload['materi_bab_id'],
                 'judul' => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'status_aktif' => $request->boolean('status_aktif'),
@@ -71,14 +126,14 @@ class KuisController extends Controller
 
     public function show(Kuis $kui)
     {
-        $kui->load(['materi', 'pertanyaan.opsi']);
+        $kui->load(['materi', 'materiBab', 'pertanyaan.opsi']);
         return view('dashboard.kuis.show', ['kuis' => $kui]);
     }
 
     public function edit(Kuis $kui)
     {
         $kui->load('pertanyaan.opsi');
-        $materiList = Materi::where('status_aktif', true)
+        $materiList = Materi::with('bab')->where('status_aktif', true)
             ->orderBy('judul')
             ->get();
 
@@ -88,14 +143,16 @@ class KuisController extends Controller
     public function update(Request $request, Kuis $kui)
     {
         $validated = $this->validatePayload($request, $kui);
+        $relationPayload = $this->resolveMateriRelationPayload($validated);
 
-        DB::transaction(function () use ($kui, $validated, $request) {
+        DB::transaction(function () use ($kui, $validated, $request, $relationPayload) {
             $existingAudioPaths = $kui->pertanyaan()
                 ->pluck('audio_path', 'id')
                 ->all();
 
             $kui->update([
-                'materi_id' => $validated['materi_id'] ?? null,
+                'materi_id' => $relationPayload['materi_id'],
+                'materi_bab_id' => $relationPayload['materi_bab_id'],
                 'judul' => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'status_aktif' => $request->boolean('status_aktif'),
@@ -198,6 +255,10 @@ class KuisController extends Controller
                 'nullable',
                 Rule::exists('materi', 'id')->where('status_aktif', true),
             ],
+            'materi_bab_id' => [
+                'nullable',
+                Rule::exists('materi_bab', 'id')->where('status_aktif', true),
+            ],
             'deskripsi' => 'nullable|string',
             'pertanyaan' => 'required|array|min:1',
             'pertanyaan.*.id' => 'nullable|integer',
@@ -265,6 +326,17 @@ class KuisController extends Controller
                     }
                 }
             }
+
+            $materiId = $request->input('materi_id');
+            $materiBabId = $request->input('materi_bab_id');
+            if ($materiBabId) {
+                $bab = MateriBab::find($materiBabId);
+                if (!$bab) {
+                    $validator->errors()->add('materi_bab_id', 'Bab materi tidak ditemukan.');
+                } elseif ($materiId && (int) $bab->materi_id !== (int) $materiId) {
+                    $validator->errors()->add('materi_bab_id', 'Bab yang dipilih tidak sesuai dengan materi.');
+                }
+            }
         });
 
         if ($validator->fails()) {
@@ -321,5 +393,23 @@ class KuisController extends Controller
 
             $order += 1;
         }
+    }
+
+    private function resolveMateriRelationPayload(array $validated): array
+    {
+        $materiBabId = $validated['materi_bab_id'] ?? null;
+        if ($materiBabId) {
+            $bab = MateriBab::findOrFail($materiBabId);
+
+            return [
+                'materi_id' => $bab->materi_id,
+                'materi_bab_id' => $bab->id,
+            ];
+        }
+
+        return [
+            'materi_id' => $validated['materi_id'] ?? null,
+            'materi_bab_id' => null,
+        ];
     }
 }

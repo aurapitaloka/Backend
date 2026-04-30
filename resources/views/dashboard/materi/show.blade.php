@@ -420,6 +420,152 @@
             font-weight: 600;
             color: var(--color-text);
         }
+
+        .chapter-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--color-gray);
+        }
+
+        .chapter-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .chapter-card {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            border-radius: 16px;
+            padding: 1rem 1.1rem;
+            background: #fffdf7;
+        }
+
+        .chapter-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .chapter-meta {
+            margin-top: 0.35rem;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            color: var(--color-muted);
+            font-size: 0.9rem;
+        }
+
+        .chapter-actions {
+            display: flex;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            margin-top: 0.9rem;
+        }
+
+        .flash-alert {
+            padding: 1rem 1.1rem;
+            border-radius: 14px;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+        }
+
+        .flash-alert.success {
+            background: #ECFDF3;
+            color: #166534;
+            border-color: #A7F3D0;
+        }
+
+        .flash-alert.error {
+            background: #FEF2F2;
+            color: #991B1B;
+            border-color: #FECACA;
+        }
+
+        .summary-shell {
+            margin-top: 1rem;
+            border: 1px solid rgba(248, 184, 3, 0.2);
+            border-radius: 18px;
+            background: linear-gradient(180deg, #FFFDF5 0%, #FFFFFF 100%);
+            padding: 1rem 1.05rem;
+        }
+
+        .summary-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.9rem;
+        }
+
+        .summary-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 0.9rem;
+        }
+
+        .summary-card {
+            border-radius: 14px;
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            background: #FFFFFF;
+            padding: 0.95rem 1rem;
+        }
+
+        .summary-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+            margin-bottom: 0.45rem;
+        }
+
+        .summary-text {
+            color: var(--color-text);
+            line-height: 1.7;
+        }
+
+        .summary-list {
+            margin: 0;
+            padding-left: 1.1rem;
+            color: var(--color-text);
+            line-height: 1.7;
+        }
+
+        .keyword-wrap {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .keyword-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.38rem 0.72rem;
+            border-radius: 999px;
+            background: var(--color-accent-light);
+            color: var(--color-accent-dark);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .summary-generated {
+            font-size: 0.82rem;
+            color: var(--color-muted);
+        }
+
+        @media (max-width: 860px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -460,6 +606,14 @@
                 </div>
 
                 <div class="detail-container">
+                    @if(session('success'))
+                        <div class="flash-alert success">{{ session('success') }}</div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="flash-alert error">{{ session('error') }}</div>
+                    @endif
+
                     <!-- Header -->
                     <div class="detail-header">
                         <div style="flex: 1;">
@@ -542,11 +696,148 @@
                                     </a>
                                 </div>
                             </div>
+                        @elseif($materi->tipe_konten == 'bab')
+                            <div style="padding: 1.25rem; background: var(--color-accent-light); border-radius: 12px; color: var(--color-text);">
+                                Buku ini menggunakan struktur <strong>Per Bab</strong>. Isi utama dibaca melalui daftar bab di bawah, bukan dari satu file penuh.
+                            </div>
                         @elseif($materi->tipe_konten == 'teks' && $materi->konten_teks)
                             <div class="text-content">{{ $materi->konten_teks }}</div>
                         @else
                             <div style="padding: 2rem; text-align: center; color: var(--color-muted); background: var(--color-gray-light); border-radius: 12px;">
                                 <p>Konten belum tersedia</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="chapter-section">
+                        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+                            <div>
+                                <h3 class="section-title" style="margin-bottom:0.2rem;">Daftar Bab</h3>
+                                <div style="color: var(--color-muted);">Satu buku bisa memiliki banyak bab seperti reader Wattpad.</div>
+                            </div>
+                            <a href="{{ route('materi.bab.create', $materi->id) }}" class="btn btn-primary">
+                                <i data-lucide="plus-circle"></i>
+                                Tambah Bab
+                            </a>
+                        </div>
+
+                        @if($materi->bab->count() > 0)
+                            <div class="chapter-list">
+                                @foreach($materi->bab as $bab)
+                                    <div class="chapter-card">
+                                        <div class="chapter-head">
+                                            <div>
+                                                <div style="font-size:1.05rem; font-weight:700;">Bab {{ $bab->urutan }}. {{ $bab->judul_bab }}</div>
+                                                <div class="chapter-meta">
+                                                    <span>{{ ucfirst($bab->tipe_konten) }}</span>
+                                                    <span>{{ $bab->status_aktif ? 'Aktif' : 'Nonaktif' }}</span>
+                                                    @if($bab->jumlah_halaman)
+                                                        <span>{{ $bab->jumlah_halaman }} halaman</span>
+                                                    @endif
+                                                    <span>{{ $bab->kuis_count }} kuis</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @if($bab->tipe_konten === 'teks' && $bab->konten_teks)
+                                            <div style="margin-top:0.75rem; color:var(--color-text); line-height:1.7;">
+                                                {{ \Illuminate\Support\Str::limit($bab->konten_teks, 220) }}
+                                            </div>
+                                        @elseif($bab->file_path)
+                                            <div style="margin-top:0.75rem; color:var(--color-muted);">
+                                                File: {{ basename($bab->file_path) }}
+                                            </div>
+                                        @endif
+
+                                        <div class="chapter-actions">
+                                            <form method="POST" action="{{ route('materi.bab.generate-summary', [$materi->id, $bab->id]) }}">
+                                                @csrf
+                                                <button type="submit" class="btn btn-secondary" style="background:#FFF7D6; color:#8A6500;">
+                                                    <i data-lucide="sparkles"></i>
+                                                    {{ $bab->summary_generated_at ? 'Perbarui Rangkuman AI' : 'Generate Rangkuman AI' }}
+                                                </button>
+                                            </form>
+                                            @if($bab->kuis->isNotEmpty())
+                                                <a href="{{ route('kuis.edit', $bab->kuis->first()->id) }}" class="btn btn-primary">
+                                                    <i data-lucide="clipboard-check"></i>
+                                                    Kelola Kuis Bab
+                                                </a>
+                                            @else
+                                                <a href="{{ route('kuis.create', ['materi_id' => $materi->id, 'materi_bab_id' => $bab->id]) }}" class="btn btn-primary">
+                                                    <i data-lucide="clipboard-plus"></i>
+                                                    Buat Kuis Bab
+                                                </a>
+                                            @endif
+                                            <a href="{{ route('materi.bab.edit', [$materi->id, $bab->id]) }}" class="btn btn-secondary">
+                                                <i data-lucide="edit-3"></i>
+                                                Edit Bab
+                                            </a>
+                                            <form method="POST" action="{{ route('materi.bab.destroy', [$materi->id, $bab->id]) }}" onsubmit="return confirm('Hapus bab ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-secondary" style="background:#FEE2E2; color:#991B1B;">
+                                                    <i data-lucide="trash-2"></i>
+                                                    Hapus Bab
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div style="margin-top:0.85rem; padding:0.8rem 0.95rem; border-radius:12px; background:#F8FAFC; color:var(--color-muted); font-size:0.88rem; line-height:1.6;">
+                                            Kuis ditempatkan di akhir bab agar alur belajar tetap runtut. Guru dapat langsung membuat atau mengelola kuis untuk bab ini tanpa memisahkan materi menjadi item terpisah.
+                                        </div>
+
+                                        @if($bab->summary_short || ($bab->summary_key_points ?? []))
+                                            <div class="summary-shell">
+                                                <div class="summary-head">
+                                                    <div>
+                                                        <div class="summary-title">{{ $bab->summary_title ?: 'Rangkuman Bab' }}</div>
+                                                        <div class="summary-generated">
+                                                            Visual rangkuman AI untuk akhir bab
+                                                            @if($bab->summary_generated_at)
+                                                                • diperbarui {{ $bab->summary_generated_at->format('d M Y H:i') }}
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="summary-grid">
+                                                    <div class="summary-card">
+                                                        <div class="summary-label">Inti Bab</div>
+                                                        <div class="summary-text">{{ $bab->summary_short }}</div>
+                                                    </div>
+                                                    <div class="summary-card">
+                                                        <div class="summary-label">Kata Kunci</div>
+                                                        <div class="keyword-wrap">
+                                                            @forelse(($bab->summary_keywords ?? []) as $keyword)
+                                                                <span class="keyword-chip">{{ $keyword }}</span>
+                                                            @empty
+                                                                <span class="summary-text" style="color:var(--color-muted);">Belum ada kata kunci.</span>
+                                                            @endforelse
+                                                        </div>
+                                                    </div>
+                                                    <div class="summary-card">
+                                                        <div class="summary-label">Poin Utama</div>
+                                                        <ul class="summary-list">
+                                                            @foreach(($bab->summary_key_points ?? []) as $point)
+                                                                <li>{{ $point }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    <div class="summary-card">
+                                                        <div class="summary-label">Ingat Ini</div>
+                                                        <div class="summary-text">{{ $bab->summary_memory_tip ?: 'Belum ada tips mengingat.' }}</div>
+                                                        @if($bab->summary_example)
+                                                            <div class="summary-label" style="margin-top:0.85rem;">Contoh Sederhana</div>
+                                                            <div class="summary-text">{{ $bab->summary_example }}</div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div style="margin-top:1rem; padding:1rem 1.1rem; border-radius:14px; background:#F9FAFB; color:var(--color-muted);">
+                                Buku ini belum punya bab. Tambahkan bab pertama agar materi tersusun per chapter.
                             </div>
                         @endif
                     </div>

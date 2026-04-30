@@ -54,6 +54,11 @@ class Materi extends Model
         return $this->hasMany(Kuis::class, 'materi_id');
     }
 
+    public function bab()
+    {
+        return $this->hasMany(MateriBab::class, 'materi_id')->orderBy('urutan');
+    }
+
     public function getFileUrlAttribute(): ?string
     {
         if (!$this->file_path) {

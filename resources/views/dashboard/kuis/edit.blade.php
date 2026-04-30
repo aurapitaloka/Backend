@@ -115,6 +115,19 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="materi_bab_id">Bab Materi (Opsional)</label>
+                            <select id="materi_bab_id" name="materi_bab_id">
+                                <option value="">-- Pilih Bab --</option>
+                                @foreach($materiList as $materi)
+                                    @foreach($materi->bab as $bab)
+                                        <option value="{{ $bab->id }}" data-materi-id="{{ $materi->id }}" {{ old('materi_bab_id', $kuis->materi_bab_id) == $bab->id ? 'selected' : '' }}>
+                                            {{ $materi->judul }} - Bab {{ $bab->urutan }}: {{ $bab->judul_bab }}
+                                        </option>
+                                    @endforeach
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="deskripsi">Deskripsi</label>
                             <textarea id="deskripsi" name="deskripsi" rows="3">{{ old('deskripsi', $kuis->deskripsi) }}</textarea>
                         </div>
@@ -287,6 +300,42 @@
 
     <script>
         (function() {
+            const materiSelect = document.getElementById('materi_id');
+            const materiBabSelect = document.getElementById('materi_bab_id');
+
+            function syncBabOptions() {
+                if (!materiBabSelect) return;
+                const selectedMateriId = materiSelect ? materiSelect.value : '';
+                Array.from(materiBabSelect.options).forEach((option, index) => {
+                    if (index === 0) {
+                        option.hidden = false;
+                        return;
+                    }
+                    const visible = !selectedMateriId || option.dataset.materiId === selectedMateriId;
+                    option.hidden = !visible;
+                    if (!visible && option.selected) {
+                        materiBabSelect.value = '';
+                    }
+                });
+            }
+
+            function syncMateriFromBabSelection() {
+                if (!materiBabSelect || !materiSelect) return;
+                const selectedOption = materiBabSelect.options[materiBabSelect.selectedIndex];
+                if (!selectedOption || !selectedOption.dataset.materiId) return;
+                materiSelect.value = selectedOption.dataset.materiId;
+                syncBabOptions();
+            }
+
+            if (materiSelect) {
+                materiSelect.addEventListener('change', syncBabOptions);
+                syncBabOptions();
+            }
+
+            if (materiBabSelect) {
+                materiBabSelect.addEventListener('change', syncMateriFromBabSelection);
+            }
+
             const container = document.getElementById('questionContainer');
             const addBtn = document.getElementById('addQuestion');
 

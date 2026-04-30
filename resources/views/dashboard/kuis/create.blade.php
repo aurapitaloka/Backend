@@ -90,6 +90,13 @@
         .type-card-desc { display: block; color: var(--color-text-light); font-size: 0.8rem; line-height: 1.35; }
         .type-card-check { position: absolute; right: 0.65rem; top: 0.65rem; width: 18px; height: 18px; border-radius: 50%; border: 1px solid #D1D5DB; background: #FFFFFF; }
         .type-card.active .type-card-check { border-color: var(--color-accent); background: var(--color-accent); box-shadow: inset 0 0 0 4px #FFFFFF; }
+        .ai-generate-panel { border: 1px solid #FDE68A; background: linear-gradient(180deg, #FFFBEF 0%, #FFFFFF 100%); border-radius: 14px; padding: 1rem; margin-top: 1rem; }
+        .ai-generate-toolbar { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; align-items: end; }
+        .ai-generate-status { display: none; margin-top: 0.85rem; padding: 0.85rem 1rem; border-radius: 12px; font-size: 0.92rem; }
+        .ai-generate-status.info { display: block; background: #FFF7D6; color: #8A6500; }
+        .ai-generate-status.success { display: block; background: #ECFDF3; color: #166534; }
+        .ai-generate-status.error { display: block; background: #FEF2F2; color: #B91C1C; }
+        .ai-generate-note { margin-top: 0.8rem; font-size: 0.84rem; color: var(--color-text-light); }
     </style>
 </head>
 <body>
@@ -156,10 +163,24 @@
                                 <select id="materi_id" name="materi_id">
                                     <option value="">-- Tanpa Materi --</option>
                                     @foreach($materiList as $materi)
-                                        <option value="{{ $materi->id }}" {{ old('materi_id') == $materi->id ? 'selected' : '' }}>{{ $materi->judul }}</option>
+                                        <option value="{{ $materi->id }}" {{ old('materi_id', $prefillMateriId ?? '') == $materi->id ? 'selected' : '' }}>{{ $materi->judul }}</option>
                                     @endforeach
                                 </select>
                                 <div class="field-hint">Pilih materi jika kuis terkait materi tertentu.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="materi_bab_id">Bab Materi (Opsional)</label>
+                                <select id="materi_bab_id" name="materi_bab_id">
+                                    <option value="">-- Pilih Bab --</option>
+                                    @foreach($materiList as $materi)
+                                        @foreach($materi->bab as $bab)
+                                            <option value="{{ $bab->id }}" data-materi-id="{{ $materi->id }}" {{ old('materi_bab_id', $prefillMateriBabId ?? '') == $bab->id ? 'selected' : '' }}>
+                                                {{ $materi->judul }} - Bab {{ $bab->urutan }}: {{ $bab->judul_bab }}
+                                            </option>
+                                        @endforeach
+                                    @endforeach
+                                </select>
+                                <div class="field-hint">Jika dipilih, kuis akan menempel ke bab tertentu di dalam buku.</div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -183,7 +204,7 @@
                         <div class="card-header">
                             <div>
                                 <div class="section-title"><i data-lucide="help-circle"></i> Pertanyaan</div>
-                                <div class="section-subtitle">Minimal 1 pertanyaan dengan opsi A-D.</div>
+                                <div class="section-subtitle">Minimal 1 pertanyaan dengan opsi A-D. Bisa dibuat manual atau dibantu Gemini dari materi.</div>
                             </div>
                             <button type="button" class="btn btn-outline btn-sm" id="addQuestion">
                                 <i data-lucide="plus-circle"></i>
@@ -191,6 +212,46 @@
                             </button>
                         </div>
                         <div class="section-note">Tips: Gunakan tipe soal yang sesuai. Pilihan ganda untuk evaluasi cepat, essay untuk jawaban mendalam, listening/speaking untuk latihan audio.</div>
+                        <div class="ai-generate-panel">
+                            <div class="section-title"><i data-lucide="sparkles"></i> Generate Soal dari Materi</div>
+                            <div class="section-subtitle">Gemini akan membuat draft pilihan ganda dari isi materi. Hasilnya tetap bisa kamu edit sebelum simpan.</div>
+                            <div class="ai-generate-toolbar">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="ai_jenis_soal">Jenis Soal</label>
+                                    <select id="ai_jenis_soal">
+                                        <option value="pilihan" selected>Pilihan Ganda</option>
+                                        <option value="essay">Essay</option>
+                                        <option value="listening">Listening</option>
+                                        <option value="speaking">Speaking</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="ai_jumlah_soal">Jumlah Soal</label>
+                                    <select id="ai_jumlah_soal">
+                                        <option value="3">3 soal</option>
+                                        <option value="5" selected>5 soal</option>
+                                        <option value="7">7 soal</option>
+                                        <option value="10">10 soal</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="ai_kesulitan">Tingkat Kesulitan</label>
+                                    <select id="ai_kesulitan">
+                                        <option value="mudah">Mudah</option>
+                                        <option value="sedang" selected>Sedang</option>
+                                        <option value="sulit">Sulit</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <button type="button" class="btn btn-primary" id="generateQuizAiBtn" style="width:100%;">
+                                        <i data-lucide="sparkles"></i>
+                                        Generate Draft
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="aiGenerateStatus" class="ai-generate-status"></div>
+                            <div class="ai-generate-note">Versi ini paling optimal untuk materi teks atau file PDF. Jika form sudah berisi pertanyaan, draft baru akan menggantikan pertanyaan lama setelah konfirmasi.</div>
+                        </div>
                         <div id="questionContainer"></div>
                     </div>
 
@@ -238,6 +299,51 @@
         (function() {
             const container = document.getElementById('questionContainer');
             const addBtn = document.getElementById('addQuestion');
+            const materiSelect = document.getElementById('materi_id');
+            const materiBabSelect = document.getElementById('materi_bab_id');
+            const judulInput = document.getElementById('judul');
+            const deskripsiInput = document.getElementById('deskripsi');
+            const aiJumlahSoalSelect = document.getElementById('ai_jumlah_soal');
+            const aiKesulitanSelect = document.getElementById('ai_kesulitan');
+            const aiJenisSoalSelect = document.getElementById('ai_jenis_soal');
+            const generateQuizAiBtn = document.getElementById('generateQuizAiBtn');
+            const aiGenerateStatus = document.getElementById('aiGenerateStatus');
+
+            function syncBabOptions() {
+                if (!materiBabSelect) {
+                    return;
+                }
+
+                const selectedMateriId = materiSelect ? materiSelect.value : '';
+                Array.from(materiBabSelect.options).forEach((option, index) => {
+                    if (index === 0) {
+                        option.hidden = false;
+                        return;
+                    }
+
+                    const optionMateriId = option.dataset.materiId || '';
+                    const visible = !selectedMateriId || selectedMateriId === optionMateriId;
+                    option.hidden = !visible;
+
+                    if (!visible && option.selected) {
+                        materiBabSelect.value = '';
+                    }
+                });
+            }
+
+            function syncMateriFromBabSelection() {
+                if (!materiBabSelect || !materiSelect) {
+                    return;
+                }
+
+                const selectedOption = materiBabSelect.options[materiBabSelect.selectedIndex];
+                if (!selectedOption || !selectedOption.dataset.materiId) {
+                    return;
+                }
+
+                materiSelect.value = selectedOption.dataset.materiId;
+                syncBabOptions();
+            }
 
             function buildQuestion(index) {
                 const wrapper = document.createElement('div');
@@ -502,6 +608,133 @@
                 return wrapper;
             }
 
+            function setAiStatus(message, type = 'info') {
+                if (!aiGenerateStatus) {
+                    return;
+                }
+
+                if (!message) {
+                    aiGenerateStatus.textContent = '';
+                    aiGenerateStatus.className = 'ai-generate-status';
+                    return;
+                }
+
+                aiGenerateStatus.textContent = message;
+                aiGenerateStatus.className = `ai-generate-status ${type}`;
+            }
+
+            function fillQuestionData(wrapper, questionData) {
+                const textInput = wrapper.querySelector('input[name$="[teks]"]');
+                const typeSelect = wrapper.querySelector('.q-type');
+                const benarSelect = wrapper.querySelector('select[name$="[benar]"]');
+                const opsiA = wrapper.querySelector('input[name$="[opsi][A]"]');
+                const opsiB = wrapper.querySelector('input[name$="[opsi][B]"]');
+                const opsiC = wrapper.querySelector('input[name$="[opsi][C]"]');
+                const opsiD = wrapper.querySelector('input[name$="[opsi][D]"]');
+                const essayJawaban = wrapper.querySelector('.q-essay textarea[name$="[jawaban_teks]"]');
+                const essayKeyword = wrapper.querySelector('.q-essay input[name$="[keyword]"]');
+                const essayBahasa = wrapper.querySelector('.q-essay select[name$="[bahasa]"]');
+                const listeningAudioText = wrapper.querySelector('.q-listening textarea[name$="[audio_text]"]');
+                const listeningBahasa = wrapper.querySelector('.q-listening select[name$="[bahasa]"]');
+                const speakingJawaban = wrapper.querySelector('.q-speaking input[name$="[jawaban_teks]"]');
+                const speakingAudioText = wrapper.querySelector('.q-speaking textarea[name$="[audio_text]"]');
+                const speakingBahasa = wrapper.querySelector('.q-speaking select[name$="[bahasa]"]');
+
+                if (textInput) textInput.value = questionData.teks || '';
+                if (typeSelect) {
+                    typeSelect.value = questionData.tipe || 'pilihan';
+                    typeSelect.dispatchEvent(new Event('change'));
+                }
+                if (opsiA) opsiA.value = questionData.opsi?.A || '';
+                if (opsiB) opsiB.value = questionData.opsi?.B || '';
+                if (opsiC) opsiC.value = questionData.opsi?.C || '';
+                if (opsiD) opsiD.value = questionData.opsi?.D || '';
+                if (benarSelect) benarSelect.value = questionData.benar || '';
+                if (essayJawaban) essayJawaban.value = questionData.jawaban_teks || '';
+                if (essayKeyword) essayKeyword.value = questionData.keyword || '';
+                if (essayBahasa) essayBahasa.value = questionData.bahasa || 'id-ID';
+                if (listeningAudioText) listeningAudioText.value = questionData.audio_text || '';
+                if (listeningBahasa) listeningBahasa.value = questionData.bahasa || 'id-ID';
+                if (speakingJawaban) speakingJawaban.value = questionData.jawaban_teks || '';
+                if (speakingAudioText) speakingAudioText.value = questionData.audio_text || '';
+                if (speakingBahasa) speakingBahasa.value = questionData.bahasa || 'id-ID';
+            }
+
+            function replaceQuestions(questions) {
+                container.innerHTML = '';
+                questions.forEach((questionData, index) => {
+                    const wrapper = buildQuestion(index);
+                    container.appendChild(wrapper);
+                    fillQuestionData(wrapper, questionData);
+                });
+                renumber();
+                lucide.createIcons();
+            }
+
+            async function generateDraftFromMateri() {
+                const materiId = materiSelect ? materiSelect.value : '';
+                const materiBabId = materiBabSelect ? materiBabSelect.value : '';
+                if (!materiId) {
+                    setAiStatus('Pilih materi dulu sebelum generate draft kuis.', 'error');
+                    materiSelect?.focus();
+                    return;
+                }
+
+                const existingQuestions = container.querySelectorAll('.question').length;
+                if (existingQuestions > 0) {
+                    const hasContent = Array.from(container.querySelectorAll('input[name$="[teks]"]')).some((input) => input.value.trim() !== '');
+                    if (hasContent && !confirm('Draft dari Gemini akan menggantikan pertanyaan yang sedang ada di form. Lanjutkan?')) {
+                        return;
+                    }
+                }
+
+                setAiStatus('Gemini sedang membuat draft kuis dari materi...', 'info');
+                generateQuizAiBtn.disabled = true;
+
+                try {
+                    const response = await fetch('{{ route("kuis.generate-from-materi", [], false) }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        },
+                        body: JSON.stringify({
+                            materi_id: materiId,
+                            materi_bab_id: materiBabId || null,
+                            jumlah_soal: Number(aiJumlahSoalSelect?.value || 5),
+                            kesulitan: aiKesulitanSelect?.value || 'sedang',
+                            jenis_soal: aiJenisSoalSelect?.value || 'pilihan',
+                        }),
+                    });
+
+                    const payload = await response.json();
+                    if (!response.ok) {
+                        throw new Error(
+                            payload.message
+                            || (payload.errors ? Object.values(payload.errors).flat()[0] : null)
+                            || 'Generate draft kuis gagal.'
+                        );
+                    }
+
+                    const draft = payload.data || {};
+                    if (judulInput && (!judulInput.value || judulInput.value.trim() === '')) {
+                        judulInput.value = draft.judul || '';
+                    }
+                    if (deskripsiInput && (!deskripsiInput.value || deskripsiInput.value.trim() === '')) {
+                        deskripsiInput.value = draft.deskripsi || '';
+                    }
+
+                    replaceQuestions(Array.isArray(draft.pertanyaan) ? draft.pertanyaan : []);
+                    setAiStatus('Draft kuis berhasil dibuat. Periksa dan edit lagi sebelum disimpan.', 'success');
+                } catch (error) {
+                    setAiStatus(error.message || 'Generate draft kuis gagal.', 'error');
+                } finally {
+                    generateQuizAiBtn.disabled = false;
+                    lucide.createIcons();
+                }
+            }
+
             function renumber() {
                 const items = container.querySelectorAll('.question');
                 items.forEach((item, idx) => {
@@ -518,6 +751,19 @@
                 container.appendChild(buildQuestion(index));
                 lucide.createIcons();
             });
+
+            if (materiSelect) {
+                materiSelect.addEventListener('change', syncBabOptions);
+                syncBabOptions();
+            }
+
+            if (materiBabSelect) {
+                materiBabSelect.addEventListener('change', syncMateriFromBabSelection);
+            }
+
+            if (generateQuizAiBtn) {
+                generateQuizAiBtn.addEventListener('click', generateDraftFromMateri);
+            }
 
             // default 1 question
             container.appendChild(buildQuestion(0));

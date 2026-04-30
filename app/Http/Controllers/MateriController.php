@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeminiCoverException;
 use App\Models\Level;
 use App\Models\Materi;
+use App\Models\MateriBab;
 use App\Models\MataPelajaran;
+use App\Services\GeminiCoverService;
 use App\Services\PdfCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MateriController extends Controller
 {
@@ -25,6 +29,7 @@ class MateriController extends Controller
         $user = Auth::user();
 
         $materi = Materi::with(['pengguna', 'level', 'mataPelajaran'])
+            ->withCount('bab')
             ->when($this->isSiswaApiRequest(), function ($query) {
                 $query->where('status_aktif', true);
             })
@@ -80,11 +85,23 @@ class MateriController extends Controller
             'deskripsi' => 'nullable|string',
             'mata_pelajaran_id' => 'nullable|exists:mata_pelajaran,id',
             'level_id' => 'nullable|exists:level,id',
-            'tipe_konten' => 'required|in:teks,file',
+            'tipe_konten' => 'required|in:teks,file,bab',
             'konten_teks' => 'nullable|string|required_if:tipe_konten,teks',
             'file_path' => "nullable|file|mimes:pdf,doc,docx|max:{$maxUploadKb}|required_if:tipe_konten,file",
             'pdf_page_selection' => 'nullable|string',
+            'bab' => 'nullable|array',
+            'bab.*.judul_bab' => 'nullable|string|max:200',
+            'bab.*.urutan' => 'nullable|integer|min:1',
+            'bab.*.tipe_konten' => 'nullable|in:teks,file',
+            'bab.*.konten_teks' => 'nullable|string',
+            'bab.*.pdf_page_selection' => 'nullable|string',
+            'bab.*.jumlah_halaman' => 'nullable|integer|min:1',
+            'bab.*.status_aktif' => 'nullable|boolean',
+            'bab_files' => 'nullable|array',
+            'bab_files.*' => "nullable|file|mimes:pdf,doc,docx|max:{$maxUploadKb}",
             'cover_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'generated_cover_temp_path' => 'nullable|string',
+            'use_generated_cover' => 'nullable|boolean',
             'jumlah_halaman' => 'nullable|integer|min:1',
             'status_aktif' => 'boolean',
         ], [
@@ -100,9 +117,13 @@ class MateriController extends Controller
             'cover_path.image' => 'Cover buku harus berupa gambar.',
             'cover_path.mimes' => 'Format cover buku harus JPG, JPEG, PNG, atau WEBP.',
             'cover_path.max' => 'Ukuran cover buku terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
+            'generated_cover_temp_path.string' => 'Path cover AI tidak valid.',
             'jumlah_halaman.integer' => 'Jumlah halaman harus berupa angka.',
             'jumlah_halaman.min' => 'Jumlah halaman minimal 1.',
+            'bab.array' => 'Data bab tidak valid.',
         ]);
+
+        $this->validateBabEntries($request, $validated);
 
         // Handle file upload
         if ($request->hasFile('file_path')) {
@@ -115,6 +136,11 @@ class MateriController extends Controller
             if ($storedFile['page_count'] !== null) {
                 $validated['jumlah_halaman'] = $storedFile['page_count'];
             }
+        } elseif (($validated['tipe_konten'] ?? null) === 'bab') {
+            $validated['file_path'] = null;
+            $validated['pdf_page_selection'] = null;
+            $validated['konten_teks'] = null;
+            $validated['jumlah_halaman'] = null;
         } else {
             $validated['pdf_page_selection'] = null;
         }
@@ -124,12 +150,24 @@ class MateriController extends Controller
             $coverName = time() . '_cover_' . $cover->getClientOriginalName();
             $coverPath = $cover->storeAs('materi/covers', $coverName, 'public');
             $validated['cover_path'] = $coverPath;
+        } elseif ($request->boolean('use_generated_cover') && $request->filled('generated_cover_temp_path')) {
+            $validated['cover_path'] = $this->moveGeneratedCoverToPermanent(
+                (string) $request->input('generated_cover_temp_path')
+            );
+        } elseif ($request->filled('generated_cover_temp_path')) {
+            $this->deleteGeneratedTempCover((string) $request->input('generated_cover_temp_path'));
         }
 
         $validated['dibuat_oleh'] = Auth::id();
         $validated['status_aktif'] = $request->has('status_aktif') ? true : false;
 
-        Materi::create($validated);
+        DB::transaction(function () use ($validated, $request) {
+            $materi = Materi::create($validated);
+
+            if (($validated['tipe_konten'] ?? null) === 'bab') {
+                $this->storeBabEntries($materi, $request);
+            }
+        });
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json(['message' => 'Materi berhasil ditambahkan!'], 201);
         }
@@ -138,12 +176,73 @@ class MateriController extends Controller
             ->with('success', 'Materi berhasil ditambahkan!');
     }
 
+    public function generateCoverPreview(
+        Request $request,
+        GeminiCoverService $geminiCoverService
+    ) {
+        $validated = $request->validate([
+            'judul' => 'required|string|max:200',
+            'deskripsi' => 'nullable|string',
+            'mata_pelajaran' => 'nullable|string|max:200',
+            'level' => 'nullable|string|max:200',
+            'prompt_tambahan' => 'nullable|string|max:500',
+            'previous_temp_path' => 'nullable|string',
+        ], [
+            'judul.required' => 'Judul wajib diisi sebelum generate cover.',
+        ]);
+
+        try {
+            $generated = $geminiCoverService->generateBookCover($validated);
+            $extension = $this->extensionFromMimeType($generated['mime_type']);
+            $fileName = 'temp/covers/' . now()->format('YmdHis') . '_' . Str::uuid() . '.' . $extension;
+
+            Storage::disk('public')->put($fileName, $generated['binary']);
+
+            if (!empty($validated['previous_temp_path'])) {
+                $this->deleteGeneratedTempCover((string) $validated['previous_temp_path']);
+            }
+
+            return response()->json([
+                'message' => 'Preview cover berhasil dibuat.',
+                'temp_path' => $fileName,
+                'url' => route('media.public.show', ['path' => $fileName], false),
+                'prompt' => $generated['prompt'],
+            ]);
+        } catch (GeminiCoverException $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], $exception->status());
+        }
+    }
+
+    public function discardCoverPreview(Request $request)
+    {
+        $validated = $request->validate([
+            'temp_path' => 'required|string',
+        ]);
+
+        $this->deleteGeneratedTempCover((string) $validated['temp_path']);
+
+        return response()->json([
+            'message' => 'Preview cover dibuang.',
+        ]);
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $materi = Materi::with(['pengguna', 'level', 'mataPelajaran'])->findOrFail($id);
+        $materi = Materi::with([
+            'pengguna',
+            'level',
+            'mataPelajaran',
+            'bab' => function ($query) {
+                $query->with(['kuis' => function ($kuisQuery) {
+                    $kuisQuery->orderByDesc('created_at');
+                }])->withCount('kuis')->orderBy('urutan');
+            },
+        ])->findOrFail($id);
 
         if ($this->isSiswaApiRequest()) {
             if (!$materi->status_aktif) {
@@ -163,7 +262,7 @@ class MateriController extends Controller
      */
     public function edit(string $id)
     {
-        $materi = Materi::findOrFail($id);
+        $materi = Materi::with('bab')->findOrFail($id);
         $levels = Level::where('status_aktif', true)->orderBy('nama')->get();
         $mataPelajarans = MataPelajaran::where('status_aktif', true)->orderBy('nama')->get();
         return view('dashboard.materi.edit', compact('materi', 'levels', 'mataPelajarans'));
@@ -182,7 +281,7 @@ class MateriController extends Controller
             'deskripsi' => 'nullable|string',
             'mata_pelajaran_id' => 'nullable|exists:mata_pelajaran,id',
             'level_id' => 'nullable|exists:level,id',
-            'tipe_konten' => 'required|in:teks,file',
+            'tipe_konten' => 'required|in:teks,file,bab',
             'konten_teks' => 'nullable|string|required_if:tipe_konten,teks',
             'file_path' => "nullable|file|mimes:pdf,doc,docx|max:{$maxUploadKb}",
             'pdf_page_selection' => 'nullable|string',
@@ -222,6 +321,15 @@ class MateriController extends Controller
             if ($storedFile['page_count'] !== null) {
                 $validated['jumlah_halaman'] = $storedFile['page_count'];
             }
+        } elseif (($validated['tipe_konten'] ?? null) === 'bab') {
+            if ($materi->file_path && Storage::disk('public')->exists($materi->file_path)) {
+                Storage::disk('public')->delete($materi->file_path);
+            }
+
+            $validated['file_path'] = null;
+            $validated['pdf_page_selection'] = null;
+            $validated['konten_teks'] = null;
+            $validated['jumlah_halaman'] = null;
         } else {
             // Keep existing file if not uploading new one
             $validated['file_path'] = $materi->file_path;
@@ -300,6 +408,136 @@ class MateriController extends Controller
         return (request()->wantsJson() || request()->is('api/*'))
             && $user
             && $user->peran === 'siswa';
+    }
+
+    private function validateBabEntries(Request $request, array $validated): void
+    {
+        if (($validated['tipe_konten'] ?? null) !== 'bab') {
+            return;
+        }
+
+        $babEntries = $request->input('bab', []);
+        if (!is_array($babEntries) || count($babEntries) === 0) {
+            throw ValidationException::withMessages([
+                'bab' => 'Tambahkan minimal 1 bab untuk materi dengan tipe Per Bab.',
+            ]);
+        }
+
+        $babFiles = $request->file('bab_files', []);
+
+        foreach ($babEntries as $index => $bab) {
+            $tipeKonten = $bab['tipe_konten'] ?? null;
+            $judulBab = trim((string) ($bab['judul_bab'] ?? ''));
+
+            if ($judulBab === '') {
+                throw ValidationException::withMessages([
+                    "bab.$index.judul_bab" => 'Judul bab wajib diisi.',
+                ]);
+            }
+
+            if (!in_array($tipeKonten, ['teks', 'file'], true)) {
+                throw ValidationException::withMessages([
+                    "bab.$index.tipe_konten" => 'Tipe konten bab wajib dipilih.',
+                ]);
+            }
+
+            if ($tipeKonten === 'teks' && trim((string) ($bab['konten_teks'] ?? '')) === '') {
+                throw ValidationException::withMessages([
+                    "bab.$index.konten_teks" => 'Konten teks bab wajib diisi jika tipe bab adalah teks.',
+                ]);
+            }
+
+            if ($tipeKonten === 'file' && empty($babFiles[$index])) {
+                throw ValidationException::withMessages([
+                    "bab_files.$index" => 'File bab wajib diupload jika tipe bab adalah file.',
+                ]);
+            }
+        }
+    }
+
+    private function storeBabEntries(Materi $materi, Request $request): void
+    {
+        $babEntries = $request->input('bab', []);
+        $babFiles = $request->file('bab_files', []);
+
+        foreach ($babEntries as $index => $bab) {
+            $payload = [
+                'materi_id' => $materi->id,
+                'judul_bab' => trim((string) ($bab['judul_bab'] ?? '')),
+                'urutan' => (int) ($bab['urutan'] ?? ($index + 1)),
+                'tipe_konten' => (string) ($bab['tipe_konten'] ?? 'teks'),
+                'konten_teks' => $bab['tipe_konten'] === 'teks' ? ($bab['konten_teks'] ?? null) : null,
+                'pdf_page_selection' => null,
+                'jumlah_halaman' => !empty($bab['jumlah_halaman']) ? (int) $bab['jumlah_halaman'] : null,
+                'status_aktif' => array_key_exists('status_aktif', $bab) ? (bool) $bab['status_aktif'] : true,
+            ];
+
+            if (($bab['tipe_konten'] ?? null) === 'file' && !empty($babFiles[$index])) {
+                $storedFile = $this->storeMateriFile(
+                    $babFiles[$index],
+                    $bab['pdf_page_selection'] ?? null
+                );
+                $payload['file_path'] = $storedFile['path'];
+                $payload['pdf_page_selection'] = $bab['pdf_page_selection'] ?? null;
+                if ($storedFile['page_count'] !== null) {
+                    $payload['jumlah_halaman'] = $storedFile['page_count'];
+                }
+            } else {
+                $payload['file_path'] = null;
+            }
+
+            MateriBab::create($payload);
+        }
+    }
+
+    private function moveGeneratedCoverToPermanent(string $tempPath): string
+    {
+        $normalizedPath = $this->normalizeGeneratedTempPath($tempPath);
+
+        if (!Storage::disk('public')->exists($normalizedPath)) {
+            throw ValidationException::withMessages([
+                'cover_path' => 'Preview cover AI tidak ditemukan. Silakan generate ulang.',
+            ]);
+        }
+
+        $extension = pathinfo($normalizedPath, PATHINFO_EXTENSION) ?: 'png';
+        $targetPath = 'materi/covers/' . now()->format('YmdHis') . '_' . Str::uuid() . '.' . $extension;
+
+        Storage::disk('public')->copy($normalizedPath, $targetPath);
+        Storage::disk('public')->delete($normalizedPath);
+
+        return $targetPath;
+    }
+
+    private function deleteGeneratedTempCover(string $tempPath): void
+    {
+        $normalizedPath = $this->normalizeGeneratedTempPath($tempPath);
+
+        if (Storage::disk('public')->exists($normalizedPath)) {
+            Storage::disk('public')->delete($normalizedPath);
+        }
+    }
+
+    private function normalizeGeneratedTempPath(string $path): string
+    {
+        $normalizedPath = trim(str_replace('\\', '/', $path), '/');
+
+        if (!str_starts_with($normalizedPath, 'temp/covers/')) {
+            throw ValidationException::withMessages([
+                'cover_path' => 'Path preview cover AI tidak valid.',
+            ]);
+        }
+
+        return $normalizedPath;
+    }
+
+    private function extensionFromMimeType(string $mimeType): string
+    {
+        return match (strtolower($mimeType)) {
+            'image/jpeg', 'image/jpg' => 'jpg',
+            'image/webp' => 'webp',
+            default => 'png',
+        };
     }
 
     private function storeMateriFile($file, $pageSelection = null): array
