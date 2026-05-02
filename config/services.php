@@ -41,4 +41,10 @@ return [
         'text_model' => env('GEMINI_TEXT_MODEL', 'gemini-2.5-flash-lite'),
     ],
 
+    'huggingface' => [
+        'api_token' => env('HF_API_TOKEN'),
+        'image_model' => env('HF_IMAGE_MODEL', 'black-forest-labs/FLUX.1-schnell'),
+        'base_url' => env('HF_BASE_URL', 'https://router.huggingface.co/hf-inference/models'),
+    ],
+
 ];

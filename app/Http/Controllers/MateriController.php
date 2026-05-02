@@ -7,7 +7,7 @@ use App\Models\Level;
 use App\Models\Materi;
 use App\Models\MateriBab;
 use App\Models\MataPelajaran;
-use App\Services\GeminiCoverService;
+use App\Services\HuggingFaceCoverService;
 use App\Services\PdfCompressionService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -178,7 +178,7 @@ class MateriController extends Controller
 
     public function generateCoverPreview(
         Request $request,
-        GeminiCoverService $geminiCoverService
+        HuggingFaceCoverService $huggingFaceCoverService
     ) {
         $validated = $request->validate([
             'judul' => 'required|string|max:200',
@@ -192,7 +192,7 @@ class MateriController extends Controller
         ]);
 
         try {
-            $generated = $geminiCoverService->generateBookCover($validated);
+            $generated = $huggingFaceCoverService->generateBookCover($validated);
             $extension = $this->extensionFromMimeType($generated['mime_type']);
             $fileName = 'temp/covers/' . now()->format('YmdHis') . '_' . Str::uuid() . '.' . $extension;
 
