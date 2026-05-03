@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\LandingItem;
+use App\Models\Materi;
 use App\Models\Ulasan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class LandingPageController extends Controller
 {
@@ -16,7 +18,29 @@ class LandingPageController extends Controller
         $flowHeader = LandingItem::section('flow-header')->active()->orderBy('sort_order')->first();
         $steps = LandingItem::section('step')->active()->orderBy('sort_order')->get();
         $collectionHeader = LandingItem::section('collection-header')->active()->orderBy('sort_order')->first();
-        $books = LandingItem::section('book')->active()->orderBy('sort_order')->get();
+        $books = Materi::with(['mataPelajaran', 'level'])
+            ->where('status_aktif', true)
+            ->latest()
+            ->take(6)
+            ->get()
+            ->map(function (Materi $materi) {
+                $badgeSource = trim((string) optional($materi->mataPelajaran)->nama);
+
+                return (object) [
+                    'title' => $materi->judul,
+                    'description' => $materi->deskripsi ?: 'Materi belajar siap dipelajari di Ruma.',
+                    'badge' => $badgeSource !== '' ? Str::limit($badgeSource, 12, '') : 'Materi',
+                    'image_url' => $materi->cover_url,
+                    'button_label' => 'Lihat Detail',
+                    'button_url' => auth()->check()
+                        ? route('dashboard.siswa.materi.show', $materi->id, false)
+                        : route('login', [], false),
+                    'meta' => trim(collect([
+                        optional($materi->level)->nama,
+                        optional($materi->mataPelajaran)->nama,
+                    ])->filter()->implode(' • ')),
+                ];
+            });
         $app = LandingItem::section('app')->active()->orderBy('sort_order')->first();
         $footer = LandingItem::section('footer')->active()->orderBy('sort_order')->first();
 
@@ -88,37 +112,10 @@ class LandingPageController extends Controller
             'title' => 'Koleksi Materi',
             'description' => 'Materi belajar terstruktur berdasarkan kelas dan mata pelajaran.',
             'button_label' => 'Lihat Semua',
-            'button_url' => '#',
+            'button_url' => auth()->check()
+                ? route('dashboard.siswa.materi', [], false)
+                : route('login', [], false),
         ];
-
-        if ($books->isEmpty()) {
-            $books = collect([
-                (object) [
-                    'title' => 'Bahasa Indonesia',
-                    'description' => 'Materi membaca, menulis, dan memahami teks secara interaktif.',
-                    'badge' => 'B. Indo',
-                    'image_path' => null,
-                    'button_label' => 'Lihat Detail',
-                    'button_url' => '#',
-                ],
-                (object) [
-                    'title' => 'Matematika',
-                    'description' => 'Latihan logika, hitung, dan pemecahan masalah secara bertahap.',
-                    'badge' => 'MTK',
-                    'image_path' => null,
-                    'button_label' => 'Lihat Detail',
-                    'button_url' => '#',
-                ],
-                (object) [
-                    'title' => 'IPA',
-                    'description' => 'Materi sains dasar untuk memahami alam dan lingkungan sekitar.',
-                    'badge' => 'IPA',
-                    'image_path' => null,
-                    'button_label' => 'Lihat Detail',
-                    'button_url' => '#',
-                ],
-            ]);
-        }
 
         $app = $app ?? (object) [
             'title' => 'Dapatkan Aplikasi Ruma',

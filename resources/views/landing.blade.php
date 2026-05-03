@@ -475,7 +475,7 @@
                 </p>
             </div>
 
-            <a href="{{ optional($collectionHeader)->button_url ?? '#' }}"
+            <a href="{{ optional($collectionHeader)->button_url ?? route('login', [], false) }}"
                class="inline-flex items-center gap-2 px-6 py-3
                       bg-yellow-400 text-gray-900 font-bold rounded-xl
                       hover:bg-yellow-500 transition shadow-md">
@@ -486,10 +486,10 @@
 
         <!-- Carousel -->
         <div class="flex gap-8 overflow-x-auto pb-6 snap-x snap-mandatory">
-            @foreach($books as $book)
+            @forelse($books as $book)
                 @php
-                    $bookImage = $book->image_path
-                        ? Storage::url($book->image_path)
+                    $bookImage = $book->image_url
+                        ? $book->image_url
                         : asset('images/book-shelf-' . (($loop->index % 3) + 1) . '.png');
                 @endphp
                 <div class="group snap-start flex-shrink-0 w-80 rounded-2xl
@@ -513,6 +513,12 @@
                     </div>
 
                     <div class="p-6">
+                        @if(!empty($book->meta))
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 mb-3">
+                                {{ $book->meta }}
+                            </p>
+                        @endif
+
                         <h3 class="text-2xl font-bold text-gray-900 mb-2">
                             {{ $book->title }}
                         </h3>
@@ -520,7 +526,7 @@
                             {{ $book->description }}
                         </p>
 
-                        <a href="{{ $book->button_url ?? '#' }}"
+                        <a href="{{ $book->button_url ?? route('login', [], false) }}"
                            class="inline-block w-full text-center px-4 py-3
                                   bg-gray-900 text-white font-semibold rounded-xl
                                   hover:bg-yellow-400 hover:text-gray-900 transition">
@@ -528,7 +534,11 @@
                         </a>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="w-full rounded-2xl border border-dashed border-yellow-300 bg-white/80 p-10 text-center text-gray-600">
+                    Belum ada materi aktif yang bisa ditampilkan di landing page.
+                </div>
+            @endforelse
 
         </div>
     </div>
@@ -789,4 +799,3 @@
     </div>
 </body>
 </html>
-
