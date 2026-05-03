@@ -28,7 +28,7 @@ class LandingPageController extends Controller
 
                 return (object) [
                     'title' => $materi->judul,
-                    'description' => $materi->deskripsi ?: 'Materi belajar siap dipelajari di Ruma.',
+                    'description' => 'Materi belajar siap dipelajari di Ruma.',
                     'badge' => $badgeSource !== '' ? Str::limit($badgeSource, 12, '') : 'Materi',
                     'image_url' => $materi->cover_url,
                     'button_label' => 'Lihat Detail',
