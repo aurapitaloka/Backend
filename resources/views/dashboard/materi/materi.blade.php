@@ -412,7 +412,7 @@
         .materi-table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: auto;
+            table-layout: fixed;
         }
         
         .materi-table thead {
@@ -440,8 +440,25 @@
         .materi-table th:nth-child(2) {
             width: 110px;
         }
-        
-        .materi-table th:nth-child(9) {
+
+        .materi-table th:nth-child(3) {
+            width: 34%;
+        }
+
+        .materi-table th:nth-child(4) {
+            width: 90px;
+        }
+
+        .materi-table th:nth-child(5) {
+            width: 120px;
+            text-align: center;
+        }
+
+        .materi-table th:nth-child(6) {
+            width: 110px;
+        }
+
+        .materi-table th:nth-child(7) {
             width: 120px;
             text-align: center;
         }
@@ -464,9 +481,13 @@
             transition: all 0.2s ease;
         }
 
-        .materi-table td:nth-child(7) a {
+        .materi-title-cell {
+            max-width: 0;
+        }
+
+        .materi-title-text {
             display: inline-block;
-            max-width: 180px;
+            max-width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -497,19 +518,6 @@
         
         .materi-table tbody tr:last-child td {
             border-bottom: none;
-        }
-        
-        /* File Link */
-        .file-link {
-            color: var(--color-primary-dark);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-        
-        .file-link:hover {
-            color: var(--color-primary-dark);
-            text-decoration: underline;
         }
         
         /* Action Buttons */
@@ -546,14 +554,9 @@
             font-weight: 600;
         }
 
-        .badge-info {
-            background: #E3F2FD;
-            color: #1976D2;
-        }
-
-        .badge-warning {
-            background: #FFF3E0;
-            color: #F57C00;
+        .badge-neutral {
+            background: #EEF2FF;
+            color: #3730A3;
         }
 
         .badge-success {
@@ -641,8 +644,8 @@
                 font-size: 0.9rem;
             }
             
-            .materi-table td:nth-child(7) a {
-                max-width: 120px;
+            .materi-table th:nth-child(3) {
+                width: 30%;
             }
         }
         
@@ -685,7 +688,7 @@
                 width: 90px;
             }
             
-            .materi-table th:nth-child(9) {
+            .materi-table th:nth-child(7) {
                 width: 100px;
             }
             
@@ -699,10 +702,6 @@
                 gap: 0.3rem;
             }
             
-            .materi-table td:nth-child(7) a {
-                max-width: 80px;
-            }
-
             .search-form {
                 grid-template-columns: 1fr;
             }
@@ -823,8 +822,7 @@
                                     <th>Tanggal</th>
                                     <th>Judul</th>
                                     <th>Level</th>
-                                    <th>Tipe</th>
-                                    <th>File</th>
+                                    <th>Jumlah Materi</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -834,21 +832,14 @@
                                     <tr>
                                         <td>{{ $materi->firstItem() + $index }}</td>
                                         <td>{{ $item->created_at->format('d M Y') }}</td>
-                                        <td>{{ $item->judul }}</td>
-                                        <td>{{ $item->level?->nama ?? '-' }}</td>
-                                        <td>
-                                            <span class="badge {{ $item->tipe_konten == 'teks' ? 'badge-info' : 'badge-warning' }}">
-                                                {{ ucfirst($item->tipe_konten) }}
-                                            </span>
+                                        <td class="materi-title-cell">
+                                            <span class="materi-title-text" title="{{ $item->judul }}">{{ $item->judul }}</span>
                                         </td>
-                                        <td>
-                                            @if($item->file_url)
-                                                <a href="{{ $item->file_url }}" class="file-link" target="_blank">
-                                                    {{ basename($item->file_path) }}
-                                                </a>
-                                            @else
-                                                <span style="color: var(--color-text-light);">-</span>
-                                            @endif
+                                        <td>{{ $item->level?->nama ?? '-' }}</td>
+                                        <td style="text-align:center;">
+                                            <span class="badge badge-neutral">
+                                                {{ $item->bab_count }}
+                                            </span>
                                         </td>
                                         <td>
                                             <span class="badge {{ $item->status_aktif ? 'badge-success' : 'badge-danger' }}">
