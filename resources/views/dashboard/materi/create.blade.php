@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Materi - Ruma Dashboard</title>
+    <title>Tambah Mata Pelajaran - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -944,7 +944,7 @@
                 <div style="margin-bottom: 1.5rem;">
                     <a href="{{ route('materi.index') }}" class="back-link-clean">
                     <i data-lucide="arrow-left"></i>
-                    Daftar Materi
+                    Daftar Mata Pelajaran
                 </a>
                 </div>
 
@@ -964,46 +964,46 @@
                     <input type="hidden" name="generated_cover_temp_path" id="generated_cover_temp_path" value="{{ old('generated_cover_temp_path') }}">
                     <input type="hidden" name="use_generated_cover" id="use_generated_cover" value="{{ old('use_generated_cover', 0) }}">
 
-                    <div class="section-title"><i data-lucide="book-open-text"></i> Detail Materi</div>
-                    <div class="section-subtitle">Lengkapi cover, judul, deskripsi, kategori, dan level terlebih dulu sebelum mengisi submateri pertama.</div>
+                    <div class="section-title"><i data-lucide="book-open-text"></i> Detail Mata Pelajaran</div>
+                    <div class="section-subtitle">Lengkapi cover, judul, deskripsi, kategori, dan level terlebih dulu sebelum mengisi materi pertama.</div>
 
                     <div class="book-hero-grid">
                         <div class="book-cover-column">
                             <button type="button" id="open_cover_modal_btn" class="book-cover-stage">
-                                <img id="book_cover_stage_image" src="" alt="Preview cover materi">
+                                <img id="book_cover_stage_image" src="" alt="Preview cover mata pelajaran">
                                 <div id="book_cover_stage_placeholder" class="book-cover-placeholder">
                                     <i data-lucide="image-plus"></i>
-                                    <strong>Tambahkan cover materi</strong>
-                                    Cover akan tampil di daftar materi dan halaman detail materi.
+                                    <strong>Tambahkan cover mata pelajaran</strong>
+                                    Cover akan tampil di daftar mata pelajaran dan halaman detail mata pelajaran.
                                 </div>
                             </button>
 
                             <div class="book-cover-caption">
-                                Cover ini akan dipakai sebagai identitas utama materi di daftar materi, halaman detail, dan area baca siswa.
+                                Cover ini akan dipakai sebagai identitas utama mata pelajaran di daftar, halaman detail, dan area baca siswa.
                             </div>
 
                             <button type="button" id="open_cover_modal_secondary_btn" class="btn btn-secondary cover-stage-trigger">
                                 <i data-lucide="image-plus"></i>
-                                Atur Cover Materi
+                                Atur Cover Mata Pelajaran
                             </button>
                         </div>
 
                         <div class="book-detail-column">
                             <div class="form-group">
                                 <label class="form-label">
-                                    Judul Materi <span class="required">*</span>
+                                    Judul Mata Pelajaran <span class="required">*</span>
                                 </label>
                                 <input type="text" name="judul" value="{{ old('judul') }}" class="form-input" required>
-                                <span class="hint">Masukkan judul materi utama yang nanti bisa dipecah menjadi beberapa submateri atau bab.</span>
+                                <span class="hint">Masukkan judul mata pelajaran utama yang nanti bisa dipecah menjadi beberapa materi.</span>
                                 @error('judul')
                                     <span class="error-message">{{ $message }}</span>
                                 @enderror
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Deskripsi Materi</label>
+                                <label class="form-label">Deskripsi Mata Pelajaran</label>
                                 <textarea name="deskripsi" rows="6" class="form-textarea">{{ old('deskripsi') }}</textarea>
-                                <span class="hint">Deskripsi ini membantu guru dan siswa memahami fokus materi sebelum masuk ke bagian-bagiannya.</span>
+                                <span class="hint">Deskripsi ini membantu guru dan siswa memahami fokus mata pelajaran sebelum masuk ke materi-materinya.</span>
                                 @error('deskripsi')
                                     <span class="error-message">{{ $message }}</span>
                                 @enderror
@@ -1011,16 +1011,16 @@
 
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label class="form-label">Kategori Materi</label>
+                                    <label class="form-label">Kategori</label>
                                     <select name="mata_pelajaran_id" class="form-select">
-                                        <option value="">Pilih Kategori Materi</option>
+                                        <option value="">Pilih Kategori</option>
                                         @foreach($mataPelajarans as $mp)
                                             <option value="{{ $mp->id }}" {{ old('mata_pelajaran_id') == $mp->id ? 'selected' : '' }}>
                                                 {{ $mp->nama }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    <span class="hint">Opsional. Dipakai sebagai label pengelompokan, bukan struktur utama materi.</span>
+                                    <span class="hint">Opsional. Dipakai sebagai label pengelompokan tambahan.</span>
                                     @error('mata_pelajaran_id')
                                         <span class="error-message">{{ $message }}</span>
                                     @enderror
@@ -1042,7 +1042,7 @@
                             </div>
 
                             <div class="book-cover-caption" style="margin-top: 1.25rem;">
-                                Cover dikelola lewat popup agar form materi tetap rapi. Klik preview cover di samping atau tombol <strong>Atur Cover Materi</strong>.
+                                Cover dikelola lewat popup agar form mata pelajaran tetap rapi. Klik preview cover di samping atau tombol <strong>Atur Cover Mata Pelajaran</strong>.
                             </div>
                         </div>
                     </div>
@@ -1051,8 +1051,8 @@
                         <div class="cover-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="cover_modal_title">
                             <div class="cover-modal-header">
                                 <div>
-                                    <div id="cover_modal_title" class="section-title" style="margin-bottom: 0.2rem;"><i data-lucide="image"></i> Atur Cover Materi</div>
-                                    <div class="section-subtitle" style="margin-bottom: 0;">Pilih upload manual atau generate dengan Gemini. Cover ini akan dipakai sebagai identitas materi.</div>
+                                    <div id="cover_modal_title" class="section-title" style="margin-bottom: 0.2rem;"><i data-lucide="image"></i> Atur Cover Mata Pelajaran</div>
+                                    <div class="section-subtitle" style="margin-bottom: 0;">Pilih upload manual atau generate dengan Gemini. Cover ini akan dipakai sebagai identitas mata pelajaran.</div>
                                 </div>
                                 <button type="button" id="close_cover_modal_btn" class="cover-modal-close" aria-label="Tutup popup cover">
                                     <i data-lucide="x"></i>
@@ -1146,19 +1146,19 @@
                         </div>
                     </div>
 
-                    <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="layers"></i> Bab 1 - Konten Materi</div>
-                    <div class="section-subtitle">Setelah buku dibuat, isi konten pertama ini akan otomatis disimpan sebagai Bab 1.</div>
+                    <div class="section-title" style="margin-top: 1.5rem;"><i data-lucide="layers"></i> Materi 1 - Konten Awal</div>
+                    <div class="section-subtitle">Setelah mata pelajaran dibuat, isi konten pertama ini akan otomatis disimpan sebagai Materi 1.</div>
 
                     <div class="form-group">
                         <label class="form-label">
-                            Tipe Konten Bab 1 <span class="required">*</span>
+                            Tipe Konten Materi 1 <span class="required">*</span>
                         </label>
                         <select name="tipe_konten" id="tipe_konten" class="form-select" required>
-                            <option value="">Pilih Tipe Konten Bab 1</option>
+                            <option value="">Pilih Tipe Konten Materi 1</option>
                             <option value="teks" {{ old('tipe_konten') == 'teks' ? 'selected' : '' }}>Teks</option>
                             <option value="file" {{ old('tipe_konten') == 'file' ? 'selected' : '' }}>File</option>
                         </select>
-                        <span class="hint">Pilih Teks untuk isi langsung atau File untuk upload dokumen sebagai Bab 1.</span>
+                        <span class="hint">Pilih Teks untuk isi langsung atau File untuk upload dokumen sebagai Materi 1.</span>
                         @error('tipe_konten')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
@@ -1166,7 +1166,7 @@
 
                     <div id="konten_teks_field" class="form-group" style="display: none;">
                         <label class="form-label">
-                            Konten Teks Bab 1 <span class="required">*</span>
+                            Konten Teks Materi 1 <span class="required">*</span>
                         </label>
                         <textarea name="konten_teks" rows="8" class="form-textarea">{{ old('konten_teks') }}</textarea>
                         @error('konten_teks')
@@ -1176,7 +1176,7 @@
 
                     <div id="file_path_field" class="form-group" style="display: none;">
                         <label class="form-label">
-                            File Bab 1 (PDF, DOC, DOCX) <span class="required">*</span>
+                            File Materi 1 (PDF, DOC, DOCX) <span class="required">*</span>
                         </label>
                         <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx" class="form-input">
                         <small class="hint">PDF di atas 10 MB akan dicoba dikompres otomatis sampai 10 MB. DOC/DOCX tetap maksimal 10 MB, dan total upload tetap mengikuti batas server.</small>
@@ -1215,16 +1215,16 @@
                     <div id="chapter_builder" class="chapter-builder">
                         <div class="chapter-builder-head">
                             <div>
-                                <div class="section-title" style="margin-bottom:0.2rem;"><i data-lucide="library-big"></i> Bab Tambahan (Opsional)</div>
-                                <div class="section-subtitle" style="margin-bottom:0;">Kalau perlu, kamu bisa langsung menambahkan Bab 2, Bab 3, dan seterusnya pada saat buku dibuat.</div>
+                                <div class="section-title" style="margin-bottom:0.2rem;"><i data-lucide="library-big"></i> Materi Tambahan (Opsional)</div>
+                                <div class="section-subtitle" style="margin-bottom:0;">Kalau perlu, kamu bisa langsung menambahkan Materi 2, Materi 3, dan seterusnya pada saat mata pelajaran dibuat.</div>
                             </div>
                             <button type="button" id="add_chapter_btn" class="btn btn-primary" style="flex: 0 0 auto;">
                                 <i data-lucide="plus-circle"></i>
-                                Tambah Bab
+                                Tambah Materi
                             </button>
                         </div>
                         <div class="chapter-builder-note">
-                            Bab 1 dibuat dari konten materi utama di atas. Bagian ini hanya untuk bab tambahan agar struktur buku langsung lengkap sejak awal.
+                            Materi 1 dibuat dari konten utama di atas. Bagian ini hanya untuk materi tambahan agar struktur mata pelajaran langsung lengkap sejak awal.
                         </div>
                         <div id="chapter_list" class="chapter-list"></div>
                     </div>
@@ -1235,7 +1235,7 @@
                     <div class="form-group">
                         <label class="form-checkbox">
                             <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', true) ? 'checked' : '' }}>
-                            <span>Status Materi Aktif</span>
+                            <span>Status Mata Pelajaran Aktif</span>
                         </label>
                     </div>
 
@@ -1788,7 +1788,7 @@
 
             wrapper.innerHTML = `
                 <div class="chapter-item-head">
-                    <div class="chapter-item-title">Bab ${index + 1}</div>
+                    <div class="chapter-item-title">Materi ${index + 1}</div>
                     <button type="button" class="btn btn-secondary remove-chapter-btn" style="flex: 0 0 auto;">
                         <i data-lucide="trash-2"></i>
                         Hapus
@@ -1796,7 +1796,7 @@
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">Judul Bab <span class="required">*</span></label>
+                        <label class="form-label">Judul Materi <span class="required">*</span></label>
                         <input type="text" name="bab[${index}][judul_bab]" value="${escapeHtml(babTitle)}" class="form-input" required>
                     </div>
                     <div class="form-group">
@@ -1805,19 +1805,19 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Tipe Konten Bab <span class="required">*</span></label>
+                    <label class="form-label">Tipe Konten Materi <span class="required">*</span></label>
                     <select name="bab[${index}][tipe_konten]" class="form-select chapter-type-select">
                         <option value="teks" ${tipeKonten === 'teks' ? 'selected' : ''}>Teks</option>
                         <option value="file" ${tipeKonten === 'file' ? 'selected' : ''}>File</option>
                     </select>
                 </div>
                 <div class="form-group chapter-text-field" style="display:${tipeKonten === 'teks' ? 'block' : 'none'};">
-                    <label class="form-label">Konten Teks Bab <span class="required">*</span></label>
+                    <label class="form-label">Konten Teks Materi <span class="required">*</span></label>
                     <textarea name="bab[${index}][konten_teks]" rows="7" class="form-textarea">${escapeHtml(kontenTeks)}</textarea>
                 </div>
                 <div class="chapter-file-field" style="display:${tipeKonten === 'file' ? 'block' : 'none'};">
                     <div class="form-group">
-                        <label class="form-label">File Bab (PDF, DOC, DOCX) <span class="required">*</span></label>
+                        <label class="form-label">File Materi (PDF, DOC, DOCX) <span class="required">*</span></label>
                         <input type="file" name="bab_files[${index}]" accept=".pdf,.doc,.docx" class="form-input chapter-file-input">
                         <span class="hint">Kalau PDF, isi pilihan halaman dengan nomor yang dipisahkan koma. Contoh: 1,2,3,4</span>
                     </div>
@@ -1829,11 +1829,11 @@
                 <div class="form-group">
                     <label class="form-checkbox">
                         <input type="checkbox" name="bab[${index}][status_aktif]" value="1" ${isAktif ? 'checked' : ''}>
-                        <span>Bab Aktif</span>
+                        <span>Materi Aktif</span>
                     </label>
                 </div>
                 <div class="chapter-quiz-note">
-                    Kuis per submateri akan dibuat setelah materi disimpan. Sistem akan menyediakan tombol cepat ke menu kuis dari halaman detail materi.
+                    Kuis per materi akan dibuat setelah mata pelajaran disimpan. Sistem akan menyediakan tombol cepat ke menu kuis dari halaman detail mata pelajaran.
                 </div>
             `;
 
@@ -1872,7 +1872,7 @@
                 item.dataset.chapterIndex = String(index);
                 const title = item.querySelector('.chapter-item-title');
                 if (title) {
-                    title.textContent = `Bab ${index + 1}`;
+                    title.textContent = `Materi ${index + 1}`;
                 }
 
                 item.querySelectorAll('input, textarea, select').forEach((field) => {
@@ -1998,7 +1998,7 @@
                     body: JSON.stringify({
                         judul,
                         deskripsi: deskripsiInput ? deskripsiInput.value.trim() : '',
-                        mata_pelajaran: selectedMapelText && selectedMapelText !== 'Pilih Kategori Materi' ? selectedMapelText : '',
+                        mata_pelajaran: selectedMapelText && selectedMapelText !== 'Pilih Kategori' ? selectedMapelText : '',
                         level: selectedLevelText && selectedLevelText !== 'Pilih Level' ? selectedLevelText : '',
                         prompt_tambahan: coverAiPromptTambahan ? coverAiPromptTambahan.value.trim() : '',
                         previous_temp_path: generatedCoverTempPathInput.value || '',

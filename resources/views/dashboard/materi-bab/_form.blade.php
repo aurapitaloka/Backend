@@ -5,12 +5,12 @@
 @endphp
 
 <div class="form-group">
-    <label class="form-label">Judul Bab <span class="required">*</span></label>
+    <label class="form-label">Judul Materi <span class="required">*</span></label>
     <input type="text" name="judul_bab" value="{{ old('judul_bab', $bab->judul_bab ?? '') }}" class="form-input" required>
 </div>
 
 <div class="form-group">
-    <label class="form-label">Urutan Bab <span class="required">*</span></label>
+    <label class="form-label">Urutan Materi <span class="required">*</span></label>
     <input type="number" name="urutan" value="{{ old('urutan', $bab->urutan ?? $nextUrutan ?? 1) }}" min="1" class="form-input" required>
 </div>
 
@@ -28,7 +28,7 @@
 </div>
 
 <div id="file_path_field" class="form-group" style="display: {{ $currentTipe === 'file' ? 'block' : 'none' }};">
-    <label class="form-label">File Bab (PDF, DOC, DOCX) <span class="required">*</span></label>
+    <label class="form-label">File Materi (PDF, DOC, DOCX) <span class="required">*</span></label>
     <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx" class="form-input">
     <input type="hidden" name="pdf_page_selection" id="pdf_page_selection" value="{{ $currentPdfSelection }}">
     @if($isEdit && !empty($bab->file_path))
@@ -61,6 +61,6 @@
 <div class="form-group">
     <label class="form-checkbox">
         <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', $bab->status_aktif ?? true) ? 'checked' : '' }}>
-        <span>Bab Aktif</span>
+        <span>Materi Aktif</span>
     </label>
 </div>

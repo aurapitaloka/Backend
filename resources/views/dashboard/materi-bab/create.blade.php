@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Bab - Ruma Dashboard</title>
+    <title>Tambah Materi - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -431,21 +431,21 @@
 
         <main class="main-content">
             <header class="header-bar">
-                <h1 class="header-title">Tambah Bab</h1>
+                <h1 class="header-title">Tambah Materi</h1>
             </header>
 
             <div class="content-area">
                 <a href="{{ route('materi.show', $materi->id) }}" class="back-link-clean">
                     <i data-lucide="arrow-left"></i>
-                    Kembali ke detail materi
+                    Kembali ke detail mata pelajaran
                 </a>
 
                 <div class="form-container">
                     <div class="hero-panel">
                         <div class="hero-card">
-                            <div class="hero-title">Tambah Submateri Baru</div>
+                            <div class="hero-title">Tambah Materi Baru</div>
                             <div class="hero-subtitle">
-                                Tambahkan submateri baru agar struktur materi utama tetap rapi. Bagian ini akan menjadi turunan dari materi dan bisa dihubungkan ke kuis setelah disimpan.
+                                Tambahkan materi baru agar struktur mata pelajaran utama tetap rapi. Bagian ini akan menjadi turunan dari mata pelajaran dan bisa dihubungkan ke kuis setelah disimpan.
                             </div>
                             <div class="hero-book-name">
                                 <i data-lucide="book-open"></i>
@@ -453,11 +453,11 @@
                             </div>
                         </div>
                         <div class="info-card">
-                            <div class="mini-label">Posisi Submateri Berikutnya</div>
-                            <div class="mini-value">Bab {{ $nextUrutan ?? 1 }}</div>
+                            <div class="mini-label">Posisi Materi Berikutnya</div>
+                            <div class="mini-value">Materi {{ $nextUrutan ?? 1 }}</div>
                             <div class="mini-label" style="margin-top:0.85rem;">Pola Pengelolaan</div>
                             <div class="hero-subtitle" style="font-size:0.9rem;">
-                                Satu materi dapat memiliki banyak submateri atau bab. Setiap bagian bisa memakai teks langsung atau file terpisah sesuai kebutuhan guru.
+                                Satu mata pelajaran dapat memiliki banyak materi. Setiap materi bisa memakai teks langsung atau file terpisah sesuai kebutuhan guru.
                             </div>
                         </div>
                     </div>
@@ -472,11 +472,11 @@
                         </div>
                     @endif
 
-                    <div class="section-title"><i data-lucide="layout-template"></i> Form Submateri</div>
-                    <div class="section-subtitle">Isi data submateri dengan jelas agar materi mudah dibaca dan siap dilanjutkan ke kuis per bagian.</div>
+                    <div class="section-title"><i data-lucide="layout-template"></i> Form Materi</div>
+                    <div class="section-subtitle">Isi data materi dengan jelas agar mata pelajaran mudah dibaca dan siap dilanjutkan ke kuis per bagian.</div>
 
                     <div class="note-box">
-                        Submateri ini disimpan sebagai bagian dari materi utama, bukan sebagai materi terpisah. Setelah berhasil dibuat, kamu bisa memakai tombol cepat di halaman detail materi untuk membuat kuis yang menempel di akhir bagian ini.
+                        Materi ini disimpan sebagai bagian dari mata pelajaran utama. Setelah berhasil dibuat, kamu bisa memakai tombol cepat di halaman detail mata pelajaran untuk membuat kuis yang menempel di akhir bagian ini.
                     </div>
 
                     <form method="POST" action="{{ route('materi.bab.store', $materi->id) }}" enctype="multipart/form-data" id="babForm">
@@ -486,7 +486,7 @@
                         <div class="btn-row">
                             <button type="submit" class="btn btn-primary">
                                 <i data-lucide="save"></i>
-                                Simpan Submateri
+                                Simpan Materi
                             </button>
                             <a href="{{ route('materi.show', $materi->id) }}" class="btn btn-secondary">
                                 <i data-lucide="arrow-left"></i>

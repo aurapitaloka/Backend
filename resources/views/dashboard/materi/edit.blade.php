@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Materi - Ruma Dashboard</title>
+    <title>Edit Mata Pelajaran - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -135,7 +135,7 @@
 
         <main class="main-content">
             <header class="header-bar">
-                <h1 class="header-title">Edit Materi</h1>
+                <h1 class="header-title">Edit Mata Pelajaran</h1>
             </header>
 
             <div class="content-area">
@@ -146,7 +146,7 @@
                     </a>
                     <a href="{{ route('materi.index') }}" class="back-link">
                         <i data-lucide="book-open"></i>
-                        Daftar Materi
+                        Daftar Mata Pelajaran
                     </a>
                 </div>
 
@@ -166,11 +166,11 @@
                     @method('PUT')
 
                     <div class="note-box">
-                        Halaman ini hanya untuk mengubah metadata materi: judul, deskripsi, kategori, level, cover, dan status. Isi submateri dikelola dari halaman detail materi agar struktur pembahasan tetap rapi.
+                        Halaman ini hanya untuk mengubah metadata mata pelajaran: judul, deskripsi, kategori, level, cover, dan status. Isi materi dikelola dari halaman detail mata pelajaran agar struktur pembahasan tetap rapi.
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Judul Materi <span class="required">*</span></label>
+                        <label class="form-label">Judul Mata Pelajaran <span class="required">*</span></label>
                         <input type="text" name="judul" value="{{ old('judul', $materi->judul) }}" class="form-input" required>
                         @error('judul')
                             <span class="error-message">{{ $message }}</span>
@@ -187,16 +187,16 @@
 
                     <div class="form-grid">
                         <div class="form-group">
-                            <label class="form-label">Kategori Materi</label>
+                            <label class="form-label">Kategori</label>
                             <select name="mata_pelajaran_id" class="form-select">
-                                <option value="">Pilih Kategori Materi</option>
+                                <option value="">Pilih Kategori</option>
                                 @foreach($mataPelajarans as $mp)
                                     <option value="{{ $mp->id }}" {{ old('mata_pelajaran_id', $materi->mata_pelajaran_id) == $mp->id ? 'selected' : '' }}>
                                         {{ $mp->nama }}
                                     </option>
                                 @endforeach
                             </select>
-                            <span class="hint">Opsional. Dipakai sebagai label pengelompokan, bukan struktur utama materi.</span>
+                            <span class="hint">Opsional. Dipakai sebagai label pengelompokan tambahan.</span>
                             @error('mata_pelajaran_id')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
@@ -219,7 +219,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Cover Materi</label>
+                        <label class="form-label">Cover Mata Pelajaran</label>
                         <div class="cover-panel">
                             <input type="file" name="cover_path" id="cover_path" accept=".jpg,.jpeg,.png,.webp" class="form-input">
                             <span class="hint">Opsional. Kalau tidak diganti, sistem tetap memakai cover yang sekarang.</span>
@@ -229,7 +229,7 @@
                                 <div class="current-cover">
                                     <img src="{{ $materi->cover_url }}" alt="Cover {{ $materi->judul }}">
                                     <div class="hint" style="margin-top:0;">
-                                        Cover materi saat ini digunakan di daftar materi dan halaman detail materi.
+                                        Cover saat ini digunakan di daftar mata pelajaran dan halaman detail mata pelajaran.
                                     </div>
                                 </div>
                             @endif
@@ -242,7 +242,7 @@
                     <div class="form-group">
                         <label class="form-checkbox">
                             <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', $materi->status_aktif) ? 'checked' : '' }}>
-                            <span>Status Materi Aktif</span>
+                            <span>Status Mata Pelajaran Aktif</span>
                         </label>
                     </div>
 

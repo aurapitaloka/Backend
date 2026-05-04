@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materi Pembelajaran - Ruma Dashboard</title>
+    <title>Mata Pelajaran - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -753,7 +753,7 @@
             
             <!-- Header Bar -->
             <header class="header-bar">
-                <h1 class="header-title">Materi Pembelajaran</h1>
+                <h1 class="header-title">Mata Pelajaran</h1>
             </header>
             
             <!-- Content Area -->
@@ -764,17 +764,17 @@
                     </div>
                 @endif
 
-                <div class="page-subtitle">Kelola materi sebagai bahan ajar utama. Setiap materi bisa dipecah lagi menjadi submateri atau bab sesuai kebutuhan.</div>
+                <div class="page-subtitle">Kelola mata pelajaran sebagai bahan ajar utama. Setiap mata pelajaran bisa dipecah lagi menjadi beberapa materi.</div>
 
                 <div class="materi-controls">
                     <div class="page-toolbar">
                         <div class="summary-card">
                             <i data-lucide="layers"></i>
-                            <span>{{ $search ? 'Hasil pencarian' : 'Total materi' }}: {{ $materi->total() }} item</span>
+                            <span>{{ $search ? 'Hasil pencarian' : 'Total mata pelajaran' }}: {{ $materi->total() }} item</span>
                         </div>
                         <a href="{{ route('materi.create') }}" class="add-button" style="text-decoration: none; display: inline-flex;">
                             <span><i data-lucide="plus"></i></span>
-                            <span>Tambah Materi</span>
+                            <span>Tambah Mata Pelajaran</span>
                         </a>
                     </div>
 
@@ -786,8 +786,8 @@
                                 name="search"
                                 value="{{ $search }}"
                                 class="search-input"
-                                placeholder="Cari materi berdasarkan ID, judul, kategori, level, atau pembuat..."
-                                aria-label="Cari materi"
+                                placeholder="Cari mata pelajaran berdasarkan ID, judul, kategori, level, atau pembuat..."
+                                aria-label="Cari mata pelajaran"
                             >
                         </div>
                         <button type="submit" class="search-button">
@@ -800,7 +800,7 @@
                                 <span>Reset</span>
                             </a>
                         @endif
-                        <div class="search-note">Gunakan kata kunci seperti ID materi, judul, kategori materi, level, nama pembuat, atau email pembuat.</div>
+                        <div class="search-note">Gunakan kata kunci seperti ID mata pelajaran, judul, kategori, level, nama pembuat, atau email pembuat.</div>
                     </form>
                 </div>
                 
@@ -811,7 +811,7 @@
                             @if($search)
                                 Hasil untuk "{{ $search }}"
                             @else
-                                Daftar Materi
+                                Daftar Mata Pelajaran
                             @endif
                         </div>
                     </div>
@@ -881,11 +881,11 @@
                             <i data-lucide="book-open"></i>
                         </div>
                             @if($search)
-                                <h3 style="margin-bottom: 0.5rem;">Materi tidak ditemukan</h3>
-                                <p>Tidak ada materi yang cocok dengan kata kunci "{{ $search }}".</p>
+                                <h3 style="margin-bottom: 0.5rem;">Mata pelajaran tidak ditemukan</h3>
+                                <p>Tidak ada mata pelajaran yang cocok dengan kata kunci "{{ $search }}".</p>
                             @else
-                                <h3 style="margin-bottom: 0.5rem;">Belum ada materi</h3>
-                                <p>Mulai dengan menambahkan materi baru.</p>
+                                <h3 style="margin-bottom: 0.5rem;">Belum ada mata pelajaran</h3>
+                                <p>Mulai dengan menambahkan mata pelajaran baru.</p>
                             @endif
                         </div>
                     @endif
@@ -927,8 +927,8 @@
         function handleDeleteMateri(id, judul) {
             showModal({
                 type: 'delete',
-                title: 'Hapus Materi',
-                message: `Apakah Anda yakin ingin menghapus materi "${judul}"? Tindakan ini tidak dapat dibatalkan dan semua data terkait akan terhapus.`,
+                title: 'Hapus Mata Pelajaran',
+                message: `Apakah Anda yakin ingin menghapus mata pelajaran "${judul}"? Tindakan ini tidak dapat dibatalkan dan semua data terkait akan terhapus.`,
                 icon: 'trash-2',
                 confirmText: 'Ya, Hapus',
                 isDanger: true,
@@ -956,7 +956,7 @@
                     
                     // Show loading toast
                     if (typeof showInfoToast !== 'undefined') {
-                        showInfoToast('Menghapus...', 'Sedang menghapus materi...');
+                        showInfoToast('Menghapus...', 'Sedang menghapus mata pelajaran...');
                     }
                     
                     // Submit form

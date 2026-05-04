@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Bab - Ruma Dashboard</title>
+    <title>Edit Materi - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -431,33 +431,33 @@
 
         <main class="main-content">
             <header class="header-bar">
-                <h1 class="header-title">Edit Bab</h1>
+                <h1 class="header-title">Edit Materi</h1>
             </header>
 
             <div class="content-area">
                 <a href="{{ route('materi.show', $materi->id) }}" class="back-link-clean">
                     <i data-lucide="arrow-left"></i>
-                    Kembali ke detail materi
+                    Kembali ke detail mata pelajaran
                 </a>
 
                 <div class="form-container">
                     <div class="hero-panel">
                         <div class="hero-card">
-                            <div class="hero-title">Perbarui Submateri</div>
+                            <div class="hero-title">Perbarui Materi</div>
                             <div class="hero-subtitle">
-                                Edit isi, urutan, atau tipe konten submateri tanpa memecah struktur materi utama. Perubahan ini akan langsung menjaga alur belajar siswa tetap runtut.
+                                Edit isi, urutan, atau tipe konten materi tanpa memecah struktur mata pelajaran utama. Perubahan ini akan langsung menjaga alur belajar siswa tetap runtut.
                             </div>
                             <div class="hero-book-name">
                                 <i data-lucide="book-open"></i>
-                                <span>{{ $materi->judul }} - Bagian {{ $bab->urutan }}</span>
+                                <span>{{ $materi->judul }} - Materi {{ $bab->urutan }}</span>
                             </div>
                         </div>
                         <div class="info-card">
-                            <div class="mini-label">Judul Submateri Saat Ini</div>
+                            <div class="mini-label">Judul Materi Saat Ini</div>
                             <div class="mini-value">{{ $bab->judul_bab }}</div>
                             <div class="mini-label" style="margin-top:0.85rem;">Relasi Kuis</div>
                             <div class="hero-subtitle" style="font-size:0.9rem;">
-                                Setelah bagian ini diperbarui, kuis yang terhubung tetap bisa dikelola dari halaman detail materi melalui tombol cepat per submateri.
+                                Setelah bagian ini diperbarui, kuis yang terhubung tetap bisa dikelola dari halaman detail mata pelajaran melalui tombol cepat per materi.
                             </div>
                         </div>
                     </div>
@@ -472,11 +472,11 @@
                         </div>
                     @endif
 
-                    <div class="section-title"><i data-lucide="pencil-line"></i> Form Edit Submateri</div>
-                    <div class="section-subtitle">Perbarui data submateri dengan jelas agar materi tetap konsisten dan profesional di sisi admin maupun siswa.</div>
+                    <div class="section-title"><i data-lucide="pencil-line"></i> Form Edit Materi</div>
+                    <div class="section-subtitle">Perbarui data materi dengan jelas agar mata pelajaran tetap konsisten dan profesional di sisi admin maupun siswa.</div>
 
                     <div class="note-box">
-                        Submateri ini tetap menjadi bagian dari satu materi utama. Gunakan halaman ini untuk memperbarui konten tanpa membuat materi baru, sehingga struktur isi tetap efisien dan mudah dikelola.
+                        Materi ini tetap menjadi bagian dari satu mata pelajaran utama. Gunakan halaman ini untuk memperbarui konten tanpa membuat mata pelajaran baru, sehingga struktur isi tetap efisien dan mudah dikelola.
                     </div>
 
                     <form method="POST" action="{{ route('materi.bab.update', [$materi->id, $bab->id]) }}" enctype="multipart/form-data" id="babForm">

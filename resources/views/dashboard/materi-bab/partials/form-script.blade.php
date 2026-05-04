@@ -227,7 +227,7 @@
             const isPdf = currentFile && (currentFile.type === 'application/pdf' || currentFile.name.toLowerCase().endsWith('.pdf'));
             if (isPdf && totalPdfPages > 0 && selectedPdfPages.size === 0) {
                 event.preventDefault();
-                alert('Pilih minimal satu halaman PDF yang ingin disimpan untuk bab ini.');
+                alert('Pilih minimal satu halaman PDF yang ingin disimpan untuk materi ini.');
             }
         });
     }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Materi - Ruma Dashboard</title>
+    <title>Detail Mata Pelajaran - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -785,14 +785,14 @@
 
         <main class="main-content">
             <header class="header-bar">
-                <h1 class="header-title">Detail Materi</h1>
+                <h1 class="header-title">Detail Mata Pelajaran</h1>
             </header>
 
             <div class="content-area">
                 <div style="margin-bottom: 1rem;">
                     <a href="{{ route('materi.index') }}" class="back-link">
                         <i data-lucide="arrow-left"></i>
-                        Kembali ke Daftar Materi
+                        Kembali ke Daftar Mata Pelajaran
                     </a>
                 </div>
 
@@ -814,17 +814,17 @@
                                     @else
                                         <div class="chapter-cover-fallback">
                                             <strong>{{ \Illuminate\Support\Str::limit($materi->judul, 42) }}</strong>
-                                            <span>Struktur materi per submateri</span>
+                                            <span>Struktur mata pelajaran per materi</span>
                                         </div>
                                     @endif
                                 </div>
                                 <div class="chapter-side-title">{{ $materi->judul }}</div>
                                 <div class="chapter-side-copy">
-                                    {{ \Illuminate\Support\Str::limit($materi->deskripsi ?: 'Kelola submateri atau bab agar materi utama tetap rapi dan kuis per bagian tetap mudah diatur.', 150) }}
+                                    {{ \Illuminate\Support\Str::limit($materi->deskripsi ?: 'Kelola materi agar mata pelajaran utama tetap rapi dan kuis per bagian tetap mudah diatur.', 150) }}
                                 </div>
                                 <div class="chapter-side-stats">
                                     <div class="chapter-stat">
-                                        <div class="chapter-stat-label">Total Bab</div>
+                                        <div class="chapter-stat-label">Total Materi</div>
                                         <div class="chapter-stat-value">{{ $materi->bab->count() }}</div>
                                     </div>
                                     <div class="chapter-stat">
@@ -851,11 +851,11 @@
                                 <div class="chapter-side-actions">
                                     <a href="{{ route('materi.bab.create', $materi->id) }}" class="btn btn-primary">
                                         <i data-lucide="plus-circle"></i>
-                                        Tambah Submateri
+                                        Tambah Materi
                                     </a>
                                     <a href="{{ route('materi.edit', $materi->id) }}" class="btn btn-secondary">
                                         <i data-lucide="edit-3"></i>
-                                        Edit Materi
+                                        Edit Mata Pelajaran
                                     </a>
                                 </div>
                             </aside>
@@ -863,12 +863,12 @@
                             <div class="chapter-main">
                                 <div class="chapter-main-top">
                                     <div>
-                                        <div class="chapter-main-title">Daftar Submateri / Bab</div>
+                                        <div class="chapter-main-title">Daftar Materi</div>
                                         <div class="chapter-main-subtitle">Kelola rincian materi langsung dari sini agar setiap topik tetap runtut dan mudah dihubungkan ke kuis.</div>
                                     </div>
                                     <a href="{{ route('materi.bab.create', $materi->id) }}" class="btn btn-primary">
                                         <i data-lucide="plus-circle"></i>
-                                        Tambah Submateri
+                                        Tambah Materi
                                     </a>
                                 </div>
 
@@ -881,7 +881,7 @@
                                                         <i data-lucide="grip"></i>
                                                     </div>
                                                     <div class="chapter-copy">
-                                                        <div class="chapter-title">Bab {{ $bab->urutan }}. {{ $bab->judul_bab }}</div>
+                                                        <div class="chapter-title">Materi {{ $bab->urutan }}. {{ $bab->judul_bab }}</div>
                                                         <div class="chapter-meta">
                                                             <span class="chapter-badge">{{ ucfirst($bab->tipe_konten) }}</span>
                                                             <span class="chapter-badge">{{ $bab->status_aktif ? 'Aktif' : 'Nonaktif' }}</span>
@@ -912,7 +912,7 @@
                                                             <i data-lucide="edit-3"></i>
                                                             Edit
                                                         </a>
-                                                        <form method="POST" action="{{ route('materi.bab.destroy', [$materi->id, $bab->id]) }}" onsubmit="return confirm('Hapus bab ini?');">
+                                                        <form method="POST" action="{{ route('materi.bab.destroy', [$materi->id, $bab->id]) }}" onsubmit="return confirm('Hapus materi ini?');">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-secondary" style="background:#FEE2E2; color:#991B1B;">
@@ -929,21 +929,21 @@
                                                     </div>
                                                 @elseif($bab->file_path)
                                                     <div class="chapter-outline" style="color:var(--color-muted);">
-                                                        File bab tersimpan: {{ basename($bab->file_path) }}
+                                                        File materi tersimpan: {{ basename($bab->file_path) }}
                                                     </div>
                                                 @endif
 
                                                 <div class="chapter-note">
-                                                    Letakkan kuis dan rangkuman di akhir submateri agar alur belajar tetap runtut dan setiap topik punya penutup yang jelas.
+                                                    Letakkan kuis dan rangkuman di akhir materi agar alur belajar tetap runtut dan setiap topik punya penutup yang jelas.
                                                 </div>
 
                                                 @if($bab->summary_short || ($bab->summary_key_points ?? []))
                                                     <div class="summary-shell">
                                                         <div class="summary-head">
                                                             <div>
-                                                                <div class="summary-title">{{ $bab->summary_title ?: 'Rangkuman Bab' }}</div>
+                                                                <div class="summary-title">{{ $bab->summary_title ?: 'Rangkuman Materi' }}</div>
                                                                 <div class="summary-generated">
-                                                                    Visual rangkuman AI untuk akhir bab
+                                                                    Visual rangkuman AI untuk akhir materi
                                                                     @if($bab->summary_generated_at)
                                                                         • diperbarui {{ $bab->summary_generated_at->format('d M Y H:i') }}
                                                                     @endif
@@ -952,7 +952,7 @@
                                                         </div>
                                                         <div class="summary-grid">
                                                             <div class="summary-card">
-                                                                <div class="summary-label">Inti Bab</div>
+                                                                <div class="summary-label">Inti Materi</div>
                                                                 <div class="summary-text">{{ $bab->summary_short }}</div>
                                                             </div>
                                                             <div class="summary-card">
@@ -989,7 +989,7 @@
                                     </div>
                                 @else
                                     <div style="padding:1.2rem 1.25rem; color:var(--color-muted);">
-                                        Materi ini belum punya submateri. Tambahkan bagian pertama agar struktur isi mulai terbentuk dengan rapi.
+                                        Mata pelajaran ini belum punya materi. Tambahkan materi pertama agar struktur isi mulai terbentuk dengan rapi.
                                     </div>
                                 @endif
                             </div>
@@ -999,7 +999,7 @@
                     <div class="action-buttons">
                         <a href="{{ route('materi.edit', $materi->id) }}" class="btn btn-primary">
                             <i data-lucide="edit-3"></i>
-                            Edit Materi
+                            Edit Mata Pelajaran
                         </a>
                         <a href="{{ route('materi.index') }}" class="btn btn-secondary">
                             <i data-lucide="arrow-left"></i>

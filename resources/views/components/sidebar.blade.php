@@ -184,11 +184,11 @@
     </div>
     
     <div class="nav-item" data-route="materi">
-        <a href="{{ route('materi.index', [], false) }}" data-testid="nav-materi" aria-label="Materi">
+        <a href="{{ route('materi.index', [], false) }}" data-testid="nav-materi" aria-label="Mata Pelajaran">
             <span class="nav-icon">
                 <i data-lucide="book-open"></i>
             </span>
-            <span>Materi</span>
+            <span>Mata Pelajaran</span>
         </a>
     </div>
     
