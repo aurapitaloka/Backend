@@ -964,46 +964,46 @@
                     <input type="hidden" name="generated_cover_temp_path" id="generated_cover_temp_path" value="{{ old('generated_cover_temp_path') }}">
                     <input type="hidden" name="use_generated_cover" id="use_generated_cover" value="{{ old('use_generated_cover', 0) }}">
 
-                    <div class="section-title"><i data-lucide="book-open-text"></i> Detail Buku</div>
-                    <div class="section-subtitle">Lengkapi cover, judul, deskripsi, mata pelajaran, dan level terlebih dulu sebelum mengisi Bab 1.</div>
+                    <div class="section-title"><i data-lucide="book-open-text"></i> Detail Materi</div>
+                    <div class="section-subtitle">Lengkapi cover, judul, deskripsi, kategori, dan level terlebih dulu sebelum mengisi submateri pertama.</div>
 
                     <div class="book-hero-grid">
                         <div class="book-cover-column">
                             <button type="button" id="open_cover_modal_btn" class="book-cover-stage">
-                                <img id="book_cover_stage_image" src="" alt="Preview cover buku">
+                                <img id="book_cover_stage_image" src="" alt="Preview cover materi">
                                 <div id="book_cover_stage_placeholder" class="book-cover-placeholder">
                                     <i data-lucide="image-plus"></i>
-                                    <strong>Tambahkan cover buku</strong>
-                                    Cover akan tampil di daftar buku dan halaman detail materi.
+                                    <strong>Tambahkan cover materi</strong>
+                                    Cover akan tampil di daftar materi dan halaman detail materi.
                                 </div>
                             </button>
 
                             <div class="book-cover-caption">
-                                Cover buku akan dipakai sebagai identitas utama materi di daftar buku, halaman detail, dan area baca siswa.
+                                Cover ini akan dipakai sebagai identitas utama materi di daftar materi, halaman detail, dan area baca siswa.
                             </div>
 
                             <button type="button" id="open_cover_modal_secondary_btn" class="btn btn-secondary cover-stage-trigger">
                                 <i data-lucide="image-plus"></i>
-                                Atur Cover Buku
+                                Atur Cover Materi
                             </button>
                         </div>
 
                         <div class="book-detail-column">
                             <div class="form-group">
                                 <label class="form-label">
-                                    Judul Buku <span class="required">*</span>
+                                    Judul Materi <span class="required">*</span>
                                 </label>
                                 <input type="text" name="judul" value="{{ old('judul') }}" class="form-input" required>
-                                <span class="hint">Masukkan judul buku atau judul materi utamanya.</span>
+                                <span class="hint">Masukkan judul materi utama yang nanti bisa dipecah menjadi beberapa submateri atau bab.</span>
                                 @error('judul')
                                     <span class="error-message">{{ $message }}</span>
                                 @enderror
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Deskripsi Buku</label>
+                                <label class="form-label">Deskripsi Materi</label>
                                 <textarea name="deskripsi" rows="6" class="form-textarea">{{ old('deskripsi') }}</textarea>
-                                <span class="hint">Deskripsi ini membantu guru dan siswa memahami fokus isi buku sebelum masuk ke bab-babnya.</span>
+                                <span class="hint">Deskripsi ini membantu guru dan siswa memahami fokus materi sebelum masuk ke bagian-bagiannya.</span>
                                 @error('deskripsi')
                                     <span class="error-message">{{ $message }}</span>
                                 @enderror
@@ -1011,15 +1011,16 @@
 
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label class="form-label">Mata Pelajaran</label>
+                                    <label class="form-label">Kategori Materi</label>
                                     <select name="mata_pelajaran_id" class="form-select">
-                                        <option value="">Pilih Mata Pelajaran</option>
+                                        <option value="">Pilih Kategori Materi</option>
                                         @foreach($mataPelajarans as $mp)
                                             <option value="{{ $mp->id }}" {{ old('mata_pelajaran_id') == $mp->id ? 'selected' : '' }}>
                                                 {{ $mp->nama }}
                                             </option>
                                         @endforeach
                                     </select>
+                                    <span class="hint">Opsional. Dipakai sebagai label pengelompokan, bukan struktur utama materi.</span>
                                     @error('mata_pelajaran_id')
                                         <span class="error-message">{{ $message }}</span>
                                     @enderror
@@ -1041,7 +1042,7 @@
                             </div>
 
                             <div class="book-cover-caption" style="margin-top: 1.25rem;">
-                                Cover dikelola lewat popup agar form buku tetap rapi. Klik preview cover di samping atau tombol <strong>Atur Cover Buku</strong>.
+                                Cover dikelola lewat popup agar form materi tetap rapi. Klik preview cover di samping atau tombol <strong>Atur Cover Materi</strong>.
                             </div>
                         </div>
                     </div>
@@ -1050,8 +1051,8 @@
                         <div class="cover-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="cover_modal_title">
                             <div class="cover-modal-header">
                                 <div>
-                                    <div id="cover_modal_title" class="section-title" style="margin-bottom: 0.2rem;"><i data-lucide="image"></i> Atur Cover Buku</div>
-                                    <div class="section-subtitle" style="margin-bottom: 0;">Pilih upload manual atau generate dengan Gemini. Cover ini akan dipakai sebagai identitas buku.</div>
+                                    <div id="cover_modal_title" class="section-title" style="margin-bottom: 0.2rem;"><i data-lucide="image"></i> Atur Cover Materi</div>
+                                    <div class="section-subtitle" style="margin-bottom: 0;">Pilih upload manual atau generate dengan Gemini. Cover ini akan dipakai sebagai identitas materi.</div>
                                 </div>
                                 <button type="button" id="close_cover_modal_btn" class="cover-modal-close" aria-label="Tutup popup cover">
                                     <i data-lucide="x"></i>
@@ -1083,7 +1084,7 @@
                                                     <input type="radio" name="cover_mode" value="ai">
                                                     <span class="cover-mode-title">Generate dengan AI</span>
                                                 </div>
-                                                <div class="cover-mode-desc">Buat cover otomatis dari judul, mata pelajaran, level, dan deskripsi.</div>
+                                                <div class="cover-mode-desc">Buat cover otomatis dari judul, kategori, level, dan deskripsi.</div>
                                             </label>
                                         </div>
 
@@ -1234,7 +1235,7 @@
                     <div class="form-group">
                         <label class="form-checkbox">
                             <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', true) ? 'checked' : '' }}>
-                            <span>Status Buku Aktif</span>
+                            <span>Status Materi Aktif</span>
                         </label>
                     </div>
 
@@ -1832,7 +1833,7 @@
                     </label>
                 </div>
                 <div class="chapter-quiz-note">
-                    Kuis bab akan dibuat setelah buku disimpan. Sistem akan menyediakan tombol cepat ke menu kuis dari halaman detail buku.
+                    Kuis per submateri akan dibuat setelah materi disimpan. Sistem akan menyediakan tombol cepat ke menu kuis dari halaman detail materi.
                 </div>
             `;
 
@@ -1997,7 +1998,7 @@
                     body: JSON.stringify({
                         judul,
                         deskripsi: deskripsiInput ? deskripsiInput.value.trim() : '',
-                        mata_pelajaran: selectedMapelText && selectedMapelText !== 'Pilih Mata Pelajaran' ? selectedMapelText : '',
+                        mata_pelajaran: selectedMapelText && selectedMapelText !== 'Pilih Kategori Materi' ? selectedMapelText : '',
                         level: selectedLevelText && selectedLevelText !== 'Pilih Level' ? selectedLevelText : '',
                         prompt_tambahan: coverAiPromptTambahan ? coverAiPromptTambahan.value.trim() : '',
                         previous_temp_path: generatedCoverTempPathInput.value || '',

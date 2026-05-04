@@ -814,13 +814,13 @@
                                     @else
                                         <div class="chapter-cover-fallback">
                                             <strong>{{ \Illuminate\Support\Str::limit($materi->judul, 42) }}</strong>
-                                            <span>Struktur buku per bab</span>
+                                            <span>Struktur materi per submateri</span>
                                         </div>
                                     @endif
                                 </div>
                                 <div class="chapter-side-title">{{ $materi->judul }}</div>
                                 <div class="chapter-side-copy">
-                                    {{ \Illuminate\Support\Str::limit($materi->deskripsi ?: 'Kelola bab seperti daftar isi buku agar kuis dan rangkuman AI tetap terhubung rapi di setiap chapter.', 150) }}
+                                    {{ \Illuminate\Support\Str::limit($materi->deskripsi ?: 'Kelola submateri atau bab agar materi utama tetap rapi dan kuis per bagian tetap mudah diatur.', 150) }}
                                 </div>
                                 <div class="chapter-side-stats">
                                     <div class="chapter-stat">
@@ -832,7 +832,7 @@
                                         <div class="chapter-stat-value">{{ $materi->status_aktif ? 'Aktif' : 'Nonaktif' }}</div>
                                     </div>
                                     <div class="chapter-stat">
-                                        <div class="chapter-stat-label">Mapel</div>
+                                        <div class="chapter-stat-label">Kategori</div>
                                         <div class="chapter-stat-value">{{ $materi->mataPelajaran->nama ?? '-' }}</div>
                                     </div>
                                     <div class="chapter-stat">
@@ -851,11 +851,11 @@
                                 <div class="chapter-side-actions">
                                     <a href="{{ route('materi.bab.create', $materi->id) }}" class="btn btn-primary">
                                         <i data-lucide="plus-circle"></i>
-                                        Bab Baru
+                                        Tambah Submateri
                                     </a>
                                     <a href="{{ route('materi.edit', $materi->id) }}" class="btn btn-secondary">
                                         <i data-lucide="edit-3"></i>
-                                        Edit Buku
+                                        Edit Materi
                                     </a>
                                 </div>
                             </aside>
@@ -863,12 +863,12 @@
                             <div class="chapter-main">
                                 <div class="chapter-main-top">
                                     <div>
-                                        <div class="chapter-main-title">Daftar Isi Buku</div>
-                                        <div class="chapter-main-subtitle">Kelola bab langsung dari sini agar buku terasa seperti chapter reader, bukan kumpulan file yang terpisah.</div>
+                                        <div class="chapter-main-title">Daftar Submateri / Bab</div>
+                                        <div class="chapter-main-subtitle">Kelola rincian materi langsung dari sini agar setiap topik tetap runtut dan mudah dihubungkan ke kuis.</div>
                                     </div>
                                     <a href="{{ route('materi.bab.create', $materi->id) }}" class="btn btn-primary">
                                         <i data-lucide="plus-circle"></i>
-                                        Bab Baru
+                                        Tambah Submateri
                                     </a>
                                 </div>
 
@@ -934,7 +934,7 @@
                                                 @endif
 
                                                 <div class="chapter-note">
-                                                    Letakkan kuis dan rangkuman di akhir bab agar pengalaman membaca tetap runtut seperti chapter book, bukan kumpulan materi yang terpisah.
+                                                    Letakkan kuis dan rangkuman di akhir submateri agar alur belajar tetap runtut dan setiap topik punya penutup yang jelas.
                                                 </div>
 
                                                 @if($bab->summary_short || ($bab->summary_key_points ?? []))
@@ -989,7 +989,7 @@
                                     </div>
                                 @else
                                     <div style="padding:1.2rem 1.25rem; color:var(--color-muted);">
-                                        Buku ini belum punya bab. Tambahkan bab pertama agar daftar isi mulai terbentuk dengan rapi.
+                                        Materi ini belum punya submateri. Tambahkan bagian pertama agar struktur isi mulai terbentuk dengan rapi.
                                     </div>
                                 @endif
                             </div>
@@ -999,7 +999,7 @@
                     <div class="action-buttons">
                         <a href="{{ route('materi.edit', $materi->id) }}" class="btn btn-primary">
                             <i data-lucide="edit-3"></i>
-                            Edit Buku
+                            Edit Materi
                         </a>
                         <a href="{{ route('materi.index') }}" class="btn btn-secondary">
                             <i data-lucide="arrow-left"></i>

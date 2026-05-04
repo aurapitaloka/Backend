@@ -437,27 +437,27 @@
             <div class="content-area">
                 <a href="{{ route('materi.show', $materi->id) }}" class="back-link-clean">
                     <i data-lucide="arrow-left"></i>
-                    Kembali ke detail buku
+                    Kembali ke detail materi
                 </a>
 
                 <div class="form-container">
                     <div class="hero-panel">
                         <div class="hero-card">
-                            <div class="hero-title">Perbarui Bab</div>
+                            <div class="hero-title">Perbarui Submateri</div>
                             <div class="hero-subtitle">
-                                Edit isi, urutan, atau tipe konten bab tanpa memecah struktur buku. Perubahan ini akan langsung menjaga alur belajar siswa tetap runtut.
+                                Edit isi, urutan, atau tipe konten submateri tanpa memecah struktur materi utama. Perubahan ini akan langsung menjaga alur belajar siswa tetap runtut.
                             </div>
                             <div class="hero-book-name">
                                 <i data-lucide="book-open"></i>
-                                <span>{{ $materi->judul }} • Bab {{ $bab->urutan }}</span>
+                                <span>{{ $materi->judul }} - Bagian {{ $bab->urutan }}</span>
                             </div>
                         </div>
                         <div class="info-card">
-                            <div class="mini-label">Judul Bab Saat Ini</div>
+                            <div class="mini-label">Judul Submateri Saat Ini</div>
                             <div class="mini-value">{{ $bab->judul_bab }}</div>
                             <div class="mini-label" style="margin-top:0.85rem;">Relasi Kuis</div>
                             <div class="hero-subtitle" style="font-size:0.9rem;">
-                                Setelah bab ini diperbarui, kuis yang terhubung tetap bisa dikelola dari halaman detail buku melalui tombol cepat per bab.
+                                Setelah bagian ini diperbarui, kuis yang terhubung tetap bisa dikelola dari halaman detail materi melalui tombol cepat per submateri.
                             </div>
                         </div>
                     </div>
@@ -472,11 +472,11 @@
                         </div>
                     @endif
 
-                    <div class="section-title"><i data-lucide="pencil-line"></i> Form Edit Bab</div>
-                    <div class="section-subtitle">Perbarui data bab dengan jelas agar buku tetap konsisten dan profesional di sisi admin maupun siswa.</div>
+                    <div class="section-title"><i data-lucide="pencil-line"></i> Form Edit Submateri</div>
+                    <div class="section-subtitle">Perbarui data submateri dengan jelas agar materi tetap konsisten dan profesional di sisi admin maupun siswa.</div>
 
                     <div class="note-box">
-                        Bab tetap menjadi bagian dari satu buku utama. Gunakan halaman ini untuk memperbarui konten tanpa membuat materi baru, sehingga struktur chapter tetap efisien dan mudah dikelola.
+                        Submateri ini tetap menjadi bagian dari satu materi utama. Gunakan halaman ini untuk memperbarui konten tanpa membuat materi baru, sehingga struktur isi tetap efisien dan mudah dikelola.
                     </div>
 
                     <form method="POST" action="{{ route('materi.bab.update', [$materi->id, $bab->id]) }}" enctype="multipart/form-data" id="babForm">

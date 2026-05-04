@@ -228,15 +228,6 @@
         </a>
     </div>
     
-    <div class="nav-item" data-route="mata-pelajaran">
-        <a href="{{ route('mata-pelajaran.index', [], false) }}" data-testid="nav-mata-pelajaran" aria-label="Mata Pelajaran">
-            <span class="nav-icon">
-                <i data-lucide="graduation-cap"></i>
-            </span>
-            <span>Mata Pelajaran</span>
-        </a>
-    </div>
-
     <div class="nav-item" data-route="landing">
         <a href="{{ route('landing.index', [], false) }}" data-testid="nav-landing" aria-label="Landing">
             <span class="nav-icon">
@@ -309,10 +300,7 @@
         // Check in order of specificity (most specific first)
         // Must check specific routes BEFORE checking /dashboard to avoid conflicts
         
-        if (currentPath.includes('/dashboard/mata-pelajaran') || currentPath.includes('/mata-pelajaran')) {
-            activeRoute = 'mata-pelajaran';
-        }
-        else if (currentPath.includes('/dashboard/landing') || currentPath.includes('/landing')) {
+        if (currentPath.includes('/dashboard/landing') || currentPath.includes('/landing')) {
             activeRoute = 'landing';
         }
         else if (currentPath.includes('/dashboard/panduan') || currentPath.includes('/panduan')) {

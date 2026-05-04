@@ -437,15 +437,15 @@
             <div class="content-area">
                 <a href="{{ route('materi.show', $materi->id) }}" class="back-link-clean">
                     <i data-lucide="arrow-left"></i>
-                    Kembali ke detail buku
+                    Kembali ke detail materi
                 </a>
 
                 <div class="form-container">
                     <div class="hero-panel">
                         <div class="hero-card">
-                            <div class="hero-title">Tambah Bab Baru</div>
+                            <div class="hero-title">Tambah Submateri Baru</div>
                             <div class="hero-subtitle">
-                                Tambahkan chapter baru agar struktur materi tetap rapi sebagai satu buku utuh. Bab ini akan menjadi bagian dari alur baca dan bisa dihubungkan ke kuis setelah disimpan.
+                                Tambahkan submateri baru agar struktur materi utama tetap rapi. Bagian ini akan menjadi turunan dari materi dan bisa dihubungkan ke kuis setelah disimpan.
                             </div>
                             <div class="hero-book-name">
                                 <i data-lucide="book-open"></i>
@@ -453,11 +453,11 @@
                             </div>
                         </div>
                         <div class="info-card">
-                            <div class="mini-label">Posisi Bab Berikutnya</div>
+                            <div class="mini-label">Posisi Submateri Berikutnya</div>
                             <div class="mini-value">Bab {{ $nextUrutan ?? 1 }}</div>
                             <div class="mini-label" style="margin-top:0.85rem;">Pola Pengelolaan</div>
                             <div class="hero-subtitle" style="font-size:0.9rem;">
-                                Satu buku dapat memiliki banyak bab. Setiap bab bisa memakai teks langsung atau file terpisah sesuai kebutuhan guru.
+                                Satu materi dapat memiliki banyak submateri atau bab. Setiap bagian bisa memakai teks langsung atau file terpisah sesuai kebutuhan guru.
                             </div>
                         </div>
                     </div>
@@ -472,11 +472,11 @@
                         </div>
                     @endif
 
-                    <div class="section-title"><i data-lucide="layout-template"></i> Form Bab</div>
-                    <div class="section-subtitle">Isi data bab dengan jelas agar materi mudah dibaca dan siap dilanjutkan ke kuis per bab.</div>
+                    <div class="section-title"><i data-lucide="layout-template"></i> Form Submateri</div>
+                    <div class="section-subtitle">Isi data submateri dengan jelas agar materi mudah dibaca dan siap dilanjutkan ke kuis per bagian.</div>
 
                     <div class="note-box">
-                        Bab disimpan sebagai bagian dari buku ini, bukan sebagai materi terpisah. Setelah bab berhasil dibuat, kamu bisa memakai tombol cepat di halaman detail buku untuk membuat kuis yang menempel di akhir bab.
+                        Submateri ini disimpan sebagai bagian dari materi utama, bukan sebagai materi terpisah. Setelah berhasil dibuat, kamu bisa memakai tombol cepat di halaman detail materi untuk membuat kuis yang menempel di akhir bagian ini.
                     </div>
 
                     <form method="POST" action="{{ route('materi.bab.store', $materi->id) }}" enctype="multipart/form-data" id="babForm">
@@ -486,7 +486,7 @@
                         <div class="btn-row">
                             <button type="submit" class="btn btn-primary">
                                 <i data-lucide="save"></i>
-                                Simpan Bab
+                                Simpan Submateri
                             </button>
                             <a href="{{ route('materi.show', $materi->id) }}" class="btn btn-secondary">
                                 <i data-lucide="arrow-left"></i>

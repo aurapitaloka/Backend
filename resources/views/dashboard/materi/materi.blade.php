@@ -764,7 +764,7 @@
                     </div>
                 @endif
 
-                <div class="page-subtitle">Kelola daftar materi agar terstruktur dan siap digunakan.</div>
+                <div class="page-subtitle">Kelola materi sebagai bahan ajar utama. Setiap materi bisa dipecah lagi menjadi submateri atau bab sesuai kebutuhan.</div>
 
                 <div class="materi-controls">
                     <div class="page-toolbar">
@@ -786,7 +786,7 @@
                                 name="search"
                                 value="{{ $search }}"
                                 class="search-input"
-                                placeholder="Cari materi berdasarkan ID, judul, mapel, level, atau pembuat..."
+                                placeholder="Cari materi berdasarkan ID, judul, kategori, level, atau pembuat..."
                                 aria-label="Cari materi"
                             >
                         </div>
@@ -800,7 +800,7 @@
                                 <span>Reset</span>
                             </a>
                         @endif
-                        <div class="search-note">Gunakan kata kunci seperti ID materi, judul, mata pelajaran, level, nama pembuat, atau email pembuat.</div>
+                        <div class="search-note">Gunakan kata kunci seperti ID materi, judul, kategori materi, level, nama pembuat, atau email pembuat.</div>
                     </form>
                 </div>
                 
@@ -822,7 +822,7 @@
                                     <th>No.</th>
                                     <th>Tanggal</th>
                                     <th>Judul</th>
-                                    <th>Mata Pelajaran</th>
+                                    <th>Kategori</th>
                                     <th>Level</th>
                                     <th>Tipe</th>
                                     <th>File</th>

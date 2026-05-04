@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Buku - Ruma Dashboard</title>
+    <title>Edit Materi - Ruma Dashboard</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -135,7 +135,7 @@
 
         <main class="main-content">
             <header class="header-bar">
-                <h1 class="header-title">Edit Buku</h1>
+                <h1 class="header-title">Edit Materi</h1>
             </header>
 
             <div class="content-area">
@@ -166,11 +166,11 @@
                     @method('PUT')
 
                     <div class="note-box">
-                        Halaman ini hanya untuk mengubah metadata buku: judul, deskripsi, mata pelajaran, level, cover, dan status. Isi bab dikelola dari halaman detail buku agar struktur chapter tetap rapi.
+                        Halaman ini hanya untuk mengubah metadata materi: judul, deskripsi, kategori, level, cover, dan status. Isi submateri dikelola dari halaman detail materi agar struktur pembahasan tetap rapi.
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Judul Buku <span class="required">*</span></label>
+                        <label class="form-label">Judul Materi <span class="required">*</span></label>
                         <input type="text" name="judul" value="{{ old('judul', $materi->judul) }}" class="form-input" required>
                         @error('judul')
                             <span class="error-message">{{ $message }}</span>
@@ -187,15 +187,16 @@
 
                     <div class="form-grid">
                         <div class="form-group">
-                            <label class="form-label">Mata Pelajaran</label>
+                            <label class="form-label">Kategori Materi</label>
                             <select name="mata_pelajaran_id" class="form-select">
-                                <option value="">Pilih Mata Pelajaran</option>
+                                <option value="">Pilih Kategori Materi</option>
                                 @foreach($mataPelajarans as $mp)
                                     <option value="{{ $mp->id }}" {{ old('mata_pelajaran_id', $materi->mata_pelajaran_id) == $mp->id ? 'selected' : '' }}>
                                         {{ $mp->nama }}
                                     </option>
                                 @endforeach
                             </select>
+                            <span class="hint">Opsional. Dipakai sebagai label pengelompokan, bukan struktur utama materi.</span>
                             @error('mata_pelajaran_id')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
@@ -218,7 +219,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Cover Buku</label>
+                        <label class="form-label">Cover Materi</label>
                         <div class="cover-panel">
                             <input type="file" name="cover_path" id="cover_path" accept=".jpg,.jpeg,.png,.webp" class="form-input">
                             <span class="hint">Opsional. Kalau tidak diganti, sistem tetap memakai cover yang sekarang.</span>
@@ -228,7 +229,7 @@
                                 <div class="current-cover">
                                     <img src="{{ $materi->cover_url }}" alt="Cover {{ $materi->judul }}">
                                     <div class="hint" style="margin-top:0;">
-                                        Cover buku saat ini digunakan di daftar materi dan halaman detail buku.
+                                        Cover materi saat ini digunakan di daftar materi dan halaman detail materi.
                                     </div>
                                 </div>
                             @endif
@@ -241,7 +242,7 @@
                     <div class="form-group">
                         <label class="form-checkbox">
                             <input type="checkbox" name="status_aktif" value="1" {{ old('status_aktif', $materi->status_aktif) ? 'checked' : '' }}>
-                            <span>Status Buku Aktif</span>
+                            <span>Status Materi Aktif</span>
                         </label>
                     </div>
 
