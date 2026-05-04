@@ -134,7 +134,7 @@
             <div class="hero-chips">
                 <div class="hero-chip"><i data-lucide="layers"></i> {{ $user->siswa->level->nama ?? 'Kelas belum dipilih' }}</div>
                 <div class="hero-chip"><i data-lucide="mic"></i> Suara: {{ ($user->auto_voice_nav ?? false) ? 'Aktif' : 'Nonaktif' }}</div>
-                <div class="hero-chip"><i data-lucide="sparkles"></i> Fokus hari ini: Materi & Kuis</div>
+                <div class="hero-chip"><i data-lucide="sparkles"></i> Fokus hari ini: Mata Pelajaran & Kuis</div>
             </div>
         </div>
 
@@ -150,7 +150,7 @@
             </div>
             <div class="hero-row">
                 <span>Langkah berikutnya</span>
-                <strong>Buka materi terbaru</strong>
+                <strong>Buka mata pelajaran terbaru</strong>
             </div>
             <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
                 <a href="{{ route('dashboard.siswa.pengaturan') }}" class="btn btn-secondary">Atur Kelas</a>
@@ -160,14 +160,14 @@
     </div>
 
     <div class="action-section">
-        <h3 class="section-title" style="margin-bottom: 0.6rem;">Materi Terakhir Dibuka</h3>
+        <h3 class="section-title" style="margin-bottom: 0.6rem;">Mata Pelajaran Terakhir Dibuka</h3>
         <div class="action-list">
             <div class="action-item">
                 <div class="action-icon"><i data-lucide="bookmark"></i></div>
                 <div class="action-content">
                     @if(!empty($lastReadMateri))
                         <h4>{{ $lastReadMateri->judul }}</h4>
-                        <p>{{ $lastReadMateri->deskripsi ?? 'Lanjutkan materi terakhir yang kamu buka.' }}</p>
+                        <p>{{ $lastReadMateri->deskripsi ?? 'Lanjutkan mata pelajaran terakhir yang kamu buka.' }}</p>
                         <div style="margin-bottom:0.75rem;">
                             <div style="font-size:0.85rem; color: var(--color-text-light); margin-bottom:0.35rem;">
                                 Progres belajar: {{ $lastReadProgress ?? 0 }}%
@@ -179,8 +179,8 @@
                         <a href="{{ route('dashboard.siswa.materi.show', $lastReadMateri->id) }}" class="btn btn-primary">Lanjutkan</a>
                     @else
                         <h4>Yuk mulai belajar</h4>
-                        <p>Belum ada materi yang dibuka. Pilih materi pertama untuk mulai belajar.</p>
-                        <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Pilih Materi</a>
+                        <p>Belum ada mata pelajaran yang dibuka. Pilih mata pelajaran pertama untuk mulai belajar.</p>
+                        <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Pilih Mata Pelajaran</a>
                     @endif
                 </div>
             </div>
@@ -193,9 +193,9 @@
             <div class="action-item">
                 <div class="action-icon"><i data-lucide="book-open"></i></div>
                 <div class="action-content">
-                    <h4>Materi Belajar</h4>
-                    <p>Cari semua materi aktif dan mulai belajar sekarang.</p>
-                    <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Lihat Materi</a>
+                    <h4>Mata Pelajaran</h4>
+                    <p>Cari semua mata pelajaran aktif dan mulai belajar sekarang.</p>
+                    <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Lihat Mata Pelajaran</a>
                 </div>
             </div>
 
@@ -203,7 +203,7 @@
                 <div class="action-icon"><i data-lucide="check-square"></i></div>
                 <div class="action-content">
                     <h4>Mulai Kuis</h4>
-                    <p>Uji pemahamanmu setelah membaca materi.</p>
+                    <p>Uji pemahamanmu setelah membaca mata pelajaran.</p>
                     <a href="{{ route('dashboard.siswa.kuis') }}" class="btn btn-primary">Mulai Kuis</a>
                 </div>
             </div>
@@ -230,7 +230,7 @@
                 <div class="action-icon"><i data-lucide="books"></i></div>
                 <div class="action-content">
                     <h4>Rak Buku</h4>
-                    <p>Kumpulkan materi penting agar mudah diakses ulang.</p>
+                    <p>Kumpulkan mata pelajaran penting agar mudah diakses ulang.</p>
                     <a href="{{ route('dashboard.siswa.rak-buku') }}" class="btn btn-secondary">Buka Rak Buku</a>
                 </div>
             </div>

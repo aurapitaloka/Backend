@@ -152,13 +152,13 @@
 
     <div class="history-hero">
         <h2 class="section-title">Riwayat</h2>
-        <p class="section-desc">Pantau perkembangan belajar dari materi dan kuis.</p>
+        <p class="section-desc">Pantau perkembangan belajar dari mata pelajaran dan kuis.</p>
         <div class="summary-grid">
             <div class="summary-card">
                 <span class="summary-icon"><i data-lucide="book-open"></i></span>
                 <div>
-                    <div class="section-title" style="font-size:1.1rem;">Materi Dibaca</div>
-                    <div class="section-desc" style="font-size:0.9rem;">{{ $riwayat->total() }} materi tercatat.</div>
+                    <div class="section-title" style="font-size:1.1rem;">Mata Pelajaran Dibaca</div>
+                    <div class="section-desc" style="font-size:0.9rem;">{{ $riwayat->total() }} mata pelajaran tercatat.</div>
                 </div>
             </div>
             <div class="summary-card">
@@ -172,20 +172,20 @@
     </div>
 
     <div class="section-card no-stripe" style="margin-top:1.5rem;">
-        <span class="tag">Materi</span>
+        <span class="tag">Mata Pelajaran</span>
         <h3 class="section-title">Riwayat Baca</h3>
-        <p class="section-desc">Materi terakhir yang kamu baca.</p>
+        <p class="section-desc">Mata pelajaran terakhir yang kamu baca.</p>
 
         @if($riwayat->count() === 0)
-            <p class="section-desc">Belum ada riwayat materi.</p>
-            <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Lihat Materi</a>
+            <p class="section-desc">Belum ada riwayat mata pelajaran.</p>
+            <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Lihat Mata Pelajaran</a>
         @else
             <div class="history-row" style="margin-top:1rem;">
                 @foreach($riwayat as $item)
                     <article class="history-card">
                         <span class="tag">Terakhir Dibaca</span>
                         <h3 class="section-title">{{ $item->judul }}</h3>
-                        <p class="section-desc">{{ $item->deskripsi ?? 'Materi ini belum memiliki deskripsi.' }}</p>
+                        <p class="section-desc">{{ $item->deskripsi ?? 'Mata pelajaran ini belum memiliki deskripsi.' }}</p>
                         <p class="history-meta">Terakhir dibaca: {{ \Carbon\Carbon::parse($item->last_access)->format('d M Y, H:i') }}</p>
                         <p class="history-meta">Total dibaca: {{ $item->total_baca }} kali</p>
                         <p class="history-meta">Halaman terakhir: {{ $item->halaman_terakhir ?? '-' }} | Progres: {{ $item->progres_persen ?? '-' }}%</p>
@@ -212,7 +212,7 @@
 
         @if($riwayatKuis->count() === 0)
             <p class="section-desc">Belum ada riwayat kuis.</p>
-            <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Kerjakan Kuis</a>
+            <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Pilih Mata Pelajaran</a>
         @else
             <div class="history-row-wrap" style="margin-top:1rem;">
                 <div class="history-row-hint"><i data-lucide="move-horizontal"></i> Geser</div>
@@ -222,7 +222,7 @@
                         <article class="history-card">
                             <span class="tag">Selesai Kuis</span>
                             <h3 class="section-title">{{ $item->kuis_judul }}</h3>
-                            <p class="section-desc">Materi: {{ $item->materi_judul ?? '-' }}</p>
+                            <p class="section-desc">Mata Pelajaran: {{ $item->materi_judul ?? '-' }}</p>
                             <div style="margin-top:0.5rem;">
                                 <div class="score-badge"><i data-lucide="award"></i> {{ $item->skor }}%</div>
                                 <p class="history-meta">Benar {{ $item->total_benar }} dari {{ $item->total_pertanyaan }} soal</p>
@@ -231,12 +231,12 @@
                             <p class="history-meta">Status essay: {{ ($item->has_pending ?? 0) ? 'Menunggu Koreksi' : 'Disetujui' }}</p>
                             @if($item->materi_id)
                                 <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
-                                    <a href="{{ route('dashboard.siswa.materi.show', $item->materi_id) }}" class="btn btn-secondary">Lihat Materi</a>
+                                    <a href="{{ route('dashboard.siswa.materi.show', $item->materi_id) }}" class="btn btn-secondary">Lihat Mata Pelajaran</a>
                                     <a href="{{ route('dashboard.siswa.riwayat.kuis.show', $item->hasil_id) }}" class="btn btn-primary">Detail Jawaban</a>
                                 </div>
                             @else
                                 <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
-                                    <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-secondary">Lihat Materi</a>
+                                    <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-secondary">Lihat Mata Pelajaran</a>
                                     <a href="{{ route('dashboard.siswa.riwayat.kuis.show', $item->hasil_id) }}" class="btn btn-primary">Detail Jawaban</a>
                                 </div>
                             @endif

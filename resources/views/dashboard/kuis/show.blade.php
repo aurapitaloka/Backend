@@ -80,8 +80,8 @@
                     <div class="tag">Detail Kuis</div>
                     <div class="title" style="margin-top:0.5rem;">{{ $kuis->judul }}</div>
                     <div class="desc">{{ $kuis->deskripsi ?? 'Tanpa deskripsi.' }}</div>
-                    <div class="desc" style="margin-top:0.5rem;">Materi: {{ $kuis->materi->judul ?? '-' }}</div>
-                    <div class="desc">Bab: {{ $kuis->materiBab ? 'Bab ' . $kuis->materiBab->urutan . ' - ' . $kuis->materiBab->judul_bab : '-' }}</div>
+                    <div class="desc" style="margin-top:0.5rem;">Mata Pelajaran: {{ $kuis->materi->judul ?? '-' }}</div>
+                    <div class="desc">Materi: {{ $kuis->materiBab ? 'Materi ' . $kuis->materiBab->urutan . ' - ' . $kuis->materiBab->judul_bab : '-' }}</div>
                     <div class="desc">Status: {{ $kuis->status_aktif ? 'Aktif' : 'Nonaktif' }}</div>
                     <div class="actions" style="margin-top:1rem;">
                         <a href="{{ route('kuis.edit', $kuis->id) }}" class="btn btn-secondary">Edit</a>

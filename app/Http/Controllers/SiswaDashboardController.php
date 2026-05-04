@@ -46,7 +46,7 @@ class SiswaDashboardController extends Controller
             return $redirect;
         }
 
-        $pageTitle = 'Materi';
+        $pageTitle = 'Mata Pelajaran';
         $materi = Materi::with(['mataPelajaran', 'level'])
             ->where('status_aktif', true)
             ->orderBy('created_at', 'desc')
@@ -73,7 +73,7 @@ class SiswaDashboardController extends Controller
             abort(404);
         }
 
-        $pageTitle = 'Detail Materi';
+        $pageTitle = 'Detail Mata Pelajaran';
         $materiKuisList = Kuis::withCount('pertanyaan')
             ->where('materi_id', $materi->id)
             ->where('status_aktif', true)
@@ -162,7 +162,7 @@ class SiswaDashboardController extends Controller
         if (!$materi->status_aktif) {
             return redirect()
                 ->back()
-                ->with('error', 'Materi ini sudah tidak tersedia.');
+                ->with('error', 'Mata pelajaran ini sudah tidak tersedia.');
         }
 
         if ($block = $this->ensureMateriLevelAccess($user, $materi)) {
@@ -176,7 +176,7 @@ class SiswaDashboardController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Materi ditambahkan ke rak buku.');
+            ->with('success', 'Mata pelajaran ditambahkan ke rak buku.');
     }
 
     public function removeRakBuku($materiId)
@@ -192,7 +192,7 @@ class SiswaDashboardController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Materi dihapus dari rak buku.');
+            ->with('success', 'Mata pelajaran dihapus dari rak buku.');
     }
 
     public function catatan()
@@ -450,7 +450,7 @@ class SiswaDashboardController extends Controller
         if (!$kuis) {
             return redirect()
                 ->route('dashboard.siswa.materi.show', $materi->id)
-                ->with('error', 'Kuis untuk materi ini belum tersedia.');
+                ->with('error', 'Kuis untuk mata pelajaran ini belum tersedia.');
         }
 
         return redirect()->route('dashboard.siswa.materi.kuis.show', [
@@ -477,7 +477,7 @@ class SiswaDashboardController extends Controller
         $kuis = $this->resolveMateriKuis($materi, $kuis);
         $kuis->load('pertanyaan.opsi');
 
-        $pageTitle = 'Kuis Materi';
+        $pageTitle = 'Kuis Mata Pelajaran';
         $submitRoute = route('dashboard.siswa.materi.kuis.submit', [
             'materi' => $materi->id,
             'kuis' => $kuis->id,

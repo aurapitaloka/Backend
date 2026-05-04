@@ -786,7 +786,7 @@
                                 name="search"
                                 value="{{ $search }}"
                                 class="search-input"
-                                placeholder="Cari mata pelajaran berdasarkan ID, judul, kategori, level, atau pembuat..."
+                                placeholder="Cari mata pelajaran berdasarkan ID, judul, level, atau pembuat..."
                                 aria-label="Cari mata pelajaran"
                             >
                         </div>
@@ -800,7 +800,7 @@
                                 <span>Reset</span>
                             </a>
                         @endif
-                        <div class="search-note">Gunakan kata kunci seperti ID mata pelajaran, judul, kategori, level, nama pembuat, atau email pembuat.</div>
+                        <div class="search-note">Gunakan kata kunci seperti ID mata pelajaran, judul, level, nama pembuat, atau email pembuat.</div>
                     </form>
                 </div>
                 
@@ -822,7 +822,6 @@
                                     <th>No.</th>
                                     <th>Tanggal</th>
                                     <th>Judul</th>
-                                    <th>Kategori</th>
                                     <th>Level</th>
                                     <th>Tipe</th>
                                     <th>File</th>
@@ -836,7 +835,6 @@
                                         <td>{{ $materi->firstItem() + $index }}</td>
                                         <td>{{ $item->created_at->format('d M Y') }}</td>
                                         <td>{{ $item->judul }}</td>
-                                        <td>{{ $item->mataPelajaran?->nama ?? '-' }}</td>
                                         <td>{{ $item->level?->nama ?? '-' }}</td>
                                         <td>
                                             <span class="badge {{ $item->tipe_konten == 'teks' ? 'badge-info' : 'badge-warning' }}">

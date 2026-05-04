@@ -417,7 +417,7 @@
                     </div>
                 @endif
 
-                <div class="page-subtitle">Buat dan kelola kuis untuk materi pembelajaran.</div>
+                <div class="page-subtitle">Buat dan kelola kuis untuk mata pelajaran dan materi yang terhubung.</div>
                 <div class="list-search-panel">
                     <div class="page-toolbar">
                         <div class="summary-card">
@@ -434,8 +434,8 @@
                         'action' => route('kuis.index'),
                         'resetRoute' => route('kuis.index'),
                         'value' => $search ?? '',
-                        'placeholder' => 'Cari kuis berdasarkan ID, judul, deskripsi, atau materi...',
-                        'note' => 'Gunakan kata kunci seperti ID kuis, judul kuis, deskripsi, atau judul materi yang terhubung.',
+                        'placeholder' => 'Cari kuis berdasarkan ID, judul, deskripsi, atau mata pelajaran...',
+                        'note' => 'Gunakan kata kunci seperti ID kuis, judul kuis, deskripsi, atau judul mata pelajaran yang terhubung.',
                         'panel' => false
                     ])
                 </div>
@@ -450,7 +450,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Judul</th>
-                                    <th>Materi</th>
+                                    <th>Mata Pelajaran</th>
                                     <th>Pertanyaan</th>
                                     <th>Status</th>
                                     <th>Aksi</th>

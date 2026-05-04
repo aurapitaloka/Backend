@@ -7,14 +7,14 @@
     <div class="section-grid">
         <section class="section-card">
             <span class="tag">1</span>
-            <h3 class="section-title">Pilih Materi</h3>
-            <p class="section-desc">Masuk ke menu Materi, lalu pilih materi yang ingin dibaca.</p>
+            <h3 class="section-title">Pilih Mata Pelajaran</h3>
+            <p class="section-desc">Masuk ke menu Mata Pelajaran, lalu pilih mata pelajaran yang ingin dibaca.</p>
         </section>
 
         <section class="section-card">
             <span class="tag">2</span>
             <h3 class="section-title">Masuk Sesi Baca</h3>
-            <p class="section-desc">Di detail materi, klik tombol <strong>Baca Materi</strong>.</p>
+            <p class="section-desc">Di detail mata pelajaran, klik tombol <strong>Mulai Membaca</strong>.</p>
         </section>
 
         <section class="section-card">
@@ -49,7 +49,7 @@
             <p class="section-desc">
                 Aktifkan tombol <strong>Voice Nav</strong> di header, lalu ucapkan:
                 <br>• "buka dashboard"
-                <br>• "buka materi"
+                <br>• "buka mata pelajaran"
                 <br>• "buka catatan"
                 <br>• "buka riwayat"
                 <br>• "buka panduan"
@@ -73,7 +73,7 @@
         <span class="tag">Catatan</span>
         <p class="section-desc">
             Browser perlu izin mikrofon dan umumnya harus ada klik pertama untuk mengaktifkan ASR.
-            TTS bekerja penuh untuk materi teks; untuk PDF tergantung dukungan browser.
+            TTS bekerja penuh untuk mata pelajaran teks; untuk PDF tergantung dukungan browser.
         </p>
     </div>
 @endsection

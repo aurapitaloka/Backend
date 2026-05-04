@@ -936,7 +936,7 @@
             
             <!-- Header Bar -->
             <header class="header-bar">
-                <h1 class="header-title">Tambah Buku Baru</h1>
+                <h1 class="header-title">Tambah Mata Pelajaran Baru</h1>
             </header>
             
             <!-- Content Area -->
@@ -965,7 +965,7 @@
                     <input type="hidden" name="use_generated_cover" id="use_generated_cover" value="{{ old('use_generated_cover', 0) }}">
 
                     <div class="section-title"><i data-lucide="book-open-text"></i> Detail Mata Pelajaran</div>
-                    <div class="section-subtitle">Lengkapi cover, judul, deskripsi, kategori, dan level terlebih dulu sebelum mengisi materi pertama.</div>
+                    <div class="section-subtitle">Lengkapi cover, judul, deskripsi, dan level terlebih dulu sebelum mengisi materi pertama.</div>
 
                     <div class="book-hero-grid">
                         <div class="book-cover-column">
@@ -1010,21 +1010,6 @@
                             </div>
 
                             <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">Kategori</label>
-                                    <select name="mata_pelajaran_id" class="form-select">
-                                        <option value="">Pilih Kategori</option>
-                                        @foreach($mataPelajarans as $mp)
-                                            <option value="{{ $mp->id }}" {{ old('mata_pelajaran_id') == $mp->id ? 'selected' : '' }}>
-                                                {{ $mp->nama }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <span class="hint">Opsional. Dipakai sebagai label pengelompokan tambahan.</span>
-                                    @error('mata_pelajaran_id')
-                                        <span class="error-message">{{ $message }}</span>
-                                    @enderror
-                                </div>
                                 <div class="form-group">
                                     <label class="form-label">Level</label>
                                     <select name="level_id" class="form-select">
@@ -1084,7 +1069,7 @@
                                                     <input type="radio" name="cover_mode" value="ai">
                                                     <span class="cover-mode-title">Generate dengan AI</span>
                                                 </div>
-                                                <div class="cover-mode-desc">Buat cover otomatis dari judul, kategori, level, dan deskripsi.</div>
+                                                <div class="cover-mode-desc">Buat cover otomatis dari judul, level, dan deskripsi.</div>
                                             </label>
                                         </div>
 
@@ -1242,7 +1227,7 @@
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
                             <i data-lucide="save"></i>
-                            Simpan Buku
+                            Simpan Mata Pelajaran
                         </button>
                         <a href="{{ route('materi.index') }}" class="btn btn-secondary">
                             <i data-lucide="x"></i>
@@ -1962,7 +1947,6 @@
         async function generateAiCover() {
             const judulInput = document.querySelector('input[name="judul"]');
             const deskripsiInput = document.querySelector('textarea[name="deskripsi"]');
-            const mataPelajaranSelect = document.querySelector('select[name="mata_pelajaran_id"]');
             const levelSelect = document.querySelector('select[name="level_id"]');
             const judul = judulInput ? judulInput.value.trim() : '';
 
@@ -1974,9 +1958,6 @@
                 return;
             }
 
-            const selectedMapelText = mataPelajaranSelect && mataPelajaranSelect.selectedIndex >= 0
-                ? mataPelajaranSelect.options[mataPelajaranSelect.selectedIndex].text
-                : '';
             const selectedLevelText = levelSelect && levelSelect.selectedIndex >= 0
                 ? levelSelect.options[levelSelect.selectedIndex].text
                 : '';
@@ -1998,7 +1979,7 @@
                     body: JSON.stringify({
                         judul,
                         deskripsi: deskripsiInput ? deskripsiInput.value.trim() : '',
-                        mata_pelajaran: selectedMapelText && selectedMapelText !== 'Pilih Kategori' ? selectedMapelText : '',
+                        mata_pelajaran: '',
                         level: selectedLevelText && selectedLevelText !== 'Pilih Level' ? selectedLevelText : '',
                         prompt_tambahan: coverAiPromptTambahan ? coverAiPromptTambahan.value.trim() : '',
                         previous_temp_path: generatedCoverTempPathInput.value || '',

@@ -32,13 +32,13 @@ class MateriBabController extends Controller
 
         if ($this->isApiRequest($request)) {
             return response()->json([
-                'message' => 'Bab materi berhasil ditambahkan.',
+                'message' => 'Materi berhasil ditambahkan.',
                 'data' => $this->formatBabResponse($bab),
             ], 201);
         }
 
         return redirect()->route('materi.show', $materi->id)
-            ->with('success', 'Bab materi berhasil ditambahkan.');
+            ->with('success', 'Materi berhasil ditambahkan.');
     }
 
     public function show(Request $request, Materi $materi, MateriBab $bab)
@@ -70,13 +70,13 @@ class MateriBabController extends Controller
 
         if ($this->isApiRequest($request)) {
             return response()->json([
-                'message' => 'Bab materi berhasil diperbarui.',
+                'message' => 'Materi berhasil diperbarui.',
                 'data' => $this->formatBabResponse($bab->fresh()),
             ]);
         }
 
         return redirect()->route('materi.show', $materi->id)
-            ->with('success', 'Bab materi berhasil diperbarui.');
+            ->with('success', 'Materi berhasil diperbarui.');
     }
 
     public function destroy(Request $request, Materi $materi, MateriBab $bab)
@@ -92,12 +92,12 @@ class MateriBabController extends Controller
 
         if ($this->isApiRequest($request)) {
             return response()->json([
-                'message' => 'Bab materi berhasil dihapus.',
+                'message' => 'Materi berhasil dihapus.',
             ]);
         }
 
         return redirect()->route('materi.show', $materi->id)
-            ->with('success', 'Bab materi berhasil dihapus.');
+            ->with('success', 'Materi berhasil dihapus.');
     }
 
     public function generateSummary(Request $request, Materi $materi, MateriBab $bab, GeminiBabSummaryService $summaryService)
@@ -112,13 +112,13 @@ class MateriBabController extends Controller
 
             if ($this->isApiRequest($request)) {
                 return response()->json([
-                    'message' => 'Rangkuman AI untuk bab berhasil dibuat.',
+                    'message' => 'Rangkuman AI untuk materi berhasil dibuat.',
                     'data' => $this->formatBabResponse($bab->fresh()),
                 ]);
             }
 
             return redirect()->route('materi.show', $materi->id)
-                ->with('success', 'Rangkuman AI untuk bab berhasil dibuat.');
+                ->with('success', 'Rangkuman AI untuk materi berhasil dibuat.');
         } catch (GeminiCoverException $exception) {
             if ($this->isApiRequest($request)) {
                 return response()->json([
@@ -159,8 +159,8 @@ class MateriBabController extends Controller
             'pdf_page_selection' => 'nullable|string',
             'status_aktif' => 'boolean',
         ], [
-            'judul_bab.required' => 'Judul bab wajib diisi.',
-            'urutan.required' => 'Urutan bab wajib diisi.',
+            'judul_bab.required' => 'Judul materi wajib diisi.',
+            'urutan.required' => 'Urutan materi wajib diisi.',
             'tipe_konten.required' => 'Tipe konten wajib dipilih.',
             'konten_teks.required_if' => 'Konten teks wajib diisi jika tipe konten adalah teks.',
             'file_path.required_if' => 'File wajib diupload jika tipe konten adalah file.',

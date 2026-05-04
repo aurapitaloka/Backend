@@ -142,7 +142,7 @@
                 <div class="back-links">
                     <a href="{{ route('materi.show', $materi->id) }}" class="back-link">
                         <i data-lucide="arrow-left"></i>
-                        Kembali ke Detail Buku
+                        Kembali ke Detail Mata Pelajaran
                     </a>
                     <a href="{{ route('materi.index') }}" class="back-link">
                         <i data-lucide="book-open"></i>
@@ -166,7 +166,7 @@
                     @method('PUT')
 
                     <div class="note-box">
-                        Halaman ini hanya untuk mengubah metadata mata pelajaran: judul, deskripsi, kategori, level, cover, dan status. Isi materi dikelola dari halaman detail mata pelajaran agar struktur pembahasan tetap rapi.
+                        Halaman ini hanya untuk mengubah metadata mata pelajaran: judul, deskripsi, level, cover, dan status. Isi materi dikelola dari halaman detail mata pelajaran agar struktur pembahasan tetap rapi.
                     </div>
 
                     <div class="form-group">
@@ -186,22 +186,6 @@
                     </div>
 
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Kategori</label>
-                            <select name="mata_pelajaran_id" class="form-select">
-                                <option value="">Pilih Kategori</option>
-                                @foreach($mataPelajarans as $mp)
-                                    <option value="{{ $mp->id }}" {{ old('mata_pelajaran_id', $materi->mata_pelajaran_id) == $mp->id ? 'selected' : '' }}>
-                                        {{ $mp->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <span class="hint">Opsional. Dipakai sebagai label pengelompokan tambahan.</span>
-                            @error('mata_pelajaran_id')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-
                         <div class="form-group">
                             <label class="form-label">Level</label>
                             <select name="level_id" class="form-select">

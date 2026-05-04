@@ -79,17 +79,17 @@
             @if(!$materi->cover_url)
                 <div style="font-size:0.95rem; line-height:1.4; font-weight:700;">{{ $materi->judul }}</div>
             @else
-                {{ $materi->level->nama ?? 'Materi' }}
+                {{ $materi->level->nama ?? 'Mata Pelajaran' }}
             @endif
         </div>
         <div>
             <span class="tag">{{ $materi->mataPelajaran->nama ?? 'Umum' }}</span>
             <h2 class="section-title" style="margin-top:0.35rem;">{{ $materi->judul }}</h2>
-            <p class="section-desc">{{ $materi->deskripsi ?? 'Materi ini belum memiliki deskripsi.' }}</p>
+            <p class="section-desc">{{ $materi->deskripsi ?? 'Mata pelajaran ini belum memiliki deskripsi.' }}</p>
 
             <div class="detail-meta">
                 <div class="meta-item">
-                    Mapel
+                    Mata Pelajaran
                     <strong>{{ $materi->mataPelajaran->nama ?? 'Umum' }}</strong>
                 </div>
                 <div class="meta-item">
@@ -138,12 +138,12 @@
 
     @if($materi->tipe_konten === 'teks')
         <div class="content-section">
-            <h3 class="section-title">Materi</h3>
+            <h3 class="section-title">Isi Mata Pelajaran</h3>
             <p class="section-desc">{!! nl2br(e($materi->konten_teks)) !!}</p>
         </div>
     @else
         <div class="content-section">
-            <h3 class="section-title">File Materi</h3>
+            <h3 class="section-title">File Mata Pelajaran</h3>
             @if($materi->file_url)
                 <a href="{{ $materi->file_url }}" class="btn btn-primary" target="_blank" rel="noopener">Unduh / Buka File</a>
             @else
@@ -153,12 +153,12 @@
     @endif
 
     @if(!$hasKuis)
-        <p class="section-desc" style="margin-top:0.75rem;">Kuis untuk materi ini belum tersedia.</p>
+        <p class="section-desc" style="margin-top:0.75rem;">Kuis untuk mata pelajaran ini belum tersedia.</p>
     @endif
 
     @if($hasKuis)
         <div class="content-section" id="daftar-kuis-materi">
-            <span class="tag">Kuis Materi</span>
+            <span class="tag">Kuis Mata Pelajaran</span>
             <h3 class="section-title">Daftar Kuis</h3>
             <p class="section-desc">Setiap kuis di bawah ini berdiri sendiri, jadi nilai masing-masing tidak akan tercampur walau materinya sama.</p>
 
@@ -178,7 +178,7 @@
     @endif
 
     <div class="content-section">
-        <span class="tag">Catatan Materi</span>
+        <span class="tag">Catatan Mata Pelajaran</span>
         <h3 class="section-title">Catat lewat Suara</h3>
         <p class="section-desc">Ucapkan "mulai mencatat" untuk mulai, dan "stop mencatat" untuk selesai.</p>
 
@@ -196,7 +196,7 @@
                 <p class="section-desc" style="color:#B91C1C; margin-top:0.5rem;">{{ $message }}</p>
             @enderror
             <div style="margin-top:0.75rem;">
-                <button class="btn btn-primary" type="submit">Simpan Catatan Materi</button>
+                <button class="btn btn-primary" type="submit">Simpan Catatan Mata Pelajaran</button>
             </div>
         </form>
 

@@ -143,7 +143,7 @@
             <div class="quiz-hero-icon"><i data-lucide="list-check"></i></div>
             <div class="quiz-hero-text">
                 <h2 class="section-title">Daftar Kuis</h2>
-                <p class="section-desc">Kuis umum maupun kuis materi bisa langsung dikerjakan.</p>
+                <p class="section-desc">Kuis umum maupun kuis mata pelajaran bisa langsung dikerjakan.</p>
             </div>
         </div>
     </div>
@@ -187,13 +187,13 @@
     <div class="section-card no-stripe" style="margin-top:1.5rem;">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem; flex-wrap:wrap;">
             <div>
-                <div class="section-title">Kuis Materi</div>
-                <div class="section-desc">Semua kuis yang terhubung ke materi tersedia langsung.</div>
+                <div class="section-title">Kuis Mata Pelajaran</div>
+                <div class="section-desc">Semua kuis yang terhubung ke mata pelajaran tersedia langsung.</div>
             </div>
         </div>
 
         @if($kuisMateri->count() === 0)
-            <p class="section-desc" style="margin-top:0.75rem;">Belum ada kuis materi.</p>
+            <p class="section-desc" style="margin-top:0.75rem;">Belum ada kuis mata pelajaran.</p>
         @else
             <div class="quiz-row" style="margin-top:1rem;">
                 @foreach($kuisMateri as $item)
@@ -202,19 +202,19 @@
                         $progress = $materi ? ($progressMap[$materi->id]['progres'] ?? 0) : 0;
                     @endphp
                     <div class="quiz-card">
-                        <div class="quiz-cover">Materi</div>
+                        <div class="quiz-cover">Mapel</div>
                         <div>
                             <div class="quiz-title">{{ $item->judul }}</div>
-                            <div class="quiz-meta"><i data-lucide="book-open"></i> Materi: {{ $materi->judul ?? '-' }}</div>
+                            <div class="quiz-meta"><i data-lucide="book-open"></i> Mata Pelajaran: {{ $materi->judul ?? '-' }}</div>
                             <div class="quiz-meta"><span class="quiz-pill"><i data-lucide="gauge"></i> {{ $progress }}% Progress</span></div>
                             <div class="quiz-meta"><span class="quiz-pill"><i data-lucide="list-check"></i> {{ $item->pertanyaan_count ?? 0 }} Soal</span></div>
                             <div class="quiz-actions">
                                 @if($materi)
-                                    <a href="{{ route('dashboard.siswa.materi.show', $materi->id) }}" class="btn btn-secondary">Buka Materi</a>
+                                    <a href="{{ route('dashboard.siswa.materi.show', $materi->id) }}" class="btn btn-secondary">Buka Mata Pelajaran</a>
                                     <a href="{{ route('dashboard.siswa.materi.kuis.show', ['materi' => $materi->id, 'kuis' => $item->id]) }}" class="btn btn-primary">Mulai Kuis</a>
                                 @endif
                             </div>
-                            <div class="quiz-meta">Progress materi tetap tercatat, tetapi kuis sudah bisa langsung diakses.</div>
+                            <div class="quiz-meta">Progress mata pelajaran tetap tercatat, tetapi kuis sudah bisa langsung diakses.</div>
                         </div>
                     </div>
                 @endforeach

@@ -112,7 +112,7 @@
     <div class="read-hero">
         <span class="tag">Sesi Baca</span>
         <h2 class="section-title">{{ $materi->judul }}</h2>
-        <p class="section-desc">{{ $materi->deskripsi ?? 'Materi ini belum memiliki deskripsi.' }}</p>
+        <p class="section-desc">{{ $materi->deskripsi ?? 'Mata pelajaran ini belum memiliki deskripsi.' }}</p>
 
         <div class="read-toolbar">
             <button class="btn btn-primary" type="button" id="ttsStart">
@@ -146,14 +146,14 @@
 
     @if($materi->tipe_konten === 'teks')
         <div class="read-panel">
-            <h3 class="section-title">Materi (Teks)</h3>
+            <h3 class="section-title">Mata Pelajaran (Teks)</h3>
             <div id="readingContainer" class="read-container">
                 <div id="readingContent">{!! nl2br(e($materi->konten_teks)) !!}</div>
             </div>
         </div>
     @else
         <div class="read-panel">
-            <h3 class="section-title">Materi (PDF)</h3>
+            <h3 class="section-title">Mata Pelajaran (PDF)</h3>
             @if($materi->file_url)
                 <iframe id="pdfFrame" src="{{ $materi->file_url }}" style="width:100%; height:70vh; border:1px solid var(--color-gray); border-radius:14px;"></iframe>
                 <p class="section-desc" style="margin-top:0.5rem;">

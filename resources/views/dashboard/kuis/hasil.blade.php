@@ -85,8 +85,8 @@
                     'action' => route('kuis.hasil.index'),
                     'resetRoute' => route('kuis.hasil.index'),
                     'value' => $search ?? '',
-                    'placeholder' => 'Cari hasil kuis berdasarkan ID, judul kuis, materi, atau skor...',
-                    'note' => 'Gunakan kata kunci seperti ID hasil, judul kuis, judul materi, skor, total benar, atau total pertanyaan.'
+                    'placeholder' => 'Cari hasil kuis berdasarkan ID, judul kuis, mata pelajaran, atau skor...',
+                    'note' => 'Gunakan kata kunci seperti ID hasil, judul kuis, judul mata pelajaran, skor, total benar, atau total pertanyaan.'
                 ])
 
                 <div class="card">
@@ -102,7 +102,7 @@
                                 <th>No</th>
                                 <th>Waktu</th>
                                 <th>Kuis</th>
-                                <th>Materi</th>
+                                <th>Mata Pelajaran</th>
                                 <th>Status</th>
                                 <th>Skor</th>
                                 <th>Aksi</th>

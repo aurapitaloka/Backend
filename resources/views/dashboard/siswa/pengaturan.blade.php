@@ -67,7 +67,7 @@
         <div class="section-card settings-card" style="margin-top:1rem;">
             <span class="tag">Kelas</span>
             <h3 class="section-title">Pilih Kelas</h3>
-            <p class="section-desc">Digunakan untuk menampilkan materi yang relevan.</p>
+            <p class="section-desc">Digunakan untuk menampilkan mata pelajaran yang relevan.</p>
 
             <form action="{{ route('dashboard.siswa.kelas.update') }}" method="post" style="margin-top:0.75rem;">
                 @csrf

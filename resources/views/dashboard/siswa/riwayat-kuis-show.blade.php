@@ -4,7 +4,7 @@
     <div class="section-card">
         <span class="tag">Detail Kuis</span>
         <h2 class="section-title">{{ $hasil->kuis->judul ?? 'Kuis' }}</h2>
-        <p class="section-desc">Materi: {{ $hasil->kuis->materi->judul ?? '-' }}</p>
+        <p class="section-desc">Mata Pelajaran: {{ $hasil->kuis->materi->judul ?? '-' }}</p>
         <div style="margin-top:0.75rem;">
             <div class="section-title" style="font-size:1.8rem; color:#16A34A;">{{ $hasil->skor }}%</div>
             <p class="section-desc">Benar {{ $hasil->total_benar }} dari {{ $hasil->total_pertanyaan }} soal</p>
@@ -59,7 +59,7 @@
     <div style="margin-top:1.5rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
         <a href="{{ route('dashboard.siswa.riwayat') }}" class="btn btn-secondary">Kembali ke Riwayat</a>
         @if($hasil->kuis->materi_id)
-            <a href="{{ route('dashboard.siswa.materi.show', $hasil->kuis->materi_id) }}" class="btn btn-secondary">Buka Materi</a>
+            <a href="{{ route('dashboard.siswa.materi.show', $hasil->kuis->materi_id) }}" class="btn btn-secondary">Buka Mata Pelajaran</a>
         @endif
     </div>
 @endsection

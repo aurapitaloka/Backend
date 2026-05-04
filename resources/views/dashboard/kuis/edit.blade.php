@@ -106,22 +106,22 @@
                             <input type="text" id="judul" name="judul" value="{{ old('judul', $kuis->judul) }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="materi_id">Materi (Opsional)</label>
+                            <label for="materi_id">Mata Pelajaran (Opsional)</label>
                             <select id="materi_id" name="materi_id">
-                                <option value="">-- Tanpa Materi --</option>
+                                <option value="">-- Tanpa Mata Pelajaran --</option>
                                 @foreach($materiList as $materi)
                                     <option value="{{ $materi->id }}" {{ old('materi_id', $kuis->materi_id) == $materi->id ? 'selected' : '' }}>{{ $materi->judul }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="materi_bab_id">Bab Materi (Opsional)</label>
+                            <label for="materi_bab_id">Materi (Opsional)</label>
                             <select id="materi_bab_id" name="materi_bab_id">
-                                <option value="">-- Pilih Bab --</option>
+                                <option value="">-- Pilih Materi --</option>
                                 @foreach($materiList as $materi)
                                     @foreach($materi->bab as $bab)
                                         <option value="{{ $bab->id }}" data-materi-id="{{ $materi->id }}" {{ old('materi_bab_id', $kuis->materi_bab_id) == $bab->id ? 'selected' : '' }}>
-                                            {{ $materi->judul }} - Bab {{ $bab->urutan }}: {{ $bab->judul_bab }}
+                                            {{ $materi->judul }} - Materi {{ $bab->urutan }}: {{ $bab->judul_bab }}
                                         </option>
                                     @endforeach
                                 @endforeach

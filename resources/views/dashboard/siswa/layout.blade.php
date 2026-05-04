@@ -510,7 +510,7 @@
                         <span class="nav-icon">
                             <i data-lucide="book-open"></i>
                         </span>
-                        <span>Materi</span>
+                        <span>Mata Pelajaran</span>
                     </a>
                 </div>
 

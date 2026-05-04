@@ -172,7 +172,7 @@
     </style>
 
     <h2 class="section-title">Rak Buku</h2>
-    <p class="section-desc">Daftar materi yang kamu simpan di rak buku.</p>
+    <p class="section-desc">Daftar mata pelajaran yang kamu simpan di rak buku.</p>
 
     @if(session('success'))
         <div class="library-empty">
@@ -190,8 +190,8 @@
         <div class="library-empty">
             <span class="tag">Info</span>
             <h3 class="section-title">Rak buku masih kosong</h3>
-            <p class="section-desc">Tambahkan materi dari menu Materi.</p>
-            <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Buka Materi</a>
+            <p class="section-desc">Tambahkan mata pelajaran dari menu Mata Pelajaran.</p>
+            <a href="{{ route('dashboard.siswa.materi') }}" class="btn btn-primary">Buka Mata Pelajaran</a>
         </div>
     @else
         <div class="library-grid" data-panel="reading">
@@ -204,13 +204,13 @@
                         <div class="library-cover {{ $coverPath ? 'has-image' : 'placeholder' }}" style="{{ $coverPath ? "background-image:url('" . asset('storage/' . $coverPath) . "');" : '' }}">
                             <span class="library-tag">{{ $item->materi->mataPelajaran->nama ?? 'Umum' }}</span>
                         </div>
-                        <div class="library-title">{{ $item->materi->judul ?? 'Materi' }}</div>
-                        <div class="library-meta">{{ $item->materi->deskripsi ?? 'Materi ini belum memiliki deskripsi.' }}</div>
+                        <div class="library-title">{{ $item->materi->judul ?? 'Mata Pelajaran' }}</div>
+                        <div class="library-meta">{{ $item->materi->deskripsi ?? 'Mata pelajaran ini belum memiliki deskripsi.' }}</div>
                     </a>
                     <div class="library-actions">
                         <a href="{{ route('dashboard.siswa.materi.show', $item->materi_id) }}" class="library-btn primary">
                             <i data-lucide="play-circle"></i>
-                            Buka Materi
+                            Buka Mata Pelajaran
                         </a>
                         <form action="{{ route('dashboard.siswa.rak-buku.remove', $item->materi_id) }}" method="post">
                             @csrf
@@ -227,8 +227,8 @@
 
         <div class="library-empty" data-panel="finished" style="display:none;">
             <span class="tag">Info</span>
-            <h3 class="section-title">Belum ada materi selesai</h3>
-            <p class="section-desc">Materi yang sudah selesai akan muncul di tab ini.</p>
+            <h3 class="section-title">Belum ada mata pelajaran selesai</h3>
+            <p class="section-desc">Mata pelajaran yang sudah selesai akan muncul di tab ini.</p>
         </div>
 
         <div style="margin-top:1.5rem;">

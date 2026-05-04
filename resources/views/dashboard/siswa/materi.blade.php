@@ -200,14 +200,14 @@
         }
     </style>
 
-    <h2 class="section-title">Daftar Materi</h2>
-    <p class="section-desc">Berikut materi yang sudah ditambahkan oleh admin dan siap dipelajari.</p>
+    <h2 class="section-title">Daftar Mata Pelajaran</h2>
+    <p class="section-desc">Berikut mata pelajaran yang sudah ditambahkan oleh admin dan siap dipelajari.</p>
 
     @if($materi->count() === 0)
         <div class="section-card">
             <span class="tag">Info</span>
-            <h3 class="section-title">Belum ada materi</h3>
-            <p class="section-desc">Saat ini belum ada materi aktif. Silakan cek kembali nanti.</p>
+            <h3 class="section-title">Belum ada mata pelajaran</h3>
+            <p class="section-desc">Saat ini belum ada mata pelajaran aktif. Silakan cek kembali nanti.</p>
         </div>
     @else
         @php
@@ -225,12 +225,12 @@
                     <a href="{{ route('dashboard.siswa.materi.show', $item->id) }}" class="featured-card" data-title="{{ $item->judul }}" data-url="{{ route('dashboard.siswa.materi.show', $item->id) }}">
                         <div class="featured-cover {{ $item->cover_url ? '' : 'placeholder' }}" style="{{ $item->cover_url ? "background-image:url('" . $item->cover_url . "');" : '' }}">
                             @if(!$item->cover_url)
-                                {{ $item->level->nama ?? 'Materi' }}
+                                {{ $item->level->nama ?? 'Mata Pelajaran' }}
                             @endif
                         </div>
                         <div class="featured-body">
                             <h4>{{ $item->judul }}</h4>
-                            <p>{{ $item->deskripsi ?? 'Materi ini belum memiliki deskripsi.' }}</p>
+                            <p>{{ $item->deskripsi ?? 'Mata pelajaran ini belum memiliki deskripsi.' }}</p>
                             <div class="featured-meta">
                                 <i data-lucide="book-open"></i>
                                 {{ $item->mataPelajaran->nama ?? 'Umum' }}
@@ -258,7 +258,7 @@
                                     <div class="book-placeholder-text">{{ $item->judul }}</div>
                                 @else
                                     <div class="book-meta">
-                                        {{ $item->level->nama ?? 'Materi' }}
+                                        {{ $item->level->nama ?? 'Mata Pelajaran' }}
                                     </div>
                                 @endif
                             </div>

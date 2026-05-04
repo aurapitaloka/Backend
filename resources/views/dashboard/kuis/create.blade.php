@@ -147,7 +147,7 @@
                         <div class="card-header">
                             <div>
                                 <div class="section-title"><i data-lucide="file-text"></i> Informasi Kuis</div>
-                                <div class="section-subtitle">Atur judul, materi, dan status kuis.</div>
+                                <div class="section-subtitle">Atur judul, mata pelajaran, dan status kuis.</div>
                             </div>
                             <span class="question-badge">Wajib</span>
                         </div>
@@ -156,31 +156,31 @@
                             <div class="form-group">
                                 <label for="judul">Judul Kuis</label>
                                 <input type="text" id="judul" name="judul" value="{{ old('judul') }}" required>
-                                <div class="field-hint">Contoh: Kuis Bahasa Indonesia Bab 1</div>
+                                <div class="field-hint">Contoh: Kuis Bahasa Indonesia Materi 1</div>
                             </div>
                             <div class="form-group">
-                                <label for="materi_id">Materi (Opsional)</label>
+                                <label for="materi_id">Mata Pelajaran (Opsional)</label>
                                 <select id="materi_id" name="materi_id">
-                                    <option value="">-- Tanpa Materi --</option>
+                                    <option value="">-- Tanpa Mata Pelajaran --</option>
                                     @foreach($materiList as $materi)
                                         <option value="{{ $materi->id }}" {{ old('materi_id', $prefillMateriId ?? '') == $materi->id ? 'selected' : '' }}>{{ $materi->judul }}</option>
                                     @endforeach
                                 </select>
-                                <div class="field-hint">Pilih materi jika kuis terkait materi tertentu.</div>
+                                <div class="field-hint">Pilih mata pelajaran jika kuis terkait mata pelajaran tertentu.</div>
                             </div>
                             <div class="form-group">
-                                <label for="materi_bab_id">Bab Materi (Opsional)</label>
+                                <label for="materi_bab_id">Materi (Opsional)</label>
                                 <select id="materi_bab_id" name="materi_bab_id">
-                                    <option value="">-- Pilih Bab --</option>
+                                    <option value="">-- Pilih Materi --</option>
                                     @foreach($materiList as $materi)
                                         @foreach($materi->bab as $bab)
                                             <option value="{{ $bab->id }}" data-materi-id="{{ $materi->id }}" {{ old('materi_bab_id', $prefillMateriBabId ?? '') == $bab->id ? 'selected' : '' }}>
-                                                {{ $materi->judul }} - Bab {{ $bab->urutan }}: {{ $bab->judul_bab }}
+                                                {{ $materi->judul }} - Materi {{ $bab->urutan }}: {{ $bab->judul_bab }}
                                             </option>
                                         @endforeach
                                     @endforeach
                                 </select>
-                                <div class="field-hint">Jika dipilih, kuis akan menempel ke bab tertentu di dalam buku.</div>
+                                <div class="field-hint">Jika dipilih, kuis akan menempel ke materi tertentu di dalam mata pelajaran.</div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -204,7 +204,7 @@
                         <div class="card-header">
                             <div>
                                 <div class="section-title"><i data-lucide="help-circle"></i> Pertanyaan</div>
-                                <div class="section-subtitle">Minimal 1 pertanyaan dengan opsi A-D. Bisa dibuat manual atau dibantu Gemini dari materi.</div>
+                                <div class="section-subtitle">Minimal 1 pertanyaan dengan opsi A-D. Bisa dibuat manual atau dibantu Gemini dari materi yang dipilih.</div>
                             </div>
                             <button type="button" class="btn btn-outline btn-sm" id="addQuestion">
                                 <i data-lucide="plus-circle"></i>
@@ -214,7 +214,7 @@
                         <div class="section-note">Tips: Gunakan tipe soal yang sesuai. Pilihan ganda untuk evaluasi cepat, essay untuk jawaban mendalam, listening/speaking untuk latihan audio.</div>
                         <div class="ai-generate-panel">
                             <div class="section-title"><i data-lucide="sparkles"></i> Generate Soal dari Materi</div>
-                            <div class="section-subtitle">Gemini akan membuat draft pilihan ganda dari isi materi. Hasilnya tetap bisa kamu edit sebelum simpan.</div>
+                            <div class="section-subtitle">Gemini akan membuat draft pilihan ganda dari isi materi yang dipilih. Hasilnya tetap bisa kamu edit sebelum simpan.</div>
                             <div class="ai-generate-toolbar">
                                 <div class="form-group" style="margin-bottom:0;">
                                     <label for="ai_jenis_soal">Jenis Soal</label>
@@ -675,7 +675,7 @@
                 const materiId = materiSelect ? materiSelect.value : '';
                 const materiBabId = materiBabSelect ? materiBabSelect.value : '';
                 if (!materiId) {
-                    setAiStatus('Pilih materi dulu sebelum generate draft kuis.', 'error');
+                    setAiStatus('Pilih mata pelajaran dulu sebelum generate draft kuis.', 'error');
                     materiSelect?.focus();
                     return;
                 }
@@ -688,7 +688,7 @@
                     }
                 }
 
-                setAiStatus('Gemini sedang membuat draft kuis dari materi...', 'info');
+                setAiStatus('Gemini sedang membuat draft kuis dari materi yang dipilih...', 'info');
                 generateQuizAiBtn.disabled = true;
 
                 try {

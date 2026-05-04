@@ -103,7 +103,7 @@
                             <div class="info-value">{{ $hasil->kuis->judul ?? '-' }}</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Materi</div>
+                            <div class="info-label">Mata Pelajaran</div>
                             <div class="info-value">{{ $hasil->kuis->materi->judul ?? '-' }}</div>
                         </div>
                         <div class="info-item">

@@ -104,25 +104,25 @@ class MateriController extends Controller
             'status_aktif' => 'boolean',
         ], [
             'judul.required' => 'Judul wajib diisi',
-            'tipe_konten.required' => 'Tipe konten Bab 1 wajib dipilih',
+            'tipe_konten.required' => 'Tipe konten Materi 1 wajib dipilih',
             'konten_teks.required_if' => 'Konten teks wajib diisi jika tipe konten adalah teks',
             'file_path.required_if' => 'File wajib diupload jika tipe konten adalah file',
             'file_path.file' => 'File materi tidak valid. Pilih file PDF, DOC, atau DOCX.',
             'file_path.mimes' => 'Format file materi harus PDF, DOC, atau DOCX.',
             'file_path.max' => 'Ukuran file materi melebihi batas upload server.',
-            'mata_pelajaran_id.exists' => 'Mata pelajaran yang dipilih tidak valid',
+            'mata_pelajaran_id.exists' => 'Kategori yang dipilih tidak valid',
             'level_id.exists' => 'Level yang dipilih tidak valid',
-            'cover_path.image' => 'Cover buku harus berupa gambar.',
-            'cover_path.mimes' => 'Format cover buku harus JPG, JPEG, PNG, atau WEBP.',
-            'cover_path.max' => 'Ukuran cover buku terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
+            'cover_path.image' => 'Cover mata pelajaran harus berupa gambar.',
+            'cover_path.mimes' => 'Format cover mata pelajaran harus JPG, JPEG, PNG, atau WEBP.',
+            'cover_path.max' => 'Ukuran cover mata pelajaran terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
             'generated_cover_temp_path.string' => 'Path cover AI tidak valid.',
-            'bab.array' => 'Data bab tidak valid.',
+            'bab.array' => 'Data materi tidak valid.',
         ]);
 
         $this->validateBabEntries($request);
 
         $firstBabPayload = [
-            'judul_bab' => 'Bab 1',
+            'judul_bab' => 'Materi 1',
             'urutan' => 1,
             'tipe_konten' => (string) $validated['tipe_konten'],
             'konten_teks' => $validated['tipe_konten'] === 'teks' ? ($validated['konten_teks'] ?? null) : null,
@@ -169,11 +169,11 @@ class MateriController extends Controller
             $this->storeBabEntries($materi, $request, 2);
         });
         if ($request->wantsJson() || $request->is('api/*')) {
-            return response()->json(['message' => 'Buku berhasil ditambahkan!'], 201);
+            return response()->json(['message' => 'Mata pelajaran berhasil ditambahkan!'], 201);
         }
 
         return redirect()->route('materi.index')
-            ->with('success', 'Buku berhasil ditambahkan!');
+            ->with('success', 'Mata pelajaran berhasil ditambahkan!');
     }
 
     public function generateCoverPreview(
@@ -246,7 +246,7 @@ class MateriController extends Controller
 
         if ($this->isSiswaApiRequest()) {
             if (!$materi->status_aktif) {
-                return response()->json(['message' => 'Materi tidak tersedia'], 404);
+                return response()->json(['message' => 'Mata pelajaran tidak tersedia'], 404);
             }
         }
 
@@ -284,11 +284,11 @@ class MateriController extends Controller
             'status_aktif' => 'boolean',
         ], [
             'judul.required' => 'Judul wajib diisi',
-            'mata_pelajaran_id.exists' => 'Mata pelajaran yang dipilih tidak valid',
+            'mata_pelajaran_id.exists' => 'Kategori yang dipilih tidak valid',
             'level_id.exists' => 'Level yang dipilih tidak valid',
-            'cover_path.image' => 'Cover buku harus berupa gambar.',
-            'cover_path.mimes' => 'Format cover buku harus JPG, JPEG, PNG, atau WEBP.',
-            'cover_path.max' => 'Ukuran cover buku terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
+            'cover_path.image' => 'Cover mata pelajaran harus berupa gambar.',
+            'cover_path.mimes' => 'Format cover mata pelajaran harus JPG, JPEG, PNG, atau WEBP.',
+            'cover_path.max' => 'Ukuran cover mata pelajaran terlalu besar. Maksimal 5 MB. Silakan kompres atau pilih gambar yang lebih kecil.',
         ]);
 
         if ($materi->file_path && Storage::disk('public')->exists($materi->file_path)) {
@@ -318,11 +318,11 @@ class MateriController extends Controller
 
         $materi = $materi->fresh();
         if ($request->wantsJson() || $request->is('api/*')) {
-            return response()->json(['message' => 'Materi berhasil diperbarui!', 'data' => $materi]);
+            return response()->json(['message' => 'Mata pelajaran berhasil diperbarui!', 'data' => $materi]);
         }
 
         return redirect()->route('materi.index')
-            ->with('success', 'Buku berhasil diperbarui!');
+            ->with('success', 'Mata pelajaran berhasil diperbarui!');
     }
 
     /**
@@ -358,11 +358,11 @@ class MateriController extends Controller
         }
 
         if (request()->wantsJson() || request()->is('api/*')) {
-            return response()->json(['message' => 'Materi berhasil dihapus!']);
+            return response()->json(['message' => 'Mata pelajaran berhasil dihapus!']);
         }
 
         return redirect()->route('materi.index')
-            ->with('success', 'Materi berhasil dihapus!');
+            ->with('success', 'Mata pelajaran berhasil dihapus!');
     }
 
     private function isSiswaApiRequest(): bool
@@ -389,25 +389,25 @@ class MateriController extends Controller
 
             if ($judulBab === '') {
                 throw ValidationException::withMessages([
-                    "bab.$index.judul_bab" => 'Judul bab wajib diisi.',
+                    "bab.$index.judul_bab" => 'Judul materi wajib diisi.',
                 ]);
             }
 
             if (!in_array($tipeKonten, ['teks', 'file'], true)) {
                 throw ValidationException::withMessages([
-                    "bab.$index.tipe_konten" => 'Tipe konten bab wajib dipilih.',
+                    "bab.$index.tipe_konten" => 'Tipe konten materi wajib dipilih.',
                 ]);
             }
 
             if ($tipeKonten === 'teks' && trim((string) ($bab['konten_teks'] ?? '')) === '') {
                 throw ValidationException::withMessages([
-                    "bab.$index.konten_teks" => 'Konten teks bab wajib diisi jika tipe bab adalah teks.',
+                    "bab.$index.konten_teks" => 'Konten teks materi wajib diisi jika tipe materi adalah teks.',
                 ]);
             }
 
             if ($tipeKonten === 'file' && empty($babFiles[$index])) {
                 throw ValidationException::withMessages([
-                    "bab_files.$index" => 'File bab wajib diupload jika tipe bab adalah file.',
+                    "bab_files.$index" => 'File materi wajib diupload jika tipe materi adalah file.',
                 ]);
             }
         }

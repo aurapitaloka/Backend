@@ -11,7 +11,7 @@
             <p class="section-desc">
                 Ucapkan:
                 <br>• "buka dashboard"
-                <br>• "buka materi"
+                <br>• "buka mata pelajaran"
                 <br>• "buka catatan"
                 <br>• "buka riwayat"
                 <br>• "buka perintah suara"
@@ -22,7 +22,7 @@
 
         <section class="section-card">
             <span class="tag">Sesi Baca</span>
-            <h3 class="section-title">Kontrol Materi</h3>
+            <h3 class="section-title">Kontrol Mata Pelajaran</h3>
             <p class="section-desc">
                 Ucapkan:
                 <br>• "mulai scroll"

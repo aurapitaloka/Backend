@@ -832,10 +832,6 @@
                                         <div class="chapter-stat-value">{{ $materi->status_aktif ? 'Aktif' : 'Nonaktif' }}</div>
                                     </div>
                                     <div class="chapter-stat">
-                                        <div class="chapter-stat-label">Kategori</div>
-                                        <div class="chapter-stat-value">{{ $materi->mataPelajaran->nama ?? '-' }}</div>
-                                    </div>
-                                    <div class="chapter-stat">
                                         <div class="chapter-stat-label">Level</div>
                                         <div class="chapter-stat-value">{{ $materi->level->nama ?? '-' }}</div>
                                     </div>
